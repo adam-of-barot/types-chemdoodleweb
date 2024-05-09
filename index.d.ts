@@ -1,7 +1,10 @@
-/**
- * Based off of https://web.chemdoodle.com/docs/api
- * For ChemDoodle Version 10.0.0
- */
+// Type definitions for ChemDoodle Web Components 10.0.0
+// Project: https://web.chemdoodle.com
+// Definitions by: Ádám Baróthi <https://github.com/adam-of-barot>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// Based off of the offical API docs: https://web.chemdoodle.com/docs/api
+
+import type { mat4, vec3 } from "gl-matrix";
 
 /**
  * this package is the root for all contents of the ChemDoodle Web Components library.
@@ -9,13 +12,13 @@
  */
 declare module ChemDoodle {
     /** a hashmap for elemental data where the element's symbol is the key and the corresponding Element data structure is the value */
-    var ELEMENT: Object
+    const ELEMENT: Object
 
     /** a hashmap for residue data where the residue's symbol is the key and the corresponding Residue data structure is the value */
-    var RESIDUE: Object
+    const RESIDUE: Object
 
     /** a numbered Array containing all element symbols, where the index is the element's atomic number - 1 (index starts at 0 for hydrogen) */
-    var SYMBOLS: Object
+    const SYMBOLS: Object
 
     /** returns the version of the ChemDoodle Web Components library; changing this value in source is not recommended */
     function getVersion(): string
@@ -109,100 +112,100 @@ declare module ChemDoodle {
          * if neither dbltap or dblclick are implemented,
          * then the event is forwarded to touchstart or mousedown
          */
-        dbltap?(e: Event): void
+        dbltap?(e: JQuery.Event): void
 
         /** receives the gesture move event for mobile devices, override this for your custom canvases */
-        gesturechange?(e: Event): void
+        gesturechange?(e: JQuery.Event): void
 
         /** receives the touch end event for mobile devices, override this for your custom canvases */
-        gestureend?(e: Event): void
+        gestureend?(e: JQuery.Event): void
 
         /** receives the gesture start event for mobile devices, override this for your custom canvases */
-        gesturestart?(e: Event): void
+        gesturestart?(e: JQuery.Event): void
 
         /** 
          * receives an event for mobile devices where multiple fingers are moving on the screen, override this for your custom canvases,
          * the center of the fingers is provided in the Event, the number of fingers touching the screen is also sent to the handler
          */
-        multitouchmove?(e: Event, numFingers: number): void
+        multitouchmove?(e: JQuery.Event, numFingers: number): void
 
         /** receives the tap event for mobile devices (quickly touchstart then touchend), override this for your custom canvases, forwards to click if not implemented */
-        tap?(e: Event): void
+        tap?(e: JQuery.Event): void
 
         /** receives the touch end event for mobile devices, override this for your custom canvases, forwards to mouseup if not implemented */
-        touchend?(e: Event): void
+        touchend?(e: JQuery.Event): void
 
         /** receives the touch hold event for mobile devices, override this for your custom canvases; will fire if the user touches down and does not lift or move for 1 second */
-        touchhold?(e: Event): void
+        touchhold?(e: JQuery.Event): void
 
         /** receives the touch move event for mobile devices, override this for your custom canvases, forwards to drag if not implemented */
-        touchmove?(e: Event): void
+        touchmove?(e: JQuery.Event): void
 
         /** receives the touch start event for mobile devices, override this for your custom canvases, forwards to mousedown if not implemented */
-        touchstart?(e: Event): void
+        touchstart?(e: JQuery.Event): void
 
 
         // Mouse Events
 
         /** receives the mouse click event, override this for your custom canvases */
-        click?(e: Event): void
+        click?(e: JQuery.Event): void
 
         /** receives the contextmenu event, responding to the right mouse button being pressed down to open the context menu */
-        contextmenu?(e: Event, delta: number): void
+        contextmenu?(e: JQuery.Event, delta: number): void
 
         /** receives the mouse double click event, override this for your custom canvases */
-        dblclick?(e: Event): void
+        dblclick?(e: JQuery.Event): void
 
         /** receives the mouse drag event, override this for your custom canvases */
-        drag?(e: Event): void
+        drag?(e: JQuery.Event): void
 
         /** receives the mouse middle click event, override this for your custom canvases */
-        middleclick?(e: Event): void
+        middleclick?(e: JQuery.Event): void
 
         /** receives the mouse middle mouse down event, override this for your custom canvases */
-        middlemousedown?(e: Event): void
+        middlemousedown?(e: JQuery.Event): void
 
         /** receives the mouse middle mouse up event, override this for your custom canvases */
-        middlemouseup?(e: Event): void
+        middlemouseup?(e: JQuery.Event): void
 
         /** receives the mouse down event, override this for your custom canvases */
-        mousedown?(e: Event): void
+        mousedown?(e: JQuery.Event): void
 
         /** receives the mouse move event, override this for your custom canvases */
-        mousemove?(e: Event): void
+        mousemove?(e: JQuery.Event): void
 
         /** receives the mouse out event, override this for your custom canvases */
-        mouseout?(e: Event): void
+        mouseout?(e: JQuery.Event): void
 
         /** receives the mouse over event, override this for your custom canvases */
-        mouseover?(e: Event): void
+        mouseover?(e: JQuery.Event): void
 
         /** receives the mouse up event, override this for your custom canvases */
-        mouseup?(e: Event): void
+        mouseup?(e: JQuery.Event): void
 
         /** receives the mouse wheel event, override this for your custom canvases; delta is the amount the wheel has spun */
-        mousewheel?(e: Event, delta: number): void
+        mousewheel?(e: JQuery.Event, delta: number): void
 
         /** receives the mouse right click event, override this for your custom canvases */
-		rightclick?(e: Event): void
+		rightclick?(e: JQuery.Event): void
 
         /** receives the mouse right mouse down event, override this for your custom canvases */
-		rightmousedown?(e: Event): void
+		rightmousedown?(e: JQuery.Event): void
 
         /** receives the mouse right mouse up event, override this for your custom canvases */
-		rightmouseup?(e: Event): void
+		rightmouseup?(e: JQuery.Event): void
 
 
         //Keyboard Events
 
         /** receives the key down event, override this for your custom canvases */
-		keydown?(e: Event): void
+		keydown?(e: JQuery.Event): void
 
         /** receives the key press event, override this for your custom canvases */
-		keypress?(e: Event): void
+		keypress?(e: JQuery.Event): void
 
         /** receives the key up event, override this for your custom canvases */
-		keyup?(e: Event): void
+		keyup?(e: JQuery.Event): void
     }
 
     /**
@@ -229,7 +232,7 @@ declare module ChemDoodle {
         /** the message to be displayed if there is no content currently present for the canvas to render. If this variable is undefined, no message is displayed if there is no content */
         emptyMessage: string
         /** the background image, overrides the VisualSpecification backgroundColor property; if undefined, no image is drawn */
-        image: unknown
+        image: ImageData
         /** 
          * all default browser event actions (like scrolling, text input) are blocked when performed above the Canvas,
          * set this variable to true to disable this, as is done when the sketcher needs text input
@@ -313,7 +316,7 @@ declare module ChemDoodle {
         loadMolecule(mol: structures.Molecule): void
         
         /** conditions the user input event and sets a new variable in the Event object named p that contains the coordinates of the event in the canvas */
-        prehandleEvent(e: Event): void
+        prehandleEvent(e: JQuery.Event): void
 
         /**
          * removes the given Molecule, mol from the molecules array;
@@ -358,24 +361,24 @@ declare module ChemDoodle {
         /** if true and urlOrFunction is a url, then the url will be opened in a new window instead of changing the current page */
         openInNewWindow: boolean
         /** if this is initialized, then the mouse over will display an image instead of a hyperlink-like decoration */
-        hoverImage: unknown
+        hoverImage: ImageData
         /** keeps track of the last event */
-        e: Event
+        e: JQuery.Event
 
         /** sets the canvas's hover image to the image url specified */
         setHoverImage(url: string): void
 
         /** performs the mouse click action */
-        click(e: Event): void
+        click(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
         drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /**  performs the mouse out action */
-        mouseout(e: Event): void
+        mouseout(e: JQuery.Event): void
 
         /** performs the mouse over action, currently not called */
-        mouseover(e: Event): void
+        mouseover(e: JQuery.Event): void
     }
 
     /** is a child of the Canvas class and provides a basic canvas for users to transform (translate [alt+drag], rotate [drag], scale [mousewheel]) molecules with */
@@ -394,22 +397,22 @@ declare module ChemDoodle {
         lastGestureRotate: number
         
         /** performs the double-click action, which centers the molecule */
-		dblclick(e: Event): void
+		dblclick(e: JQuery.Event): void
 
         /** performs the mouse drag action */
-		drag(e: Event): void
+		drag(e: JQuery.Event): void
 
         /** handles any pinch and rotate gestures from mobile devices which will scale and rotate the molecule */
-		gesturechange(e: Event): void
+		gesturechange(e: JQuery.Event): void
 
         /** resets the gesture tracking variables and ends the gesture */
-		gestureend(e: Event): void
+		gestureend(e: JQuery.Event): void
 
         /** performs the mouse down action */
-		mousedown(e: Event): void
+		mousedown(e: JQuery.Event): void
 
         /** performs the mouse wheel action */
-        mousewheel(e: Event, delta: number): void;
+        mousewheel(e: JQuery.Event, delta: number): void;
     }
 
     /** is a child of the Canvas class and provides a basic canvas for users to search databases with. */
@@ -481,7 +484,7 @@ declare module ChemDoodle {
         zIncrement: number
 
         /** catches double click events and toggles the animation */
-        dblclick(e: Event): void
+        dblclick(e: JQuery.Event): void
 
         /** updates the state during the rotation animation */
         nextFrame(delta: number): void
@@ -532,7 +535,7 @@ declare module ChemDoodle {
          */
         static PRESERVE_DRAWING_BUFFER: string
         /** the rotation matrix to be applied before rendering the 3D scene */
-        rotationMatrix: unknown
+        rotationMatrix: mat4
         /** the translation (actually the negative of the center of the scene content) to be applied before rendering the 3D scene */
         contentCenter: Array<number>
 		/** the last point in the canvas's space that the user initiated a mouseDown event */
@@ -601,28 +604,28 @@ declare module ChemDoodle {
 		center(): void
 
         /** performs the mouse drag action */
-		drag(e: Event): void
+		drag(e: JQuery.Event): void
 
         /** performs the gesturechange action */
-		gesturechange(e: Event): void
+		gesturechange(e: JQuery.Event): void
 
         /** performs the mouse down action */
-		mousedown(e: Event): void
+		mousedown(e: JQuery.Event): void
 
         /** performs the mouse up action */
-		mousedown(e: Event): void
+		mousedown(e: JQuery.Event): void
 
         /** performs the mouse scroll action */
-		mousewheel(e: Event): void
+		mousewheel(e: JQuery.Event): void
 
         /** performs the multitouchmove action */
-		multitouchmove(e: Event): void
+		multitouchmove(e: JQuery.Event): void
 
         /** renders the 3D scene */
 		repaint(): void
 
         /** performs the mouse right click action */
-		rightmousedown(e: Event): void
+		rightmousedown(e: JQuery.Event): void
 
         /**
          * sets up GLContext, alerts viewer to warning if GLContext cannot be created;
@@ -692,7 +695,7 @@ declare module ChemDoodle {
 		stopAnimation(): void
 
         /** catches double click events and toggles the animation */
-		dblclick(e: Event): void
+		dblclick(e: JQuery.Event): void
 
         /** set to undefined to ignore this gesture */
 		drag(): void
@@ -752,7 +755,7 @@ declare module ChemDoodle {
 		center(): void
 
         /** catches double click events and toggles the animation */
-		dblclick(e: Event): void
+		dblclick(e: JQuery.Event): void
 
         /** updates the state during the rotation animation */
 		nextFrame(delta: number): void
@@ -812,25 +815,25 @@ declare module ChemDoodle {
         lastPinchScale: number
 
         /** performs the double-click action, which fits the entire spectrum to the canvas */
-		dblclick(e: Event): void
+		dblclick(e: JQuery.Event): void
 
         /** performs the mouse drag action, which will zoom in on the spectrum; if the shift key is held, then the spectrum will be translated */
-		drag(e: Event): void
+		drag(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
 		drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /** handles any pinch gestures from mobile devices which will scale the spectrum */
-		gesturechange(e: Event): void
+		gesturechange(e: JQuery.Event): void
 
         /** performs the mouse down action */
-		mousedown(e: Event): void
+		mousedown(e: JQuery.Event): void
 
         /** performs the mouse up action */
-		mouseup(e: Event): void
+		mouseup(e: JQuery.Event): void
 
         /** performs the mouse wheel action */
-        mousewheel(e: Event, delta: number): void
+        mousewheel(e: JQuery.Event, delta: number): void
     }
 
     /** is a child of the SpectrumCanvas class and provides an interactive canvas for viewing internal coordinates in spectra */
@@ -852,19 +855,19 @@ declare module ChemDoodle {
 		innerRepaint(ctx: CanvasRenderingContext2D): void
 
         /** performs the mouse move action */
-		mousemove(e: Event): void
+		mousemove(e: JQuery.Event): void
 
         /** performs the mouse out action */
-		mouseout(e: Event): void
+		mouseout(e: JQuery.Event): void
 
         /** performs the touch end action */
-		touchend(e: Event): void
+		touchend(e: JQuery.Event): void
 
         /** performs the touch move action */
-		touchmove(e: Event): void
+		touchmove(e: JQuery.Event): void
 
         /** performs the touch start action */
-		touchstart(e: Event): void
+		touchstart(e: JQuery.Event): void
     }
 
     /**
@@ -890,16 +893,16 @@ declare module ChemDoodle {
         getHoveredElement(): structures.Element
 
         /** catches double click events and selects a cell */
-		click(e: Event): void
+		click(e: JQuery.Event): void
 
         /** set to undefined to ignore this function from the _Canvas class */
 		getMolecule(): structures.Molecule
 
         /** catches mouse move events and hovers a cell */
-		mousemove(e: Event): void
+		mousemove(e: JQuery.Event): void
 
         /** catches mouse out events and sets the hovered cell to undefined */
-		mouseout(e: Event): void
+		mouseout(e: JQuery.Event): void
 
         /** paints the periodic table */
 		repaint(): void
@@ -911,7 +914,7 @@ declare module ChemDoodle {
 		setupTable(): void
 
         /** catches the touchstart mobile event and hovers a cell */
-		touchstart(e: Event): void
+		touchstart(e: JQuery.Event): void
     }
 
     /**
@@ -994,70 +997,70 @@ declare module ChemDoodle {
 		drawSketcherDecorations(ctx: CanvasRenderingContext2D): void
 
         /** scales the event for the current scale of the sketcher */
-		scaleEvent(e: Event): void
+		scaleEvent(e: JQuery.Event): void
 
         /** set up some internal variables before repainting */
 		checksBeforeRepaint(): void
 
         /** performs the mouse click action */
-		click(e: Event): void
+		click(e: JQuery.Event): void
 
         /** performs the mouse dblclick action */
-		dblclick(e: Event): void
+		dblclick(e: JQuery.Event): void
 
         /** performs the drag action */
-		drag(e: Event): void
+		drag(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
 		drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /** performs the gesturechange action */
-		gesturechange(e: Event): void
+		gesturechange(e: JQuery.Event): void
 
         /** performs the gestureend action */
-		gestureend(e: Event): void
+		gestureend(e: JQuery.Event): void
 
         /** performs the keydown action */
-		keydown(e: Event): void
+		keydown(e: JQuery.Event): void
 
         /** performs the keypress action */
-		keypress(e: Event): void
+		keypress(e: JQuery.Event): void
 
         /** performs the keyup action */
-		keyup(e: Event): void
+		keyup(e: JQuery.Event): void
 
         /** performs the mousedown action */
-		mousedown(e: Event): void
+		mousedown(e: JQuery.Event): void
 
         /** performs the mouseout action */
-		mouseout(e: Event): void
+		mouseout(e: JQuery.Event): void
 
         /** performs the mouseover action */
-		mouseover(e: Event): void
+		mouseover(e: JQuery.Event): void
 
         /** performs the mouseup action */
-		mouseup(e: Event): void
+		mouseup(e: JQuery.Event): void
 
         /** performs the mousewheel action */
-		mousewheel(e: Event): void
+		mousewheel(e: JQuery.Event): void
 
         /** performs the mouse rightclick action */
-		rightclick(e: Event): void
+		rightclick(e: JQuery.Event): void
 
         /** performs the rightmousedown action */
-		rightmousedown(e: Event): void
+		rightmousedown(e: JQuery.Event): void
 
         /** performs the rightmouseup action */
-		rightmouseup(e: Event): void
+		rightmouseup(e: JQuery.Event): void
 
         /** performs the touchend action */
-		touchend(e: Event): void
+		touchend(e: JQuery.Event): void
 
         /** performs the touchmove action */
-		touchmove(e: Event): void
+		touchmove(e: JQuery.Event): void
 
         /** performs the touchstart action */
-		touchstart(e: Event): void
+		touchstart(e: JQuery.Event): void
     }
 
     /** 
@@ -1092,46 +1095,46 @@ declare module ChemDoodle {
 		historyManager: uis.actions.HistoryManager
 
         /** performs the mouse click action */
-		click(e: Event): void
+		click(e: JQuery.Event): void
 
         /** performs the mouse dblclick action */
-		dblclick(e: Event): void
+		dblclick(e: JQuery.Event): void
 
         /** performs the drag action */
-		drag(e: Event): void
+		drag(e: JQuery.Event): void
 
         /** performs the keydown action */
-		keydown(e: Event): void
+		keydown(e: JQuery.Event): void
 
         /** performs the keypress action */
-		keypress(e: Event): void
+		keypress(e: JQuery.Event): void
 
         /** performs the keyup action */
-		keyup(e: Event): void
+		keyup(e: JQuery.Event): void
 
         /** performs the mousedown action */
-		mousedown(e: Event): void
+		mousedown(e: JQuery.Event): void
 
         /** performs the mouseout action */
-		mouseout(e: Event): void
+		mouseout(e: JQuery.Event): void
 
         /** performs the mouseover action */
-		mouseover(e: Event): void
+		mouseover(e: JQuery.Event): void
 
         /** performs the mouseup action */
-		mouseup(e: Event): void
+		mouseup(e: JQuery.Event): void
 
         /** performs the mousewheel action */
-		mousewheel(e: Event): void
+		mousewheel(e: JQuery.Event): void
 
         /** performs the mouse rightclick action */
-		rightclick(e: Event): void
+		rightclick(e: JQuery.Event): void
 
         /** performs the rightmousedown action */
-		rightmousedown(e: Event): void
+		rightmousedown(e: JQuery.Event): void
 
         /** performs the rightmouseup action */
-		rightmouseup(e: Event): void
+		rightmouseup(e: JQuery.Event): void
     }
 
     /**
@@ -1173,7 +1176,7 @@ declare module ChemDoodle {
 		serverSetup(data: Object): void
 
         /** handles the updating of the stoichiometry table given the updated table data */
-		serverUpdate(currentTableData: Event): void
+		serverUpdate(currentTableData: JQuery.Event): void
 
         /** defines the user interactivity actions for the stoichiometry table and its cells */
 		setupInteractivity(): void
@@ -1201,7 +1204,7 @@ declare module ChemDoodle {
         function getFontString(size: number, family: string, bold: boolean, italic: boolean): string
 
         /** returns the angle between the two input vec3 objects */
-        function vec3AngleFfrom(v1: unknown, v2: unknown): number
+        function vec3AngleFfrom(v1: vec3, v2: vec3): number
     }
 
     /** this package contains several convenience methods to check for support of verious HTML5 features that the ChemDoodle Web Components library uses. */
