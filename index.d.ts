@@ -1205,7 +1205,232 @@ declare module ChemDoodle {
     }
 
     /** this package contains several convenience methods to check for support of verious HTML5 features that the ChemDoodle Web Components library uses. */
-    module featureDetection {}
+    module featureDetection {
+        /** returns a boolean corresponding to the browser's support for the HTML5 <canvas> tag */
+        function supports_canvas(): boolean
+
+        /** returns a boolean corresponding to the browser's support for HTML5 <canvas> text rendering */
+		function supports_canvas_text(): boolean
+
+        /** returns a boolean corresponding to the browser's support for gesture events; this is useful for determining if the current browser can support pinching and zooming, and to resort to ChemDoodle's handlers if necessary */
+		function supports_gesture(): boolean
+
+        /** returns a boolean corresponding to the browser's support for touch events; this is useful for determining if the current browser is on a mobile platform */
+		function supports_touch(): boolean
+
+        /** returns a boolean corresponding to the browser's support for WebGL */
+		function supports_webgl(): boolean
+
+        /** this method checks the browser's support for XMLHttpRequest Level 2 functionality */
+		function supports_xhr2(): boolean
+    }
+
+    /** 
+     * this package connects to iChemLabs cloud services through AJAX XMLHttpRequest Level 2 for complete access to the entire ChemDoodle Java API.
+     * Please see the {@link https://web.chemdoodle.com/docs/ichemlabs-cloud-services|iChemLabs Cloud services} documentation for details.
+     */
+    module iChemLabs {}
+
+    /** this package hosts all classes that perform cheminformatics algorithms. */
+    module informatics {
+        /** returns the pixel/Ängstrom ratio that is currently defined by the default ChemDoodle settings */
+		function getPointsPerAngstrom(): number
+
+        /** is a class for analyzing bonds based on 3D coordinates */
+        class BondDeducer {
+			/** the amount of flexibility in calculating bonds; the larger the number, the more bonds found */
+			margin: Number
+
+            /**
+             * deduces covalent bonds for the input molecule and appends them to the molecule's bonds array.
+             * Uses the covalent radii data provided in atomicData.
+             * The customPointsPerAngstrom parameters allows you to change the value from that specified by default.
+             */
+		    deduceCovalentBonds(molecule: structures.Molecule, customPointsPerAngstrom: number): void
+        }
+
+        /** is a class for manipulating hydrogens */
+        class HydrogenDeducer {
+            /**
+             * removes all hydrogens and bonds attached to them from the given molecule;
+             * if removeStereo is not set to true, then hydrogens connected with wedge bonds are retained
+             */
+		    removeHydrogens(molecule: structures.Molecule, removeStereo: boolean): void
+        }
+
+        /** is a class for splitting a Molecule data structure composed of discrete graphs into individual discrete Molecule objects */
+        class Splitter {
+            /** returns an array consisting of each discrete graph data structure in the input molecule, as individual discrete Molecule objects */
+		    split(molecule: structures.Molecule): structures.Molecule[]
+        }
+
+        /** is a class for copying and creating molecular structures */
+        class StructureBuilder {
+            /** returns a new Molecule object that is a copy of the input Molecule */
+		    copy(molecule: structures.Molecule): structures.Molecule 
+        }
+
+        /**
+         * is an interface for calculating integer descriptors given a Molecule object.
+         * It should not be instantiated.
+         * To obtain a value from a Counter, use the following command where mol is a Molecule object and ChildOfCounter is a child of the Counter class:
+         * new ChildOfCounter(mol).value
+         */
+        abstract class _Counter {
+			/** the result of the Counter algorithm */
+			value: Number
+			/** holds the Molecule object being analyzed by the child derivative */
+			molecule: structures.Molecule
+
+            /** 
+             * sets the molecule and performs the descriptor calculation.
+             * Should be called as the last method in all child constructors.
+             */
+            setMolecule(molecule: structures.Molecule): void
+            
+            /**
+             * this method is defined by all child classes of Counter.
+             * This method should calculate the descriptor value given the Molecule stored.
+             */
+            abstract innerCalculate(molecule: structures.Molecule): void
+        }
+
+        /** is a child of the Counter class and calculates the Frèrejacque Number, which is the SSSR count. */
+        class FrerejacqueNumberCounter extends _Counter {
+            constructor(molecule: structures.Molecule)
+
+            /** calculates the Frèrejacque Number. This should never be manually called as it is called by the constructor after setup. */
+		    innerCalculate(molecule: structures.Molecule): void
+        }
+
+        /** is a child of the Counter class and calculates the real number of molecules in a Molecule object, which can hold disjoint graphs. */
+        class NumberOfMoleculesCounter extends _Counter {
+            constructor(molecule: structures.Molecule)
+
+            /** calculates the number of molecules. This should never be manually called as it is called by the constructor after setup. */
+		    innerCalculate(molecule: structures.Molecule): void
+        }
+
+        /**
+         * is an interface for ring perception algorithms.
+         * It should not be instantiated. 
+         * Contains helper methods for ring perception and for storing rings.
+         * So to obtain a ring set, use the following command where mol is a Molecule object and ChildOfRingFinder is a child of the RingFinder class:
+         * new ChildOfRingFinder(mol).rings */
+        abstract class _RingFinder {
+			/** all atoms that will be analyzed during ring perception are stored here, set by RingFinder.reduce() */
+			atoms: structures.Atom[]
+			/** all bonds that will be analyzed during ring perception are stored here, set by RingFinder.reduce() */
+			bonds: structures.Bond[]
+			/** this array holds all the perceived rings */
+			rings: structures.Ring[]
+
+            /** a helper method to find the bonds that belong to the perceived rings if only the atoms are specified. */
+		    fuse(): void
+
+            /** reduces this input molecule graph to discard most non-ring atons and all lone atoms to speed up runtimes, sets the atoms and bonds Arrays to the reduced graph. */
+		    reduce(molecule: structures.Molecule): void
+
+            /** sets the molecule and performs the ring perception. Should be called as the last method in all child constructors. */
+		    setMolecule(molecule: structures.Molecule): void
+
+            /** this method is defined by all child classes of RingFinder. This method should find rings based on the reduced atoms and bonds Arrays and then place perceived rings in the rings Array. */
+		    abstract innerGetRings(molecule: structures.Molecule): void
+        }
+
+        /** 
+         * perceives the Smallest Set of Smallest Rings (SSSR) as defined by Plotkin.
+         * The SSSR set is not unique.
+         * This is not a child of the RingFinder class, as it uses the EulerFacetRingFinder class to perceive rings, and the SSSR is retrieved from that result.
+         * It works identically to a RingFinder derivative.
+         */
+        class SSSRFinder {
+            constructor(molecule: structures.Molecule)
+
+			/** this array holds all the perceived rings */
+			rings: structures.Ring[]
+        }
+
+        /**
+         * is a child of the RingFinder class and perceives a set of rings that defines all Euler facets in a molecule using an algorithm developed by Kevin Theisen.
+         * This ring set is thorough, unique and adequately describes rings as a 3D representation of a 2D drawing.
+         */
+        class EulerFacetFinder extends _RingFinder {
+			/** 
+             * is a cutoff for the size of rings to be found.
+             * Defines the length of a ring path which is half of a ring.
+             * So a value of 5 specifies that only 8 membered rings and smaller should be perceived.
+             * Use this setting to improve performance.
+             */
+			fingerBreak: Number
+
+            /** 
+             * implements the algorithm to find the Euler facet ring set.
+             * This should never be manually called as it is called by the constructor after setup.
+             */
+		    innerGetRings(molecule: structures.Molecule): void
+        }
+    }
+
+    module io {
+        /** recover a Molecule from JSON format */
+		function fromJSONDummy(content: Object): structures.Molecule
+
+        /** convert a Molecule to a consise Object that represents the chemical data for use in JSON protocol */
+		function toJSONDummy(mol: structures.Molecule): Object 
+
+        /** handles converting Javascript objects to and from the ChemDoodle JSON format, this is NOT a child of the Interpreter class */
+        abstract class _Interpreter {
+            constructor()
+
+            /** 
+             * given the input object represented in ChemDoodle JSON (object, not the string),
+             * this function will create the corresponding Object data structure containing an Array of Molecule data structures named molecules and an Array of Shape data structures named shapes
+             */
+		    contentFrom(dummy: Object): Object
+
+            /**
+             * creates a dummy object from the input molecules and shapes Arrays corresponding to the ChemDoodle JSON format;
+             * use JSON.stringify() to create a JSON string from this dummy object
+             */
+		    contentTo(mols: structures.Molecule[], shapes: structures.d2._Shape): Object
+
+            /** given the input object represented in ChemDoodle JSON (object, not the string), this function will create the corresponding Molecule data structure */
+		    molFrom(dummy: Object): structures.Molecule
+
+            /** creates a dummy object from the input Molecule data structure corresponding to the ChemDoodle JSON format; use JSON.stringify() to create a JSON string from this dummy object */
+		    molTo(mol: structures.Molecule): Object
+
+            /** given the input object represented in ChemDoodle JSON (object, not the string), this function will create the corresponding Query data structure */
+		    queryFrom(dummy: Object): structures.Query
+
+            /** creates a dummy object from the input Query data structure corresponding to the ChemDoodle JSON format; use JSON.stringify() to create a JSON string from this dummy object */
+		    queryTo(mol: structures.Molecule): Object
+
+            /** given the input object represented in ChemDoodle JSON (object, not the string), this function will create the corresponding Shape data structure; the second parameter is the array of molecules already read, just incase the shape is dependent upon them */
+		    shapeFrom(dummy: Object, mols: structures.Molecule[]): structures.d2._Shape
+
+            /** creates a dummy object from the input Shape data structure corresponding to the ChemDoodle JSON format; use JSON.stringify() to create a JSON string from this dummy object */
+		    shapeTo(shape: structures.d2._Shape): Object
+        }
+
+        /** reads IUPAC JCAMP-DX files, is a child of the Interpreter class */
+        class JCAMPInterpreter extends _Interpreter {
+			/** if true, and the file being read is a NMR spectrum in HZ, then the interpreter will automatically convert the x-axis into PPM */
+			convertHZ2PPM: Boolean
+
+            /** given an input JCAMP file with structure colleration data, this function creates two canvases,
+             * one for a molecule and one for the spectrum,
+             * where each has hover events (or touch on mobile) to highlight peaks and the corresponding parts of the molecular structure;
+             * the input id is used to generate the canvases, or find previously created canvases;
+             * the array that is returned contains the molecule ChemDoodle Web Component and the spectrum ChemDoodle Web Component objects in that order */
+		    makeStructureSpectrumSet(id: string, content: string): (structures.Molecule | structures.Spectrum)[]
+
+            /** reads the JCAMP file content and returns the corresponding Spectrum */
+		    read(content: string): structures.Spectrum
+        }
+        
+    }
 
     module math {
         /** manages 2D and 3D bounds information for graphical objects */
@@ -1230,6 +1455,8 @@ declare module ChemDoodle {
 
         /** represents a chemical atom */
         class Atom {}
+
+        class Ring {}
 
         /** represents a chemical bond */
         class Bond {}
@@ -1270,6 +1497,8 @@ declare module ChemDoodle {
             bonds_wedgeThickness_2D: number
             atoms_font_size_2D: number
         }
+
+        class Query {}
 
         module d2 {
             class _Shape {}
