@@ -884,9 +884,9 @@ declare module ChemDoodle {
         constructor(id: string, cellDimension: number)
 
         /** the padding between the sides of the component and the table */
-		padding: Number
+		padding: number
         /** the width and height of each cell in the periodic table, 20 by default, but also specified in the constructor */
-		cellDimension: Number
+		cellDimension: number
 		/** the currently hovered cell, or undefined if there is no cell hovered */
 		hovered: structures.PeriodicCell | undefined
 		/** the currently selected cell, or undefined if there is no cell selected */
@@ -1248,7 +1248,7 @@ declare module ChemDoodle {
         /** is a class for analyzing bonds based on 3D coordinates */
         class BondDeducer {
 			/** the amount of flexibility in calculating bonds; the larger the number, the more bonds found */
-			margin: Number
+			margin: number
 
             /**
              * deduces covalent bonds for the input molecule and appends them to the molecule's bonds array.
@@ -1287,7 +1287,7 @@ declare module ChemDoodle {
          */
         abstract class _Counter {
 			/** the result of the Counter algorithm */
-			value: Number
+			value: number
 			/** holds the Molecule object being analyzed by the child derivative */
 			molecule: structures.Molecule
 
@@ -1371,7 +1371,7 @@ declare module ChemDoodle {
              * So a value of 5 specifies that only 8 membered rings and smaller should be perceived.
              * Use this setting to improve performance.
              */
-			fingerBreak: Number
+			fingerBreak: number
 
             /** 
              * implements the algorithm to find the Euler facet ring set.
@@ -1455,7 +1455,7 @@ declare module ChemDoodle {
         class MOLInterpreter extends _Interpreter {
             constructor()
             /** when writing V3000 MOLFiles by instantiating this class, first set this parameter to 3 */
-		    version: Number
+		    version: number
 
             /** 
              * reads MOLFile content and returns the corresponding molecule;
@@ -1602,8 +1602,96 @@ declare module ChemDoodle {
 
     /** this package contains various mathematical algorithms. */
     module math {
+        /**
+         * returns an object with two parameters (angle, largest);
+         * angle points between the largest gap of the input Array of angles in radians,
+         * largest is the value of the angle between the bonds of the largest gap in radians
+         */
+		function angleBetweenLargest(data: Object): number
+
+        /** this is a helper method to alter an angle in radians to be between 0 and 2pi and with an additional parameter to convert to degrees and a last parameter to constrain under Pi (so it will give the 2Pi complement) */
+		function angleBounds(value: number, convertToDegrees: boolean, constrainToPi: boolean): number
+
+        /**
+         * returns the distance of a line inscribed in a rectangle, given that the line has only 1 endpoint in the rectangle;
+         * the rectangle is a object with self-explanatory parameters x, y, w, and h
+         */
+		function calculateDistanceInterior(to: structures.Point, from: structures.Point, r: Object): number
+
+        /**
+         * return the value if it is between the min and max, inclusive; returns the min if the value is less than the min,
+         * returns the max if the value is greater than the max
+         */
+		function clamp(value: number, min: number, max: number): number
+
+        /**
+         * returns the shortest (tangent) distance from the input Point to the line with endpoints defined by the last two input Points.
+         * This works by rotating the frame such that the line starts at the origin and points up along the x-axis,
+         * and the absolute value of the rotated input Point x-coordinate is returned.
+         *  If the input Point's y-coordinate is not between the endpoints, inclusively, a value of -1 is returned.
+         * The retract parameter is optional and will buffer the ends of the line from hitting with that magnitue if provided.
+         */
+		function distanceFromPointToLineInclusive(p: structures.Point, l1: structures.Point, l2: structures.Point, retract: number): number
+
+        /** returns a 3 membered Array of Numbers corresponding to the RGB magnitudes of the input hex string and multiplied by the input multiplier */
+		function getRGB(hex: string, mutliplier: number): number[]
+
+        /** convert HSL (values between 0 and 1) color to RGB values */
+		function hsl2rgb(h: number, s: number, l: number): number[]
+
+        /** this is a helper method for our WebGL picking system */
+		function idx2color(value: number): string
+
+        /** returns the intersection of two non-parallel line segments, if they intersect */
+		function intersectLines(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number): structures.Point
+
+        /** returns true if the first input parameter is between the last two input parameters, inclusively */
+		function isBetween(x: number, left: number, right: number): boolean
+
+        /** return true if the Point pt is in Polygon poly */
+		function pointInPoly(poly: Object, pt: structures.Point): boolean
+
+        /** returns an rgb color as a CSS string, this is a helper function for the rainbow coloring in ribbons */
+		function rainbowAt(i: number, ii: number, colors: string[]): string
+ 
+
         /** manages 2D and 3D bounds information for graphical objects */
-        class Bounds {}
+        class Bounds {
+            constructor()
+
+            /** the minimum X value for the rectangle that represents these bounds */
+            minX: number
+            /** the minimum Y value for the rectangle that represents these bounds */
+            minY: number
+            /** the maximum X value for the rectangle that represents these bounds */
+            maxX: number
+            /** the maximum Y value for the rectangle that represents these bounds */
+            maxY: number
+            /** the minimum Z value for the rectangular prism that represents these bounds */
+            minZ: number
+            /** the maximum Z value for the rectangular prism that represents these bounds */
+            maxZ: number
+
+            /** 
+             * this Bounds object will expand the bounds of the current rectangle using the x and y data provided;
+             * two sets of coordinates can be provided, but the second set is optional (this way you can expand by point or by rectangle)
+             */
+	    	expand(x1: number, y1: number, x2: number, y2: number): void
+
+            /** 
+             * this Bounds object will expand the bounds of the current rectangle
+             * (or rectangular prism, if z coordinate information is provided)
+             * using the Bounds data provided by the bounds2 parameter
+             */
+    		expand(bounds2: math.Bounds): void
+
+            /** 
+             * this Bounds object will expand the bounds of the current rectangular prisms using the x, y and z data provided;
+             * two sets of coordinates can be provided, but the second set is optional
+             * (this way you can expand by point or by rectanglular prism)
+             */
+		    expand3D(x1: number, y1: number, x2: number, y2: number, z1: number, z2: number): void
+        }
     }
 
     module structures {
