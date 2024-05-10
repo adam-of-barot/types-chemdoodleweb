@@ -1694,6 +1694,29 @@ declare module ChemDoodle {
         }
     }
 
+    /** 
+     * this package keeps track of user input on the current page,
+     * such as the Canvas that is focused and what modifier keys are pressed on the keyboard
+     */
+    module monitor {
+		/** keeps track of whether the shift key is held down */
+		const SHIFT: Boolean
+		/** keeps track of whether the alt key is held down */
+		const ALT: Boolean
+		/** keeps track of whether the operating system specific meta key is held down (CTRL on Windows/Linux, CMD on Mac) */
+		const META: Boolean
+        /**
+         * keeps track of the canvas that the mouse is currently over.
+         * This is undefined if the mouse is over no canvas
+         */
+        const CANVAS_OVER: _Canvas | undefined
+        /**
+         * keeps track of the canvas that the mouse is currently dragging from.
+         * This is undefined if no Canvas is currently being dragged from
+         */
+        const CANVAS_DRAGGING: _Canvas | undefined
+    }
+
     module structures {
         
         /**
