@@ -229,9 +229,15 @@ declare module ChemDoodle {
         molecules: structures.Molecule[]
         /** an array of Shape data structures that the Canvas renders */
         shapes: structures.d3.Shape[]
-        /** the message to be displayed if there is no content currently present for the canvas to render. If this variable is undefined, no message is displayed if there is no content */
+        /** 
+         * the message to be displayed if there is no content currently present for the canvas to render.
+         * If this variable is undefined, no message is displayed if there is no content
+         */
         emptyMessage: string
-        /** the background image, overrides the VisualSpecification backgroundColor property; if undefined, no image is drawn */
+        /** 
+         * the background image, overrides the VisualSpecification backgroundColor property;
+         * if undefined, no image is drawn
+         */
         image: ImageData
         /** 
          * all default browser event actions (like scrolling, text input) are blocked when performed above the Canvas,
@@ -284,7 +290,7 @@ declare module ChemDoodle {
          * returns the bond present in the Canvas's molecules that contains the two parameter atoms;
          * if such a bond does not exist, undefined is returned
          */
-        getBond(a1: structures.Atom, a2: structures.Atom): structures.Bond
+        getBond(a1: structures.Atom, a2: structures.Atom): structures.Bond | undefined
 
         /** returns a Bounds object containing the 2D bounds of all of the graphics in the Canvas */
         getContentBounds(): math.Bounds
@@ -296,7 +302,7 @@ declare module ChemDoodle {
          * returns the Molecule in the Canvas's molecules array that contains the parameter atom;
          * if such a molecule does not exist, undefined is returned
          */
-        getMoleculesByAtom(a: structures.Atom): structures.Molecule
+        getMoleculesByAtom(a: structures.Atom): structures.Molecule | undefined
 
         /** returns the Canvas's array of Molecule objects */
         getMolecules(): structures.Molecule[]
@@ -565,7 +571,7 @@ declare module ChemDoodle {
          * includeAtoms and includeBonds define whether those objects are selectable
          * (if you make both true and you are only looking to select atoms,bonds will get in the way of selecting atoms)
          */
-        pick(x: number, y: number, includeAtoms: boolean, includeBonds: boolean): void
+        pick(x: number, y: number, includeAtoms: boolean, includeBonds: boolean): structures.Atom | structures.Bond | undefined
 
         /** deferred rendering color pass */
 		renderColor(): void
@@ -882,15 +888,15 @@ declare module ChemDoodle {
         /** the width and height of each cell in the periodic table, 20 by default, but also specified in the constructor */
 		cellDimension: Number
 		/** the currently hovered cell, or undefined if there is no cell hovered */
-		hovered: structures.PeriodicCell
+		hovered: structures.PeriodicCell | undefined
 		/** the currently selected cell, or undefined if there is no cell selected */
-		selected: structures.PeriodicCell
+		selected: structures.PeriodicCell | undefined
 
         /** draws the provided cell to the canvas that owns the Context using the given Styles, override this function to change the rendering of the table */
         drawCell(ctx: CanvasRenderingContext2D, styles: structures.Styles, cell: structures.PeriodicCell): void
 
         /** returns the Element object corresponding to the cell that is currently hovered by the mouse pointer, and returns undefined if no cell is hovered */
-        getHoveredElement(): structures.Element
+        getHoveredElement(): structures.Element | undefined
 
         /** catches double click events and selects a cell */
 		click(e: JQuery.Event): void
@@ -1375,15 +1381,26 @@ declare module ChemDoodle {
         }
     }
 
+    /** this package contains various classes and tools for converting chemical data between formats. */
     module io {
         /** recover a Molecule from JSON format */
 		function fromJSONDummy(content: Object): structures.Molecule
 
         /** convert a Molecule to a consise Object that represents the chemical data for use in JSON protocol */
-		function toJSONDummy(mol: structures.Molecule): Object 
+		function toJSONDummy(mol: structures.Molecule): Object
+
+        /**
+         * is an interface for reading and writing chemical data.
+         * It should not be instantiated.
+         * Contains helper methods for dealing with data.
+         */
+        abstract class _Interpreter {
+            /** helper method for formating data in MDL-like syntaxes. */
+		    fit(data: string, length: number, leftAlign: boolean): void
+        }
 
         /** handles converting Javascript objects to and from the ChemDoodle JSON format, this is NOT a child of the Interpreter class */
-        abstract class _Interpreter {
+        class JSONInterpreter {
             constructor()
 
             /** 
@@ -1419,6 +1436,7 @@ declare module ChemDoodle {
 
         /** reads IUPAC JCAMP-DX files, is a child of the Interpreter class */
         class JCAMPInterpreter extends _Interpreter {
+            constructor()
 			/** if true, and the file being read is a NMR spectrum in HZ, then the interpreter will automatically convert the x-axis into PPM */
 			convertHZ2PPM: Boolean
 
@@ -1432,9 +1450,157 @@ declare module ChemDoodle {
             /** reads the JCAMP file content and returns the corresponding Spectrum */
 		    read(content: string): structures.Spectrum
         }
+
+        /** reads and writes MDL MOLFiles, both v2000 and v3000, is a child of the Interpreter class */
+        class MOLInterpreter extends _Interpreter {
+            constructor()
+            /** when writing V3000 MOLFiles by instantiating this class, first set this parameter to 3 */
+		    version: Number
+
+            /** 
+             * reads MOLFile content and returns the corresponding molecule;
+             * this function will automatically detect v2000 and v3000 MOLFiles and handle them accordingly;
+             * the optional multiplier variable will override the default_anstromsPerBondLength variable, set it to 1 for 3D scenes in Angstroms
+             */
+		    read(content: string, multiplier?: number): structures.Molecule
+
+            /** writes and returns a String containing the MOLFile of the given molecule */
+            write(molecule: structures.Molecule): string
+        }
+
+        /** reads and writes MDL RXNFiles (v2000), is a child of the Interpreter class */
+        class RXNInterpreter extends _Interpreter {
+            constructor()
+            /**  
+             * reads RXNFile content and returns an object containing the corresponding content.
+             * The Object possesses an array of Molecules which an be accessed with the name 'molecules' and a shape array by the name of 'shapes' which contains only one Line data structure representing the arrow.
+             * The optional multiplier variable will override the default_anstromsPerBondLength variable, set it to 1 for 3D scenes in Angstroms
+             */
+            read(content: string, multiplier?: number): structures.Molecule
+
+            /** writes and returns a String containing the RXNFile of the given molecules and shapes */
+            write(molecules: structures.Molecule, shapes: structures.d2._Shape): string
+        }
+
+        /** reads XYZ files, is a child of the Interpreter class */
+        class XYZInterpreter extends _Interpreter {
+            constructor()
+            /** if true, the XYZInterpreter will also calculate covalent bonds for input atoms */
+            deduceCovalentBonds: structures.Molecule
+
+            /** reads XYZ file content and returns the corresponding molecule */
+    		read(content: string): structures.Molecule
+        }
+
+        /** reads RCSB PDB files, is a child of the Interpreter class */
+        class PDBInterpreter extends _Interpreter {
+            constructor()
+            /** if true, the PDBInterpreter deduce bonds between residue atoms */
+		    deduceResidueBonds: structures.Molecule
+            /** if true, the PDBInterpreter will also calculate distances for all protein and nucleic acid atoms to the closest ligand atoms for use in display. If no ligand atoms are present, then all atoms will be given a measured distance of 0 */
+		    calculateRibbonDistances: structures.Molecule
+
+            /** 
+             * reads the PDB file content and returns the corresponding Molecule;
+             * the optional multiplier variable will override the default_anstromsPerBondLength variable, set it to 1 for 3D scenes in Angstroms */
+            read(content: string, multiplier?: number): structures.Molecule
+        }
+
+        /** reads Crystallographic Information Files (CIF), is a child of the Interpreter class */
+        class CIFInterpreter extends _Interpreter {
+            constructor()
+            /** 
+             * Given the lengths and angles of the unit cell,
+             * a matrix is calculated (represented in an Array) of the transform matrix from ABC coordinates to XYZ coordinates
+             * 
+             * @param {number} a Angstroms
+             * @param {number} b Angstroms
+             * @param {number} c Angstroms
+             * @param {number} alpha radians
+             * @param {number} beta radians
+             * @param {number} gamma radians
+             */
+		    static generateABC2XYZ(a: number, b: number, c: number, alpha: number, beta: number, gamma: number): number[][]
+
+            /** 
+             * reads a CIF file and returns the corresponding Molecule and unit cell shape;
+             * the returned object will contain two parameters, molecule and unitCell;
+             * the three optional integers specify the supercell dimensions, by default they are all 1,
+             * so reading a file without specifying these parameters will produce just the unit cell.
+             * In addition to reading atoms from CIF files,
+             * this interpreter will also produce a unit cell and other objects relevant to the display of periodic information
+             */
+		    read(content: string, xSuper: number, ySuper: number, zSuper: number): structures.Molecule
+        }
+
+        /** 
+         * reads Chemical Markup Language files, is a child of the Interpreter class.
+         * Currently supports molecules only, no reactions.
+         */
+        class CMLInterpreter extends _Interpreter {
+            constructor()
+
+            /** 
+             * reads CML content and returns an object containing the corresponding content.
+             * The Object possesses an array of Molecules which an be accessed with the name 'molecules'.
+             */
+		    read(content: string): Object
+
+            /** writes and returns a String containing the CML of the given molecules. */
+            write(molecules: structures.Molecule): string
+        }
+
+        /** this package deals with files. */
+        module file {
+            /**
+             * retrieves the content of a file given an input url; 
+             * the content is sent to the callback function provided; 
+             * note that this function uses AJAX, so it will only work for files local to the same origin calling it, 
+             * unless the server supports XHR2
+             */
+		    function content(url: string, callback: Function): void
+        }
+
+        /** this package generates Portable Network Grpahics (PNG) images from canvases. */
+        module png {
+            /** 
+             * creates a PNG image from the input Canvas object and downloads the file to the user's default download location.
+             * The name of the file is the second parameter, which will default to "unnamed" if not provided.
+             */
+		    function download(canvas: _Canvas, filename?: string): void
+
+            /** creates a PNG image from the input Canvas object and opens it in a new window or tab based on the user's browser settings. */
+		    function open(canvas: _Canvas): void
+
+            /** 
+             * creates a PNG image from the input Canvas object as a String and returns it;
+             * the String will be prepended with "data:image/png;base64,".
+             */
+		    function string(canvas: _Canvas): string
+        }
+
+        /** 
+         * this package generates Web Scalable Vector Graphics (SVG) images from canvases.
+         * This class can only generate SVGs for 2D Canvases.
+         * (Proprietary Only)
+         */
+        module svg {
+            /** 
+             * creates a SVG image from the input Canvas object and downloads the file to the user's default download location.
+             * The name of the file is the second parameter, which will default to "unnamed" if not provided.
+             */
+		    function download(canvas: _Canvas, filename?: string): void
+
+            /** creates a SVG image from the input Canvas object and opens it in a new window or tab based on the user's browser settings. */
+		    function open(canvas: _Canvas): void
+
+            /** creates a SVG image from the input Canvas object as a String and returns it. */
+		    function string(canvas: _Canvas): string
+        }
         
     }
 
+    /** this package contains various mathematical algorithms. */
     module math {
         /** manages 2D and 3D bounds information for graphical objects */
         class Bounds {}
