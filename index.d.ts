@@ -1438,7 +1438,7 @@ declare module ChemDoodle {
         class JCAMPInterpreter extends _Interpreter {
             constructor()
 			/** if true, and the file being read is a NMR spectrum in HZ, then the interpreter will automatically convert the x-axis into PPM */
-			convertHZ2PPM: Boolean
+			convertHZ2PPM: boolean
 
             /** given an input JCAMP file with structure colleration data, this function creates two canvases,
              * one for a molecule and one for the spectrum,
@@ -1700,11 +1700,11 @@ declare module ChemDoodle {
      */
     module monitor {
 		/** keeps track of whether the shift key is held down */
-		const SHIFT: Boolean
+		const SHIFT: boolean
 		/** keeps track of whether the alt key is held down */
-		const ALT: Boolean
+		const ALT: boolean
 		/** keeps track of whether the operating system specific meta key is held down (CTRL on Windows/Linux, CMD on Mac) */
-		const META: Boolean
+		const META: boolean
         /**
          * keeps track of the canvas that the mouse is currently over.
          * This is undefined if the mouse is over no canvas
@@ -1717,29 +1717,796 @@ declare module ChemDoodle {
         const CANVAS_DRAGGING: _Canvas | undefined
     }
 
+    /** this package hosts all data structures provided by the ChemDoodle Web Components library. */
     module structures {
         
         /**
          * is data structure for holding information about an element.
          * This is a private class that cannot be instantiated, however, the Elements in the ELEMENT array can be extended.
         */
-        class Element {}
+        class Element {
+            protected constructor(symbol: string, name: string, atomicNumber: number)
+
+            /** the symbol of the element */
+            symbol: string
+            /** the name of the element */
+            name: string
+            /** the atomic number of the element */
+            atomicNumber: number
+            /** if true, implicit hydrogens are added to this element */
+            addH: boolean
+            /** the covalent radius of the element */
+            covalentRadius: number
+            /** the van der Waals radius of the element */
+            vdWRadius: number
+            /** the Jmol color of the element */
+            jmolColor: string
+            /** the PyMOL color of the element; all colors are the same as the Jmol set except: H, C, N, O, F, S */
+            pymolColor: string
+            /** the integer value for the mass of the most abundant isotope of the element */
+            mass: number
+            /** the maximum valency for an element, or 0 if unknown  */
+            valency: number
+        }
+
+        /** 
+         * is data structure for holding information about residue types.
+         * This is a private class that cannot be instantiated, however, the Residues in the RESIDUE array can be extended.
+         */
+        class Residue {
+            protected constructor(symbol: string, name: string, atomicNumber: number)
+
+            /** the symbol of the residue */
+            symbol: string
+            /** the name of the residue */
+            name: string
+            /** just for amino acids, true if polar, false if non-polar */
+            polar: boolean
+            /** the color of the residue in the "amino" color set */
+            aminoColor: string
+            /** the color of the residue in the "shapely" color set */
+            shapelyColor: string
+            /** the acidity of the residue, -1 for acidic, 0 for neutral, 1 for basic */
+            acidity: number
+        }
+
+        /**
+         * is data structure for holding information about a single cell in the periodic table for the PeriodicTableCanvas.
+         * This is a private class that cannot be instantiated.
+         */
+        class PeriodicCell {
+            protected constructor(element: structures.Element, x: number, y: number, dimension: number)
+
+            /** the corresponding element */
+            element: Element
+            /** the x coordinate of the top-left corner of the cell */
+            x: number
+            /** the y coordinate of the top-left corner of the cell */
+            y: number
+            /** the width and height of the square cell */
+            dimension: number
+        }
+
+        /**
+         * The Styles structure contains all the variables that define how all objects are drawn on the canvas.
+         * The style variables are categorized based on the objects they modify and the names of those variables are prepended with the category.
+         * For instance, spectrum settings all begin with the "plots_" prepend.
+         * All of these styles are set by the defaults when a Canvas is constructed.
+         * The default variables are defined by the global ChemDoodle.DEFAULT_STYLES, which an object containing all the defined styles.
+         * Change the default settings to enforce a style sheet on an entire webpage.
+         * You can create a copy of a Styles object by sending in the instance to be copied into the Styles constructor;
+         * of course, if nothing is provided into the constructor, the default styles are used.
+         */
+        class Styles {
+            constructor(copy: structures.Styles)
+
+
+            // Canvas Specifications
+
+            /** background color of the canvas, set this to undefined to create a see-through canvas */
+            backgroundColor: String
+            /** scale of the canvas, set this after the molecule has been loaded, then repaint the canvas */
+            scale: Number
+            /** rotation angle of the canvas */
+            rotateAngle: Number
+            /** length of the bonds, set the default_ before using an interpreter to read your file; for 2D depiction */
+            bondLength_2D: Number
+            /** number of Angstroms per bond length */
+            angstromsPerBondLength: Number
+            /** the direction the lighting points in 3D scenes */
+            lightDirection_3D: Array<number>
+            /** the diffusive light color in 3D scenes */
+            lightDiffuseColor_3D: String
+            /** the specular light color in 3D scenes */
+            lightSpecularColor_3D: String
+            /** if true, a perspective projection will be used, if false, an orthographic projection will be used */
+            projectionPerspective_3D: Boolean
+            /** the field of view angle for the perspective projection matrix in 3D scenes */
+            projectionPerspectiveVerticalFieldOfView_3D: Number
+            /** the width of the orthographic projection matrix in 3D scenes */
+            projectionOrthoWidth_3D: Number
+            /** 
+             * the width/height ratio for the projection matrix in 3D scenes;
+             * this setting is automatically handled by the canvas given its dimensions,
+             * but can be overridden if preferred (if the value is undefined, then this setting is ignored),
+             * this should be width/height of your canvas to keep the aspect ratio square
+             */
+		    projectionWidthHeightRatio_3D: Number
+            /** the near camera cutoff distance in 3D scenes */
+            projectionFrontCulling_3D: Number
+            /** the far camera cutoff distance in 3D scenes */
+            projectionBackCulling_3D: Number
+            /** if true, enables the rendering optimization not to render the mesh polygons facing away from the camera */
+            cullBackFace_3D: Boolean
+            /** this number defines the fogging algorithm used during the rendering of 3D scenes; 0 - No Fogging, 1 - Linear, 2 - EXP, 3 - EXP^2 */
+            fog_mode_3D: Number
+            /** the fog color */
+            fog_color_3D: String
+            /** the clip to start fogging along the objects */
+            fog_start_3D: Number
+            /** the clip to end fogging along the objects */
+            fog_end_3D: Number
+            /** this number affects the fogging algorithms in different ways, but it related to the magnitude */
+            fog_density_3D: Number
+            /** if true, render a cast shadow to the scene */
+            shadow_3D: Boolean
+            /** This number, between 0-1, defines the intensity of the shadow, with 0 not shading anything and 1 completely shading covered geometry to black */
+            shadow_intensity_3D: Number
+            /** if true, renders the scene using a flat color for each object (essentially no first pass shading) */
+            flat_color_3D: Boolean
+            /** if true, enables software antialiasing (which is not as good as hardware antialiasing);
+             * this is useful when using deferred shading techniques */
+            antialias_3D: Boolean
+            /** defines the gamma correction value for rendering 3D scenes */
+            gammaCorrection_3D: Number
+            /** the hover color used for graphics */
+            colorHover: String
+            /** the select color used for graphics */
+            colorSelect: String
+            /** the error color used for graphics */
+            colorError: String
+            /** the preview color used for graphics */
+            colorPreview: String
+
+
+            // 3D Shader Specifications
+
+            /** enable screen space ambient occlusion (SSAO) */
+            ssao_3D: Boolean
+            /** kernel radius setting for the SSAO shader */
+            ssao_kernel_radius: Number
+            /** the number of kernel samples to use, must be an integer */
+            ssao_kernel_samples: Number
+            /** power setting for the SSAO shader */
+            ssao_power: Number
+            /** enable outlining */
+            outline_3D: Boolean
+            /** thickness setting for the outline shader */
+            outline_thickness: Number
+            /** normal threshold setting for the outline shader */
+            outline_normal_threshold: Number
+            /** depth threshold setting for the outline shader */
+            outline_depth_threshold: Number
+            /** depth threshold setting for the FXAA antialiasing shader */
+            fxaa_edgeThreshold: Number
+            /** depth threshold setting for the FXAA antialiasing shader */
+            fxaa_edgeThresholdMin: Number
+            /** the number of search steps to perform for the FXAA antialiasing shader */
+            fxaa_searchSteps: Number
+            /** serch threshold setting for the FXAA antialiasing shader */
+            fxaa_searchThreshold: Number
+            /** subpixel cap setting for the FXAA antialiasing shader */
+            fxaa_subpixCap: Number
+            /** subpixel trim setting for the FXAA antialiasing shader */
+            fxaa_subpixTrim: Number
+
+
+            // Atom Specifications
+
+            /** draw the atoms */
+            atoms_display: Boolean
+            /** atom color */
+            atoms_color: String
+            /** atom text font size for 2D depiction */
+            atoms_font_size_2D: Number
+            /** the atom text font families, families cascade through the array if not found on the users computer; for 2D depiction */
+            atoms_font_families_2D: String[]
+            /** atom text will be bold */
+            atoms_font_bold_2D: Boolean
+            /** atom text will be italicized */
+            atoms_font_italic_2D: Boolean
+            /** draw atoms as circles, text is not drawn; for 2D depiction */
+            atoms_circles_2D: Boolean
+            /** diameter of atom circles for 2D depiction */
+            atoms_circleDiameter_2D: Number
+            /** width of atom circle borders for 2D depiction */
+            atoms_circleBorderWidth_2D: Number
+            /** use Jmol colors for atoms */
+            atoms_useJMOLColors: Boolean
+            /** use PyMOL colors for atoms, will default to Jmol if that specification is also true */
+            atoms_usePYMOLColors: Boolean
+            /** render hydrogen atoms as black always in 2D canvases if this setting is true, irregardless of other color settings; this is useful when showing color sets in both 2D and 3D components on the same page */
+            atoms_HBlack_2D: Boolean
+            /** render implicit hydrogens on all labels that are visible */
+            atoms_implicitHydrogens_2D: Boolean
+            /** show labels for terminal carbons */
+            atoms_displayTerminalCarbonLabels_2D: Boolean
+            /** show hidden carbons that are located between two nearly parallel bonds of the same bond order */
+            atoms_showHiddenCarbons_2D: Boolean
+            /** show carbon labels for carbon atoms with an attribute (charge, radical, lone pair) associated */
+            atoms_showAttributedCarbons_2D: Boolean
+            /** show all carbon labels */
+            atoms_displayAllCarbonLabels_2D: Boolean
+            /** distance between the lone pairs and the atom */
+            atoms_lonePairDistance_2D: Number
+            /** distance between the electrons in lone pairs */
+            atoms_lonePairSpread_2D: Number
+            /** diameter of the dots representing electrons in lone pairs */
+            atoms_lonePairDiameter_2D: Number
+            /** the resolution of the sphere vertex buffer used to render atoms in 3D scenes */
+            atoms_resolution_3D: Number
+            /** the diameter of atoms in 3D scenes (for ball and stick and wireframe type representations); atoms_useVDWDiameters_3D overrides this property */
+            atoms_sphereDiameter_3D: Number
+            /** use van der Waals diameters for atoms */
+            atoms_useVDWDiameters_3D: Boolean
+            /** a multiplier for VDW radii */
+            atoms_vdwMultiplier_3D: Number
+            /** the ambient color for atoms in 3D scenes */
+            atoms_materialAmbientColor_3D: String
+            /** the specular color for atoms in 3D scenes */
+            atoms_materialSpecularColor_3D: String
+            /** the shininess of atoms in 3D scenes */
+            atoms_materialShininess_3D: Number
+            /** display non-bonded atoms using a star geometry, good for visualizing ions or water oxygens in PDB files */
+            atoms_nonBondedAsStars_3D: Boolean
+            /** display atom labels in WebGL components */
+            atoms_displayLabels_3D: Boolean
+
+
+            // Bond Specifications
+
+            /** draw the bonds */
+            bonds_display: Boolean
+            /** bond color */
+            bonds_color: String
+            /** width of the bonds for 2D depiction; also controls the width of primitive lines for bonds rendered in WebGL scenes */
+            bonds_width_2D: Number
+            /** use absolute widths for saturation spacing if true; if false, use the relative value */
+            bonds_useAbsoluteSaturationWidths_2D: Boolean
+            /** relative saturation width of double and triple bond lines for 2D depiction */
+            bonds_saturationWidth_2D: Number
+            /** absolute saturation width of double and triple bond lines for 2D depiction */
+            bonds_saturationWidthAbs_2D: Number
+            /** bond end style for 2D depiction */
+            bonds_ends_2D: 'butt' | 'round' | 'square'
+            /** color the bond in half based on the colors of the connected atoms; in 2D the type of fill is controlled by the bonds_colorGradient specification */
+            bonds_splitColor: Boolean
+            /** color the bond by using a gradient between the two colors of the constituent atoms, rather than by using a color split */
+            bonds_colorGradient: Boolean
+            /** the angle that saturated double bonds are clipped by for 2D depiction */
+            bonds_saturationAngle_2D: Number
+            /** double bonds are drawn symmetrically always, instead of pointing towards the center of a ring, for instance; for 2D depiction */
+            bonds_symmetrical_2D: Boolean
+            /** draws a small background to the bond in the background color to contrast between overlapping bonds for 2D depiction */
+            bonds_clearOverlaps_2D: Boolean
+            /** the extent of the overlap clearing in both directions for 2D depiction */
+            bonds_overlapClearWidth_2D: Number
+            /** the amount that the bond pulls back from atom text for 2D depiction */
+            bonds_atomLabelBuffer_2D: Number
+            /** the thickness of stereochemical wedge bonds for 2D depiction */
+            bonds_wedgeThickness_2D: Number
+            /** the amplitude of wavy bonds for 2D depiction */
+            bonds_wavyLength_2D: Number
+            /** the width of hashes for 2D depiction */
+            bonds_hashWidth_2D: Number
+            /** the spacing of hashes for 2D depiction */
+            bonds_hashSpacing_2D: Number
+            /** the diameter of dots used in bond rendering (usually for zero order bonds) */
+            bonds_dotSize_2D: Number
+            /** this setting controls how whole order bonds are rendered; bonds will be renedered in Lewis Dot style, with perpendicular electron pairs representing the bonds */
+            bonds_lewisStyle_2D: Boolean
+            /** renders higher bond orders with multiple cylinders if true, higher bond orders will orient themselves to face the camera */
+            bonds_showBondOrders_3D: Boolean
+            /** the resolution of the cylinder vertex buffer used to render bonds in 3D scenes */
+            bonds_resolution_3D: Number
+            /** renders bonds as primitive lines in WebGL scenes, instead of as meshes */
+            bonds_renderAsLines_3D: Boolean
+            /** the diameter of bonds in 3D scenes */
+            bonds_cylinderDiameter_3D: Number
+            /** the latitude resolution of the pill vertex buffer used to render bonds in 3D scenes */
+            bonds_pillLatitudeResolution_3D: Number
+            /** the longitude resolution of the pill vertex buffer used to render bonds in 3D scenes */
+            bonds_pillLongitudeResolution_3D: Number
+            /** the length of hash segments of hash bonds in 3D scenes */
+            bonds_pillHeight_3D: Number
+            /** the spacing of hash bonds in 3D scenes */
+            bonds_pillSpacing_3D: Number
+            /** the diameter of hash bonds in 3D scenes */
+            bonds_pillDiameter_3D: Number
+            /** the ambient color for bonds in 3D scenes */
+            bonds_materialAmbientColor_3D: String
+            /** the specular color for bonds in 3D scenes */
+            bonds_materialSpecularColor_3D: String
+            /** the shininess of bonds in 3D scenes */
+            bonds_materialShininess_3D: Number
+
+
+            //Macromolecule Specifications
+
+            /** render ribbons for proteins, if any */
+            proteins_displayRibbon: Boolean
+            /** render a stick trace along the alpha carbon backbone for proteins, if any */
+            proteins_displayBackbone: Boolean
+            /** render a pipe and plank model for proteins, if any */
+            proteins_displayPipePlank: Boolean
+            /** the thickness of the sticks used to render the alpha carbon backbone */
+            proteins_backboneThickness: Number
+            /** the color of the alpha carbon backbone trace */
+            proteins_backboneColor: String
+            /** display a cartoon version of the ribbons for proteins; by default ribbons and their edges are continuous, by using the cartoon model, ribbon edges will be constant widths for different parts of the structure and will jump at intersections, end of helices and sheets will render an arrowhead */
+            proteins_ribbonCartoonize: Boolean
+            /** color residues by segment when set; by default this is 'none', and residues will not be individually colored */
+            proteins_residueColor: 'none' | 'amino' | 'shapely' | 'polarity' | 'acidity' | 'rainbow'
+            /** the color of the front of the ribbon */
+            proteins_primaryColor: String
+            /** the color of the back of the ribbon' ticks */
+            proteins_secondaryColor: String
+            /** the color of the front of helices in cartoon models */
+            proteins_ribbonCartoonHelixPrimaryColor: String
+            /** the color of the back of helices in cartoon models */
+            proteins_ribbonCartoonHelixSecondaryColor: String
+            /** the color of sheets in cartoon models */
+            proteins_ribbonCartoonSheetColor: String
+            /** the color of the tubes for pipe and plank protein models */
+            proteins_tubeColor: String
+            /** the resolution of the tube used for pipe and plank protein models in 3D scenes */
+            proteins_tubeResolution_3D: Number
+            /** the thickness of the mesh for the ribbon */
+            proteins_ribbonThickness: Number
+            /** the thickness of tube meshes built for the pipe and plank models */
+            proteins_tubeThickness: Number
+            /** the thickness of the sheet planks built for the pipe and plank models */
+            proteins_plankSheetWidth: Number
+            /** the diameter of the helix cylinders built for the pipe and plank models */
+            proteins_cylinderHelixDiameter: Number
+            /** the vertical resolution of ribbon models, must be a positive integer; recommended 8 for hi, 6 for med, 3 for low */
+            proteins_verticalResolution: Number
+            /** the horizontal resolution of ribbon models, must be a positive odd integer; recommended 8 for hi, 5 for med, 3 for low */
+            proteins_horizontalResolution: Number
+            /** the ambient color for ribbons in 3D scenes */
+            proteins_materialAmbientColor_3D: String
+            /** the specular color for ribbons in 3D scenes */
+            proteins_materialSpecularColor_3D: String
+            /** the shininess of ribbons in 3D scenes */
+            proteins_materialShininess_3D: Number
+            /** render tubes and platforms for nucleic acids, if any */
+            nucleics_display: Boolean
+            /** the color of the tubes and base handles for the nucleic acid models */
+            nucleics_tubeColor: String
+            /** the color of the base platforms for the nucleic acid models */
+            nucleics_baseColor: String
+            /** color residues by segment when set; by default this is 'none', and residues will not be individually colored */
+            nucleics_residueColor: 'none' | 'shapely' | 'rainbow'
+            /** the thickness of the tubes that define the backbones of the nucleic acids */
+            nucleics_tubeThickness: Number
+            /** the resolution of the tube used for the backbones of nucleic acids in 3D scenes */
+            nucleics_tubeResolution_3D: Number
+            /** the vertical resolution of nucleic models, must be a positive integer; recommended 8 for hi, 6 for med, 3 for low */
+            nucleics_verticalResolution: Number
+            /** the ambient color for nucleic acid models in 3D scenes */
+            nucleics_materialAmbientColor_3D: String
+            /** the specular color for nucleic acid models in 3D scenes */
+            nucleics_materialSpecularColor_3D: String
+            /** the shininess of nucleic acid models in 3D scenes */
+            nucleics_materialShininess_3D: Number
+            /** render the atoms of the proteins and nucleic acids macromolecules, if any */
+            macro_displayAtoms: Boolean
+            /** render the bonds of the proteins and nucleic acids macromolecules, if any */
+            macro_displayBonds: Boolean
+            /** this is the cutoff distance that will determine the distance from ligand molecules that is required to show macromolecule atoms; if no ligands are present, or if there are no distances calculated, this specification will have no effect; the PDBInterpreter must be set to calculate distances; if this value is -1, then all atoms are shown regardless of distance */
+            macro_atomToLigandDistance: Number
+            /** render water molecules, if any */
+            macro_showWater: Boolean
+            /** color each individual chain with a unique color, overriding any other coloring specifications; colors are iterated in order, through HSL space */
+            macro_colorByChain: Boolean
+            /** the colors to interpolate through for the rainbow */
+            macro_rainbowColors: String[]
+            
+            
+            //Surface Specifications
+
+            /** render surfaces, if any */
+            surfaces_display: Boolean
+            /** the transparency of surfaces in 3D scenes; a value between 0 and 1, with 0 being invisible and 1 being opaque */
+            surfaces_alpha: Number
+            /** the surface rendering style */
+            surfaces_style: 'Dots' | 'Mesh' | 'Solid'
+            /** the color of the surface */
+            surfaces_color: String
+            /** the ambient color for surfaces in 3D scenes */
+            surfaces_materialAmbientColor_3D: String
+            /** the specular color for surfaces in 3D scenes */
+            surfaces_materialSpecularColor_3D: String
+            /** the shininess of surfaces in 3D scenes */
+            surfaces_materialShininess_3D: Number
+            
+            
+            //Spectrum Specifications
+
+            /** plot color */
+            plots_color: String
+            /** width of the plot line */
+            plots_width: Number
+            /** display an integration line, typically for NMR spectra */
+            plots_showIntegration: Boolean
+            /** integration line color */
+            plots_integrationColor: String
+            /** width of the integration line */
+            plots_integrationLineWidth: Number
+            /** display an grid using the axes' ticks */
+            plots_showGrid: Boolean
+            /** integration line color */
+            plots_gridColor: String
+            /** width of the integration line */
+            plots_gridLineWidth: Number
+            /** display the y-axis */
+            plots_showYAxis: Boolean
+            /** flip the x-axis, typical for certain domain units of NMR and IR spectra */
+            plots_flipXAxis: Boolean
+
+
+            //Shape Specifications
+
+            /** shape text font size */
+            text_font_size: Number
+            /** the shape text font families, families cascade through the array if not found on the users computer */
+            text_font_families: String[]
+            /** shape text will be bold */
+            text_font_bold: Boolean
+            /** shape text will be italic */
+            text_font_italic: Boolean
+            /** this specification determines whether labels in WebGL scenes will have a black stroke behind them to improve contrast in complex graphics */
+            text_font_stroke_3D: Boolean
+            /** shape text color */
+            text_color: String
+            /** shape color */
+            shapes_color: String
+            /** shape line width */
+            shapes_lineWidth: Number
+            /** shape point size, typically for 3D rendering (as in surface dot representations) */
+            shapes_pointSize: Number
+            /** length of any associated arrows */
+            shapes_arrowLength_2D: Number
+            /** this specification determines whether the compass is displayed at the bottom-left of WebGL scenes */
+            compass_display: Boolean
+            /** compass X arrow color */
+            compass_axisXColor_3D: String
+            /** compass Y arrow color */
+            compass_axisYColor_3D: String
+            /** compass Z arrow color */
+            compass_axisZColor_3D: String
+            /** The size of the compass */
+            compass_size_3D: Number
+            /** The resolution of the compass */
+            compass_resolution_3D: Number
+            /** If true, the compass will display labels for the axes (X,Y,Z) */
+            compass_displayText_3D: Boolean
+            /** the type of compass to be rendered:
+             * 0 - bottom left mesh;
+             * 1 - center lined strokes
+             */
+            compass_type_3D: 0 | 1
+            /** Set this to true to have measurements update on repaint, for dynamic scenes; leave it false for static scenes to improve performance */
+            measurement_update_3D: Boolean
+            /** The resolution of the angle arcs for measurements */
+            measurement_angleBands_3D: Number
+            /** If true, text will display the measurement values */
+            measurement_displayText_3D: Boolean
+
+            /** create a copy of this Styles object */
+		    copy(): void
+
+            /** 
+             * presets the 3D representation for the main molecular structure for a Canvas3D,
+             * currently accepts: 'Ball and Stick', 'van der Waals Spheres', 'Stick', 'Wireframe', 'Line'
+             */
+		    set3DRepresentation(representation: 'Ball and Stick' | 'van der Waals Spheres' | 'Stick' | 'Wireframe' | 'Line'): void
+        }
 
         /**
          * represents a 2D point and contains functions for various 2D geometric calculations
          */
         class Point {
+            /** x coordinate */
             x: number
+            /** y coordinate */
             y: number
+
+            /** add Point p */
+		    add(p: Point): void
+
+            /** returns the angle to Point p, with the current Point as the origin (y-axis is inverted for the inverted canvases) */
+		    angle(p: Point): number
+
+            /** same as angle(), but for the contradictory way canvas arcs are handled */
+		    angleForStupidCanvasArcs(p: Point): number
+
+            /** returns the distance to Point p */
+		    distance(p: Point): number
+
+            /** subtract Point p */
+		    sub(p: Point): void
+        }
+
+        type QueryRangeVariable = {x: number, y: number}[]
+
+        /** 
+         * this data structure holds query information for chemical objects;
+         * range type query variables are arrays filled with objects defining x and y parameters,
+         * for a single value range parameter, only x is defined
+         */
+        class Query {
+            constructor(type: number)
+            /** specifies an atom query */
+            static TYPE_ATOM: string
+            /** specifies a bond query */
+            static TYPE_BOND: string
+            /** this stores the current value of the query as a String; caching improves rendering performance, make sure to reset the cache if you change the Query by setting it to the output of the toString() function */
+            cache: String
+            /** this array contains values for the element identity variable, including generics */
+            elements: QueryRangeVariable
+            /** this array contains values for the atom charge variable, which is a range variable */
+            charge: QueryRangeVariable
+            /** this hash variable defines the stereochemical configuration of the atom */
+            chirality: 'A' | 'R' | 'S'
+            /** this array contains values for the atom connectivity variable (all connections including hydrogen), which is a range variable */
+            connectivity: QueryRangeVariable
+            /** this array contains values for the atom connectivityNoH variable (all connections excluding hydrogen), which is a range variable */
+            connectivityNoH: QueryRangeVariable
+            /** this array contains values for the atom hydrogen count variable, which is a range variable */
+            hydrogens: QueryRangeVariable | boolean
+            /** this array contains values for the bond type identity variable, including generics */
+            orders: QueryRangeVariable
+            /** this hash variable defines the stereochemical configuration of the bond */
+            stereo: 'A' | 'E' | 'Z'
+            /** this boolean variable defines whether an object is aromatic or not */
+            aromatic: Boolean
+            /** this array contains values for the object ring count variable, which is a range variable */
+            ringCount: QueryRangeVariable
+            /** this type specifies the query context; defined with the static members of this class */
+            type: Number
+
+            /** draws this query to the canvas that owns the Context using the given Styles at the input position */
+		    draw(ctx: CanvasRenderingContext2D, styles: Styles, pos: Point): void
+
+            /** returns a string representing the input range objects */
+		    outputRange(range: QueryRangeVariable): String
+
+            /** returns an array of range values corresponding to the input string value */
+		    parseRange(value: string): QueryRangeVariable
+
+            /** returns a string representing this query in the ChemDoodle query notation format */
+		    toString(): String
         }
 
         /** represents a chemical atom */
-        class Atom {}
+        class Atom extends Point {
+            constructor(label: string, x: number, y: number, z: number)
+            /** specifies 'abs' (absolute) enhanced stereochemistry */
+            static ESTEREO_ABSOLUTE: string
+            /** specifies 'or' (or) enhanced stereochemistry */
+            static ESTEREO_OR: string
+            /** specifies '&' (and) enhanced stereochemistry */
+            static ESTEREO_AND: string
 
-        class Ring {}
+            /** 
+             * label of the atom, should be an element symbol;
+             * this field is chemically significant and will be expected to be an element symbol
+             */
+            label: String
+            /** 
+             * alternate text to be displayed for an atom,which will override the rendering of the element symbol and any associated attributes;
+             * this field is ignored if undefined
+             */
+            altLabel: String
+            /** z coordinate */
+            z: Number
+            /** atomic charge */
+            charge: Number
+            /** mass number, values greater than -1 are rendered */
+            mass: Number
+            /** implicit hydrogen count override, this overrides the built in implicit hydrogen algorithm with the positive value (or 0) provided, values greater than -1 are rendered */
+            implicitH: Number
+            /** number of lone pairs to be rendered on an atom; this is a positive integer value */
+            numLonePair: Number
+            /** number of radical electrons to be rendered on an atom; this is a positive integer value */
+            numRadical: Number
+            /** not connected to any other atoms (if Carbon, draws a grey dot) */
+            isLone: Boolean
+            /** if true, this represents that the mouse is hovered, draws a brown circle */
+            isHover: Boolean
+            /** if true, this represents that this atom is selected, draws a blue circle */
+            isSelected: Boolean
+            /** for SketcherCanvas, overlaps another atom, draws a red circle */
+            isOverlap: Boolean
+            /** for SketcherCanvas, this atom is contained in the lasso */
+            isLassoed: Boolean
+            /** metadata set by the containing Molecule, states if the Atom is hidden (it is located between two parallel bonds, think allenes) */
+            isHidden: Boolean
+            /** metadata set by the containing Molecule, the valency of the Atom */
+            coordinationNumber: Number
+            /** metadata set by the containing Molecule, the number of bonds connected to the Atom */
+            bondNumber: Number
+            /** metadata set by the containing Molecule, the angle in radians that points towards the largest open space between the bonds connected to the atom */
+            angleOfLeastInterference: Number
+            /** metadata set by the containing Molecule, an Array of Number storing the bond angle information from this atom */
+            angles: Number[]
+            /** set this to true to not draw this atom, this is used by the sketcher to hide the label when using the text input tool */
+            dontDraw: Boolean
+            /** this object stores the query information for this atom; if it is undefined, then there is no query associated with this atom */
+            query: Query
+            /** metadata set by the containing Molecule, the center of the molecule that contains this atom */
+            molCenter: Point
+            /**
+             * the enhanced stereochemistry definition for the atom;
+             * this object has two parameters, 'type' and 'group'.
+             * 'type' is a String and defines the enhanced stereochemistry operator, either 'abs', 'or', or '&', 'abs' by default.
+             * 'group' is a positive integer defining the and/or operator group and is 1 by default.
+             */
+            enhancedStereo: {type: 'abs' | 'or' | '&', group: number}
+
+            /** the 3D counterpart to the same Point function */
+			add3D(a: Atom): void
+
+            /** the 3D counterpart to the same Point function */
+			distance3D(a: Atom): void
+
+            /** draws this atom to the canvas that owns the Context using the given Styles */
+			draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+            /** draws attributes for an Atom */
+			drawAttribute(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+            /** draws decorations for the SketcherCanvas that owns the Context and has this Atom hovered */
+			drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+            /** returns a Bounds object containing the 2D bounds of the graphical atom */
+			getBounds(): math.Bounds
+
+            /** returns a Bounds object containing the 3D bounds of the graphical atom */
+			getBounds3D(): math.Bounds
+
+            /**
+             * this is a helper function for the rendering functions; 
+             * given the input choices, a color is returned with which to render the atom with
+             */
+			getElementColor(useJMOLColors: boolean, usePYMOLColors: boolean, color: string): String
+
+            /** returns the number of implicit hydrogens */
+			getImplicitHydrogenCount(): Number
+
+            /** returns true if label is not 'C' */
+			isLabelVisible(styles: Styles): Boolean
+
+            /** 
+             * renders this atom to the 3D scene in the WebGL canvas that owns the GLContext using the given Styles;
+             * noColor is a parameter only used by the picking system
+             */
+			render(gl: WebGLRenderingContext, styles: Styles, noColor: boolean): void
+
+            /** renders the highlight for this atom the given Styles */
+			renderHighlight(gl: WebGLRenderingContext, styles: Styles): void
+
+            /** the 3D counterpart to the same Point function */
+			sub3D(a: Atom): void
+        }
+
+        /**
+         * represents and renders advanced chemical labels, with correct tokenizing, formatting and layout.
+         * (Proprietary Only)
+         */
+        class CondensedLabel extends Point {
+            constructor(atom: Atom, text: string)
+
+            /** a string array of the valid and acceptable abbreviations to be used along with element symbols when parsing labels. */
+            static ABBREVIATIONS: string[]
+            /** the atom that this condensed label is labelling. */
+            atom: Atom
+            /** the text of the label to be parsed. */
+            text: String
+            /** a string array of the parsed tokens of the label. */
+            tokens: string[]
+
+            /** draws this condensed label to the canvas that owns the Context using the given Styles */
+		    draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+            /** reverses the order of the tokens if necessary for layout */
+		    getLeftAlignedTokens(ctx: CanvasRenderingContext2D, styles: Styles): string[]
+
+            /** this algorithm parses the label */
+		    parse(): void
+        }
+
+        /** represents a chemical ring */
+        class Ring {
+            constructor()
+
+            /** constituent atoms */
+            atoms: Atom[]
+            /** constituent bonds */
+            bonds: Bond[]
+            /** the center of this Ring, cached for performance */
+            center: Point
+
+            /** returns a Point that specifies the center of this Ring */
+		    getCenter(): Point
+
+            /** loops through bonds and sets all Bond.ring objects in to itself, caches center */
+		    setupBonds(p: Point): void
+        }
 
         /** represents a chemical bond */
-        class Bond {}
+        class Bond {
+            /** specifies no stereochemistry */
+            STEREO_NONE: String
+            /** specifies a protruding stereochemistry */
+            STEREO_PROTRUDING: String
+            /** specifies a recessed stereochemistry */
+            STEREO_RECESSED: String
+            /** specifies an ambiguous stereochemistry */
+            STEREO_AMBIGUOUS: String
+            /** first Atom */
+            a1: Atom
+            /** second Atom */
+            a2: Atom
+            /** bond order */
+            bondOrder: Number
+            /** this object stores the query information for this bond; if it is undefined, then there is no query associated with this bond */
+            query: Query
+            /** stereochemical bias of the bond, must be one of the BOND_STEREO constants */
+            stereo: String
+            /** if true, this represents that this bond is selected, draws brown handles */
+            isHover: Boolean
+            /** if true, this represents that this atom is selected, draws blue handles */
+            isSelected: Boolean
+            /** the largest containing SSSR ring */
+            ring: Ring
+            /** metadata set by the containing Molecule, the center of the molecule that contains this bond */
+            molCenter: Point
+
+            /** returns true if this Bond connects to the input atom */
+		    contains(a: Atom): Boolean
+
+            /** draws this bond to the canvas that owns the Context using the given Styles */
+		    draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+            /** draws decorations for the SketcherCanvas that owns the Context and has this Bond hovered */
+		    drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+            /** draws this bond in Lewis Dot style given the input parameters */
+		    drawLewisStyle(ctx: CanvasRenderingContext2D, styles: Styles, y1: Number, x2: Number, x1: Number, y2: Number): void
+
+            /** returns a Point that specifies the center between the two Atoms in the Bond */
+		    getCenter(): Point
+
+            /** returns the bond length on the XY plane */
+		    getLength(): Number
+
+            /** returns the 3D bond length */
+		    getLength3D(): Number
+
+            /** returns the Atom opposite Atom a */
+		    getNeighbor(a: Atom): Atom
+
+            /** renders this bond to the 3D scene in the WebGL canvas that owns the GLContext using the given Styles */
+		    render(gl: WebGLRenderingContext, styles: Styles): void
+
+            /** renders the highlight for this bond the given Styles */
+		    renderHighlight(gl: WebGLRenderingContext, styles: Styles): void
+
+            /** this function renders the bond for the picking system */
+		    renderPicker(gl: WebGLRenderingContext, styles: Styles): void
+        }
 
         /** represents a chemical molecule */
         class Molecule {
@@ -1763,22 +2530,6 @@ declare module ChemDoodle {
 
         /** data structure to hold spectrum information */
         class Spectrum {}
-
-        /**
-         * is data structure for holding information about a single cell in the periodic table for the PeriodicTableCanvas.
-         * This is a private class that cannot be instantiated.
-         */
-        class PeriodicCell {}
-
-        /** The Styles structure contains all the variables that define how all objects are drawn on the canvas. */
-        class Styles {
-            bonds_width_2D: number
-            bonds_hashSpacing_2D: number
-            bonds_wedgeThickness_2D: number
-            atoms_font_size_2D: number
-        }
-
-        class Query {}
 
         module d2 {
             class _Shape {}
