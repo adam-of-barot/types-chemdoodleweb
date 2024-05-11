@@ -2510,32 +2510,428 @@ declare module ChemDoodle {
 
         /** represents a chemical molecule */
         class Molecule {
+            constructor()
+
+            /** constituent atoms */
             atoms: Atom[]
 
-            /**
-             * Returns a Point that specifies the width and height of this Molecule in the XY plane.
-             *
-             * Among other uses, this method can be used to first find the dimensions of a molecule
+            /** constituent bonds */
+            bonds: Bond[]
+
+            /** constituent rings */
+            rings: Ring[]
+
+            /** 
+             * will find rings in the check() function;
+             * this should be disabled by you, if not necessary, to improve performance
+             */
+            findRings: boolean
+
+            /** 
+             * sets up the molecule for drawing by checking for lone carbons, rings and z-sorting, as well as setting up the metadata for drawing;
+             * since this is a cpu intensive function, the force parameter is for efficiency,
+             * so the molecule can be checked often, with a false or no parameter and it will keep track that it needs to be checked,
+             * then when an important function (such as a render) needs the check to go through,
+             * you pass it a true and the check will be forced if the molecule needs to be checked.
+             */
+            check(force: boolean): void
+
+            /** draws this molecule to the canvas that owns the Context using the given Styles */
+            draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+            /** with a as the origin, returns an Array of all the angles to the immediately connected atoms in this Molecule, in ascending order */
+            getAngles(a: Atom): number[]
+
+            /** Given an input atom from this molecule, return the group it is enclosed within, either ring block or chain */
+            getAtomGroup(atom: Atom): Atom[]
+
+            /** calculates the average bond length of the molecule, or returns 0 if there are no bonds, this is a 2D function */
+            getAverageBondLength(): number
+
+            /** Given an input bond from this molecule, return the group it is enclosed within, either ring block or chain */
+            getBondGroup(bond: Bond): Bond[]
+
+            /** returns an Array of Bond objects that contain the input Atom a in the molecule */
+            getBonds(a: Atom): Bond[]
+
+            /** returns a Bounds object containing the 2D bounds of the graphical molecule */
+            getBounds(): math.Bounds
+
+            /** returns a Bounds object containing the 3D bounds of the graphical molecule */
+            getBounds3D(): math.Bounds
+
+            /** returns a Point that specifies the center of this Molecule */
+            getCenter(): Point
+
+            /** returns an Atom that specifies the center of this Molecule in 3 dimensions */
+            getCenter3D(): Atom
+
+            /** adds the bond orders from the bs (Array of Bond) parameter together to calculate the coordination number */
+            getCoordinationNumber(bs: Bond[]): number
+
+            /** 
+             * returns a Point that specifies the width and height of this Molecule in the XY plane.
+             * Among other uses, this method can be used to first find the dimensions of a molecule 
              * to set the dimensions of a Canvas to perfectly fit it (make sure to add some aesthetic buffer space).
              */
             getDimension(): Point
 
-            /**
-             * Scales the molecule so that the average bond length equals the input length.
-             *
-             * This is a 2D function.
+            /** renders this molecule to the 3D scene in the WebGL canvas that owns the GLContext using the given Styles */
+            render(gl: WebGLRenderingContext, styles: Styles): void
+
+            /** 
+             * renders the picking scene to the backbuffer for analysis;
+             * objects is an indexed array that stores the object information for the primitive geometries;
+             * includeAtoms and includeBonds determine if these objects will be selectable
              */
+            renderPickFrame(gl: WebGLRenderingContext, styles: Styles, objects: unknown[], includeAtoms: boolean, includeBonds: boolean): void
+
+            /** scales the molecule so that the average bond length equals the input length, this is a 2D function */
             scaleToAverageBondLength(length: number): void
+
+            /** sets up metadata for the molecule, used internally to determine how graphics are rendered */
+            setupMetaData(): void
+
+            /** sorts atoms in ascending order by z coordinate */
+            sortAtomsByZ(): void
+
+            /** sorts bonds in ascending order by their z coordinate */
+            sortBondsByZ(): void
         }
 
         /** data structure to hold spectrum information */
-        class Spectrum {}
+        class Spectrum {
+            constructor()
+
+            /** the spectrum plot as an array of Point objects */
+			data: Point[]
+            /** this is an Array of String containing the header records from the JCAMP file */
+			metadata: string[]
+            /** 
+             * this is an Array of Object.
+             * Each object describes an item in the list of data items to be displayed on the top left of the spectrum.
+             * Three String parameters may be present: tag, display, value.
+             * If tag is present, then the JCAMP metadata will be searched for the corresponding JCAMP tag and placed in the list.
+             * If this tag is not found, it is ignored.
+             * If display is also provided, then the JCAMP tag name is replaced by the more appropriate title.
+             * You can also add custom items by providing the display and value parameters.
+             * If the value parameter is defined, then the tag parameter will be ignored if also defined.
+             */
+			dataDisplay: {tag?: string, display?: string, value?: string}[]
+            /** the minimum domain value, set up by the setup method to the smallest x value in the data array after the spectrum is read, can also be manually set */
+			minX: Number
+            /** the maximum domain value, set up by the setup method to the largest x value in the data array after the spectrum is read, can also be manually set */
+			maxX: Number
+            /** this value states that only values greater than this percentage of the highest y-value in the spectrum will be considered in the integration */
+			integrationSensitivity: Number
+            /** the title of the spectrum, most spectrum file formats provide a title, no title is displayed if the value is undefined */
+			title: String
+            /** the unit of the domain to be displayed under the x-axis, no x-axis title is displayed if the value is undefined */
+			xUnit: String
+            /** the unit of the domain to be displayed under the y-axis, no y-axis title is displayed if the value is undefined */
+			yUnit: String
+            /**
+             * determines how the plot will be drawn,
+             * if continuous is true, then the plot is rendered as a path from Point to Point in the data array,
+             * if continuous is false, then each data point will be rendered as a vertical line from y = 0
+             */
+			continuous: Boolean
+            /** an object storing dimension metadata from the previous render */
+			memory: Object
+
+            /** will popup a Javascript alert dialog with the metadata from the JCAMP file */
+            alertMetadata(): void
+
+            /** draws this spectrum and graph to the canvas that owns the Context using the given Styles, the canvas's width and height are also provided */
+            draw(ctx: CanvasRenderingContext2D, styles: Styles, width: Number, height: Number): void
+
+            /** draws the spectrum plot to the canvas that owns the Context using the given Styles, the canvas's width and height, and the offsets from the top, bottom, and left are also provided */
+            drawPlot(ctx: CanvasRenderingContext2D, styles: Styles, width: Number, height: Number, offsetTop: Number, offsetLeft: Number, offsetBottom: Number): void
+
+            /**
+             * given the input x-coordinate from the canvas space,
+             * this function will return a point containing the plot coordinates of the spectrum point that has its x-coordinate closest to the input x coordinate;
+             * because the smallest resolution on screens is a pixel, this function will actually find the highest peak within a pixel range of the input x coordinate to return;
+             * can only be called after a render when memory is set, this function doesn't make sense without a render first anyway
+             */
+            getClosestPlotInternalCoordinates(x: Number): Point   
+
+            /** 
+             * function to obtain the x and y coordinates within the spectrum's plot space given the input x and y coordinates from the canvas space;
+             * can only be called after a render when memory is set, this function doesn't make sense without a render first anyway;
+             * essentially, this just calls getInverseTransformedX() and getInverseTransformedY()
+             */
+            getInternalCoordinates(x: Number, y: Number): Point 
+
+            /**
+             * function to obtain the x-coordinate within the spectrum's plot space given the input x-coordinate from the canvas space;
+             * can only be called after a render when memory is set, this function doesn't make sense without a render first anyway
+             */
+            getInverseTransformedX(x: Number): Number
+
+            /**
+             * function to obtain the y-coordinate within the spectrum's plot space given the input y-coordinate from the canvas space;
+             * can only be called after a render when memory is set, this function doesn't make sense without a render first anyway
+             */
+            getInverseTransformedY(y: Number): Number
+
+            /** used internally to obtain the x-coordinate within the canvas space given the input x-coordinate from the spectrum's plot space */
+            getTransformedX(x: Number, styles: Styles, width: Number, offsetLeft: Number): Number
+
+            /** used internally to obtain the y-coordinate within the canvas space given the input y-coordinate from the spectrum's plot space */
+            getTransformedY(x: Number, styles: Styles, height: Number, offsetBottom: Number, offsetTop: Number): Number
+
+            /** analyzes the data array for the default domain and scales the range between 0 and 1, called by the interpreters that read spectra files */
+            setup(): void
+
+            /**
+             * given the signed translation amount in pixels in the canvas's domain space (in any order),
+             * will translate that domain by appropriately setting the minX and maxX parameters given the canvas width
+             */
+            translate(dif: Number, width: Number): void
+
+            /**
+             * given the input pixel1 and pixel2 values in the canvas's domain space (in any order),
+             * will focus in on that domain by appropriately setting the minX and maxX parameters given the canvas width;
+             * optionally, if the scaleY parameter is true, this function will return a that: Number should be the new scale for the Styles.scale value to see the full peak;
+             * this function returns nothing if scaleY is false
+             */
+            zoom(pixel1: Number, pixel2: Number, width: Number, scaleY: boolean): Number
+        }
+
+        /** represents a chemical reaction */
+        class Reaction {
+            constructor()
+
+            /**
+             * given a reaction arrow and an array of molecules, this function will separate the molecules into reactants and products.
+             * An object is returned with two subarrays named "reactants" and "products"
+             */
+            resolve(arrow: d2.Line, molecules: Molecule[]): {reactants: Molecule[], products: Molecule[]}
+        }
+
+        /** a queue data structure */
+        class Queue {
+            constructor()
+
+            /** returns and removes the element at the beginning of the queue */
+            dequeue(): Object
+            
+            /** adds an element to the end of the queue */
+		    enqueue(o: Object): Object
+
+            /** returns, but does not remove, the element at the beginning of the queue */
+		    getOldestElement(): Object
+
+            /** returns the size of the queue */
+		    getSize(): Number
+
+            /** returns true if there are no elements in the queue */
+		    isEmpty(): Boolean
+        }
 
         module d2 {
-            class _Shape {}
+            /** the parent data structure for all 2D shapes, it should not be instantiated. */
+            class _Shape {
+                /** draws this shape's anchor to the SketcherCanvas that owns the Context using the given Styles and mouse position */
+		        drawAnchor(ctx: CanvasRenderingContext2D, styles: Styles, p: Point, hovered: boolean): void
+
+                /** draws this shape's decorations to the SketcherCanvas that owns the Context using the given Styles */
+		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** returns a Bounds object containing the 2D bounds of the shape */
+                getBounds(): math.Bounds
+            }
+
+            /** represents a 2D line, arrows can be attached */
+            class Line {
+                constructor(p1: Point, p2: Point)
+
+                /** specifies a synthetic arrow */
+                ARROW_SYNTHETIC: String
+                /** specifies a retrosynthetic arrow */
+                ARROW_RETROSYNTHETIC: String
+                /** specifies a resonance arrow */
+                ARROW_RESONANCE: String
+                /** specifies an equilibrium arrow */
+                ARROW_EQUILIBRIUM: String
+
+                /**
+                 * the arrow type the line is to be rendered as;
+                 * if undefined, the line is rendered as a plain line
+                 */
+                arrowType: String
+                /** 
+                 * the text to be rendered above the arrow (conditions, etc.);
+                 * if undefined, no text is rendered above the arrow
+                 */
+                topText: String
+                /** the text to be rendered below the arrow; if undefined, no text is rendered below the arrow */
+                bottomText: String
+                /** this array contains one representative atom from each molecule assigned as a reactant to this line shape, typically when representing a reaction as an arrow */
+                reactants: Atom[]
+                /** this array contains one representative atom from each molecule assigned as a product to this line shape, typically when representing a reaction as an arrow */
+                products: Atom[]
+                /** the set of coordinates that represent the start of the line */
+                p1: Point
+                /** the set of coordinates that represent the end of the line */
+                p2: Point
+
+                /** draws this line to the canvas that owns the Context using the given Styles */
+                draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** returns an Array of Point objects that contains p1 and p2 */
+                getPoints(): Point[]
+
+                /** returns true if the input point is above the shape */
+                isOver(p: Point, barrier: number): boolean
+            }
+
+            /** represents electron movement, draws a bezier curve between the chemical objects involved with the transfer */
+            class Pusher {
+                constructor(o1: Object, o2: Object, numElectron: number)
+
+                /** 
+                 * the number of electrons being pushed;
+                 * if the number is -1, this is a bond forming pusher
+                 */
+                numElectron: number
+                /** the chemical object (atom or bond) that the electron(s) are coming from */
+                o1: Object
+                /** the chemical object (atom or bond) that the electron(s) are moving to */
+                o2: Object
+
+                /** draws this pusher to the canvas that owns the Context using the given Styles */
+                draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** draws this pusher's decorations in the sketcher if it is hovered */
+		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** returns an empty Array */
+                getPoints(): []
+
+                /** returns true if the input point is above the shape */
+                isOver(p: Point, barrier: number): boolean
+            }
+
+            /** this shape stores an atom mapping pair, usually used for advanced reaction searches */
+            class AtomMapping {
+                constructor(o1: Atom, o2: Atom)
+
+                /** the label that is displayed for this atom mapping pair, this value is automatically set by the SketcherCanvas class before repaint */
+                label: String
+                /** if true, this atom mapping will be rendered in the Styles.colorError color */
+                error: Boolean
+                /** the first atom of the mapping */
+                o1: Atom
+                /** the second atom of the mapping */
+                o2: Atom
+
+                /** draws this atom mapping to the canvas that owns the Context using the given Styles */
+                draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** returns an array with the points corresponding to the locations that the atom mappings are rendered at */
+                getPoints(): Point[]
+
+                /** returns true if the input point is above the shape */
+                isOver(p: Point, barrier: number): boolean
+            }
+
+            /** represents a 2D bracket with a charge, multiplicity, repeat or mix */
+            class Bracket {
+                constructor(p1: Point, p2: Point)
+
+                /** an Integer describing the charge amount associated with this bracket; this number is rendered at the top-right of the bracket */
+                charge: Number
+                /** an Integer describing the multiple associated with this bracket, useful for reaction schemes; this number is rendered at the left center of the bracket */
+                mult: Number
+                /** an Integer describing the repeat count associated with this bracket, useful for polymers; this number is rendered at the bottom-right of the bracket */
+                repeat: Number
+                /** the set of coordinates that represent the start of the bracket */
+                p1: Point
+                /** the set of coordinates that represent the end of the bracket (opposite corner from the start) */
+                p2: Point
+
+                /** draws this bracket mapping to the canvas that owns the Context using the given Styles */
+                draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** returns an Array of Point objects that contains p1 and p2 */
+                getPoints(): Point[]
+
+                /** returns true if the input point is above the shape */
+                isOver(p: Point, barrier: number): boolean
+            }
+
+            /** represents a repeat group with a repeat range */
+            class RepeatUnit {
+                constructor(b1: Point, b2: Point)
+
+                /** Repeat units in rings (where each of the end bonds is a member of one and only one ring each and they are both members of the same ring) can contain one of two subsets of atoms. This is controlled by the “flip” parameter of the RepeatUnit. By default, the contents of the repeat unit will contain the first atom of the first bond (b1.a1). If flipped, the contents of the repeat unit will contain the second atom of the first bond (b1.a2). */
+                flip: Boolean
+                /** an Integer describing the first magnitude of the repeat range */
+                n1: Number
+                /** an Integer describing the second magnitude of the repeat range */
+                n2: Number
+                /** an array of Atoms collecting all of the atoms covered by this repeat unit; this must be set accordingly by the RepeatUnit.setContents() function, which may be overridden */
+                contents: Atom[]
+                /** an array of Point containing the four corner points of the bracket ends; is only set after it is first drawn */
+                ps: Point[]
+                /** the bond that specifies the start position of the repeating group */
+                b1: Bond
+                /** the bond that specifies the end position of the repeating group */
+                b2: Bond
+
+                /** draws this repeat unit to the canvas that owns the Context using the given Styles */
+                draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** draws this repeat unit's decorations in the sketcher if it is hovered */
+		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** returns an Array of Point objects corresponding to the four corners of the drawn bracket ends */
+                getPoints(): Point[]
+
+                /** returns false */
+                isOver(p: Point, barrier: number): boolean
+
+                /** 
+                 * called before drawing if necessary;
+                 * this function resolves the contents of the repeat units and sets it to the contents variable of the instance
+                 */
+                setContents(sketcher: SketcherCanvas): void
+            }
+
+            /** represents a variable attachment point with a subtituent and attachments; the x and y constructor parameters are used for the location of the asterisk */
+            class VAP {
+                constructor(x: number, y: number)
+
+                /** the location of the asterisk that represents this variable attachment point */
+                asterisk: Atom
+                /** the substituent attached to this variable attachment point */
+                substituent: Atom
+                /** the bond type of the substituent bond from the variable attachment point to the substituent; same bond types as used for the Bond class */
+                bondType: Number
+                /** an array of Atoms collecting all of the atoms this variable attachment point is connected to, excluding the substituent */
+                attachments: Atom[]
+
+                /** draws this variable attachment point to the canvas that owns the Context using the given Styles */
+                draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** draws this variable attachment point's decorations in the sketcher if it is hovered */
+		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+
+                /** returns an Array of Point objects corresponding to the four corners of the drawn bracket ends */
+                getPoints(): Point[]
+
+                /** returns false */
+                isOver(p: Point, barrier: number): boolean
+            }
         }
 
         module d3 {
+            class _Mesh {}
+
+            class _Measurement {}
+
             class Shape {}
         }
     }
