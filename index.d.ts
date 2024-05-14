@@ -74,10 +74,10 @@ declare module ChemDoodle {
 
     /** shortcut method to write ChemDoodle JSON into a string given input Molecule and Shape arrays without instantiating a JSONInterpreter */
     function writeJSON(mols: structures.Molecule[], shapes: structures.d3.Shape[]): string
-  
+
     /** shortcut method to write a V2000 MDL MOLFile given an input Molecule without instantiating a MOLInterpreter */
     function writeMOL(mol: structures.Molecule): string
-  
+
     /** shortcut method to write a V3000 MDL MOLFile given an input Molecule without instantiating a MOLInterpreter */
     function writeMOLV3(mol: structures.Molecule): string
 
@@ -187,25 +187,25 @@ declare module ChemDoodle {
         mousewheel?(e: JQuery.Event, delta: number): void
 
         /** receives the mouse right click event, override this for your custom canvases */
-		rightclick?(e: JQuery.Event): void
+        rightclick?(e: JQuery.Event): void
 
         /** receives the mouse right mouse down event, override this for your custom canvases */
-		rightmousedown?(e: JQuery.Event): void
+        rightmousedown?(e: JQuery.Event): void
 
         /** receives the mouse right mouse up event, override this for your custom canvases */
-		rightmouseup?(e: JQuery.Event): void
+        rightmouseup?(e: JQuery.Event): void
 
 
         //Keyboard Events
 
         /** receives the key down event, override this for your custom canvases */
-		keydown?(e: JQuery.Event): void
+        keydown?(e: JQuery.Event): void
 
         /** receives the key press event, override this for your custom canvases */
-		keypress?(e: JQuery.Event): void
+        keypress?(e: JQuery.Event): void
 
         /** receives the key up event, override this for your custom canvases */
-		keyup?(e: JQuery.Event): void
+        keyup?(e: JQuery.Event): void
     }
 
     /**
@@ -245,7 +245,7 @@ declare module ChemDoodle {
          */
         doEventDefault: boolean
         toolbarManager: uis.gui.desktop.ToolbarManager
-    
+
         /**
          * loads the given Molecule, mol, and checks it;
          * the current content of the canvas is not cleared, the input mol is pushed as the next element of the molecules array;
@@ -320,7 +320,7 @@ declare module ChemDoodle {
          * repaints canvas
          */
         loadMolecule(mol: structures.Molecule): void
-        
+
         /** conditions the user input event and sets a new variable in the Event object named p that contains the coordinates of the event in the canvas */
         prehandleEvent(e: JQuery.Event): void
 
@@ -401,21 +401,21 @@ declare module ChemDoodle {
         lastPinchScale: number
         /** keeps track of the last rotation magnitude from a mobile gesture */
         lastGestureRotate: number
-        
+
         /** performs the double-click action, which centers the molecule */
-		dblclick(e: JQuery.Event): void
+        dblclick(e: JQuery.Event): void
 
         /** performs the mouse drag action */
-		drag(e: JQuery.Event): void
+        drag(e: JQuery.Event): void
 
         /** handles any pinch and rotate gestures from mobile devices which will scale and rotate the molecule */
-		gesturechange(e: JQuery.Event): void
+        gesturechange(e: JQuery.Event): void
 
         /** resets the gesture tracking variables and ends the gesture */
-		gestureend(e: JQuery.Event): void
+        gestureend(e: JQuery.Event): void
 
         /** performs the mouse down action */
-		mousedown(e: JQuery.Event): void
+        mousedown(e: JQuery.Event): void
 
         /** performs the mouse wheel action */
         mousewheel(e: JQuery.Event, delta: number): void;
@@ -426,13 +426,13 @@ declare module ChemDoodle {
         constructor(id: string, width: number, height: number)
 
         /** generates the HTML for the database drop down and submit buttons */
-		getInputFields?(): void
+        getInputFields?(): void
 
         /** uses iChemLabs cloud services to contact the database with query term as defined in the form and then updates the Canvas after receiving the molecule data */
-		search?(): void
+        search?(): void
 
         /** automatically searches for and loads the input search term */
-		setSearchTerm?(term: string): void
+        setSearchTerm?(term: string): void
     }
 
     /**
@@ -453,20 +453,20 @@ declare module ChemDoodle {
         constructor()
 
         /** a handle on the current Timer so it can be started and stopped */
-		handle: TimerHandler
+        handle: TimerHandler
         /** the default refresh rate */
-		timeout: number
+        timeout: number
         /** keeps track of the last time the nextFrame() function was called */
-		lastTime: number
+        lastTime: number
 
         /** returns true if the animation is currently running */
-		isRunning(): boolean
+        isRunning(): boolean
 
         /** initializes the animation */
-		startAnimation(): void
+        startAnimation(): void
 
         /** terminates the animation */
-		stopAnimation(): void
+        stopAnimation(): void
 
         /**
          * called by the timer, in the frequency specified by the interval timeout,
@@ -501,23 +501,23 @@ declare module ChemDoodle {
         constructor(id: string, width: number, height: number)
 
         /** the molecular structures to be displayed in the order they are to be displayed in, this should not be empty */
-		molecules: structures.Molecule[]
+        molecules: structures.Molecule[]
         /** keeps track of the current index in molecules */
-		curIndex: number
+        curIndex: number
         /** this parameter is inherited from AnimatorCanvas, but it is set to a larger value */
-		timeout: number
+        timeout: number
         /** keeps track of the current alpha during the transition */
-		alpha: number
+        alpha: number
         /** holds on to the second inner Timer for performing the transition, so it can be started and stopped */
-		innerHandle: TimerHandler
+        innerHandle: TimerHandler
         /** keeps track of the current phase (different types of animations) during the transition */
-		phase: number
+        phase: number
 
         /** adds a molecule to the slideshow */
-		addMolecule(molecule: structures.Molecule): void
+        addMolecule(molecule: structures.Molecule): void
 
         /** completes the second phase of the animation and the molecule switch */
-		breakInnerHandle(): void
+        breakInnerHandle(): void
 
         /** draws extra graphics on top of the base graphics */
         drawChildExtras(ctx: CanvasRenderingContext2D): void
@@ -544,26 +544,26 @@ declare module ChemDoodle {
         rotationMatrix: mat4
         /** the translation (actually the negative of the center of the scene content) to be applied before rendering the 3D scene */
         contentCenter: Array<number>
-		/** the last point in the canvas's space that the user initiated a mouseDown event */
-		lastPoint: structures.Point
-		/** overridden to 'WebGL is Unavailable!', to be displayed by default if the WebGL context creation fails */
-		emptyMessage: string
-		/** keeps track of the pinch scale for mobile gestures */
-		lastPinchScale: number
-		/** keeps track of the gesture rotate value for mobile gestures */
-		lastGestureRotate: number
+        /** the last point in the canvas's space that the user initiated a mouseDown event */
+        lastPoint: structures.Point
+        /** overridden to 'WebGL is Unavailable!', to be displayed by default if the WebGL context creation fails */
+        emptyMessage: string
+        /** keeps track of the pinch scale for mobile gestures */
+        lastPinchScale: number
+        /** keeps track of the gesture rotate value for mobile gestures */
+        lastGestureRotate: number
 
         /** pipeline for deferred rendering */
-		deferredRender(): void
+        deferredRender(): void
 
         /** controls what the Canvas3D displays if WebGL is unavailable */
-		displayMessage(): void
+        displayMessage(): void
 
         /** pipeline for immediate rendering */
-		forwardRender(): void
+        forwardRender(): void
 
         /** returns true if the 3D context is capable of supporting deferred rendering */
-		isSupportDeferred(): boolean
+        isSupportDeferred(): boolean
 
         /**
          * returns the atom or bond that is located in the 3D scene, closest to the camera, at the <canvas> coordinates of the input x and y values;
@@ -574,67 +574,67 @@ declare module ChemDoodle {
         pick(x: number, y: number, includeAtoms: boolean, includeBonds: boolean): structures.Atom | structures.Bond | undefined
 
         /** deferred rendering color pass */
-		renderColor(): void
+        renderColor(): void
 
         /** renders the scene to the shadow FBO */
-		renderDepthMap(): void
+        renderDepthMap(): void
 
         /** helper method for rendering decorative components of the scene */
-		renderExtras(): void
+        renderExtras(): void
 
         /** deferred rendering normal pass */
-		renderNormal(): void
+        renderNormal(): void
 
         /** deferred rendering Outline pass */
-		renderOutline(): void
+        renderOutline(): void
 
         /** deferred rendering position pass */
-		renderPosition(): void
+        renderPosition(): void
 
         /** deferred rendering SSAO pass */
-		renderSSAO(): void
+        renderSSAO(): void
 
         /** helper method for rendering text */
         renderText(text: string, position: Array<number>): void
 
         /** creates the 3D scene */
-		setupScene(): void
+        setupScene(): void
 
         /** updates the projection for the scene without other overhead */
-		updateScene(): void
+        updateScene(): void
 
         /** helper method to reset the scene if a gl parameter has been altered */
-		afterLoadContent(): void
+        afterLoadContent(): void
 
         /** centers the molecule in 3D around the origin */
-		center(): void
+        center(): void
 
         /** performs the mouse drag action */
-		drag(e: JQuery.Event): void
+        drag(e: JQuery.Event): void
 
         /** performs the gesturechange action */
-		gesturechange(e: JQuery.Event): void
+        gesturechange(e: JQuery.Event): void
 
         /** performs the mouse down action */
-		mousedown(e: JQuery.Event): void
+        mousedown(e: JQuery.Event): void
 
         /** performs the mouse up action */
-		mousedown(e: JQuery.Event): void
+        mousedown(e: JQuery.Event): void
 
         /** performs the mouse scroll action */
-		mousewheel(e: JQuery.Event): void
+        mousewheel(e: JQuery.Event): void
 
         /** performs the multitouchmove action */
-		multitouchmove(e: JQuery.Event): void
+        multitouchmove(e: JQuery.Event): void
 
         /** renders the 3D scene */
-		repaint(): void
+        repaint(): void
 
         /** performs the mouse right click action */
-		rightmousedown(e: JQuery.Event): void
+        rightmousedown(e: JQuery.Event): void
 
         /**
-         * sets up GLContext, alerts viewer to warning if GLContext cannot be created;
+         * sets up WebGLRenderingContext, alerts viewer to warning if WebGLRenderingContext cannot be created;
          * initializes shaders and scene
          */
         subCreate(): void
@@ -645,16 +645,16 @@ declare module ChemDoodle {
         constructor(id: string, width: number, height: number)
 
         /** set to undefined to ignore this gesture */
-		drag(): void
+        drag(): void
 
         /** set to undefined to ignore this gesture */
-		mousedown(): void
+        mousedown(): void
 
         /** set to undefined to ignore this gesture */
-		mousewheel(): void
+        mousewheel(): void
 
         /** set to undefined to ignore this gesture */
-		rightmousedown(): void
+        rightmousedown(): void
     }
 
     /** is a child of the Canvas3D class and provides a basic canvas for users to transform (translate [alt+drag], rotate [drag], scale [mousewheel]) molecules with in a 3D scene */
@@ -669,11 +669,11 @@ declare module ChemDoodle {
     class MolGrabberCanvas3D extends _Canvas3D {
         constructor(id: string, width: number, height: number)
 
-       /** uses iChemLabs cloud services to contact the database with query term as defined in the form and then updates the Canvas3D after receiving the molecule data */
-		search(): void
+        /** uses iChemLabs cloud services to contact the database with query term as defined in the form and then updates the Canvas3D after receiving the molecule data */
+        search(): void
 
-       /** automatically searches for and loads the input search term */
-		setSearchTerm(term: string): void
+        /** automatically searches for and loads the input search term */
+        setSearchTerm(term: string): void
     }
 
     /** is a child of the Canvas3D class and provides a basic canvas for displaying molecular rotation animations in a 3D scene, also doubly inherits methods from the AnimatorCanvas class */
@@ -691,32 +691,32 @@ declare module ChemDoodle {
         /** the z rotation increment */
         zIncrement: number
 
-       /** returns true if the animation is currently running */
-		isRunning(): boolean
+        /** returns true if the animation is currently running */
+        isRunning(): boolean
 
-       /** initializes the animation */
-		startAnimation(): void
+        /** initializes the animation */
+        startAnimation(): void
 
-       /** terminates the animation */
-		stopAnimation(): void
+        /** terminates the animation */
+        stopAnimation(): void
 
         /** catches double click events and toggles the animation */
-		dblclick(e: JQuery.Event): void
+        dblclick(e: JQuery.Event): void
 
         /** set to undefined to ignore this gesture */
-		drag(): void
+        drag(): void
 
         /** set to undefined to ignore this gesture */
-		mousedown(): void
+        mousedown(): void
 
         /** set to undefined to ignore this gesture */
-		mousewheel(): void
+        mousewheel(): void
 
         /** updates the state during the rotation animation */
-		nextFrame(delta: number): void
+        nextFrame(delta: number): void
 
         /** set to undefined to ignore this gesture */
-		rightmousedown(): void
+        rightmousedown(): void
     }
 
     /** is a child of the Canvas3D class and provides a basic canvas for displaying movies of molecules in a 3D scene, also doubly inherits methods from the AnimatorCanvas class */
@@ -749,22 +749,22 @@ declare module ChemDoodle {
         addFrame(mols: structures.Molecule[], shapes: structures.d3.Shape[]): void
 
         /** returns true if the animation is currently running */
-		isRunning(): boolean
+        isRunning(): boolean
 
         /** initializes the animation */
-		startAnimation(): void
+        startAnimation(): void
 
         /** terminates the animation */
-		stopAnimation(): void
+        stopAnimation(): void
 
         /** centers all of the frames in the molecules array */
-		center(): void
+        center(): void
 
         /** catches double click events and toggles the animation */
-		dblclick(e: JQuery.Event): void
+        dblclick(e: JQuery.Event): void
 
         /** updates the state during the rotation animation */
-		nextFrame(delta: number): void
+        nextFrame(delta: number): void
     }
 
     /**
@@ -781,10 +781,10 @@ declare module ChemDoodle {
         getSpectrum(): structures.Spectrum
 
         /** loads the spectrum and then repaints */
-		loadSpectrum(): void
-        
+        loadSpectrum(): void
+
         /** paints the spectrum */
-		repaint(): void
+        repaint(): void
     }
 
     /** is a child of the SpectrumCanvas class and provides a basic canvas for simply displaying a static styled spectrum drawing */
@@ -803,10 +803,10 @@ declare module ChemDoodle {
          * adds a spectrum to the canvas;
          * it is recommended that this function is used over directly populating the overlaySpectra array, as this function will first set the main spectrum if it isn't set
          */
-		addSpectrum(spectrum: structures.Spectrum): void
+        addSpectrum(spectrum: structures.Spectrum): void
 
         /** draws extra graphics on top of the base graphics */
-		innerRepaint(ctx: CanvasRenderingContext2D): void
+        innerRepaint(ctx: CanvasRenderingContext2D): void
     }
 
     /** is a child of the SpectrumCanvas class and provides an interactive canvas for zooming in on peaks in spectra */
@@ -821,22 +821,22 @@ declare module ChemDoodle {
         lastPinchScale: number
 
         /** performs the double-click action, which fits the entire spectrum to the canvas */
-		dblclick(e: JQuery.Event): void
+        dblclick(e: JQuery.Event): void
 
         /** performs the mouse drag action, which will zoom in on the spectrum; if the shift key is held, then the spectrum will be translated */
-		drag(e: JQuery.Event): void
+        drag(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
-		drawChildExtras(ctx: CanvasRenderingContext2D): void
+        drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /** handles any pinch gestures from mobile devices which will scale the spectrum */
-		gesturechange(e: JQuery.Event): void
+        gesturechange(e: JQuery.Event): void
 
         /** performs the mouse down action */
-		mousedown(e: JQuery.Event): void
+        mousedown(e: JQuery.Event): void
 
         /** performs the mouse up action */
-		mouseup(e: JQuery.Event): void
+        mouseup(e: JQuery.Event): void
 
         /** performs the mouse wheel action */
         mousewheel(e: JQuery.Event, delta: number): void
@@ -858,22 +858,22 @@ declare module ChemDoodle {
         p: structures.Point
 
         /** draws extra graphics on top of the base graphics */
-		innerRepaint(ctx: CanvasRenderingContext2D): void
+        innerRepaint(ctx: CanvasRenderingContext2D): void
 
         /** performs the mouse move action */
-		mousemove(e: JQuery.Event): void
+        mousemove(e: JQuery.Event): void
 
         /** performs the mouse out action */
-		mouseout(e: JQuery.Event): void
+        mouseout(e: JQuery.Event): void
 
         /** performs the touch end action */
-		touchend(e: JQuery.Event): void
+        touchend(e: JQuery.Event): void
 
         /** performs the touch move action */
-		touchmove(e: JQuery.Event): void
+        touchmove(e: JQuery.Event): void
 
         /** performs the touch start action */
-		touchstart(e: JQuery.Event): void
+        touchstart(e: JQuery.Event): void
     }
 
     /**
@@ -884,13 +884,13 @@ declare module ChemDoodle {
         constructor(id: string, cellDimension: number)
 
         /** the padding between the sides of the component and the table */
-		padding: number
+        padding: number
         /** the width and height of each cell in the periodic table, 20 by default, but also specified in the constructor */
-		cellDimension: number
-		/** the currently hovered cell, or undefined if there is no cell hovered */
-		hovered: structures.PeriodicCell | undefined
-		/** the currently selected cell, or undefined if there is no cell selected */
-		selected: structures.PeriodicCell | undefined
+        cellDimension: number
+        /** the currently hovered cell, or undefined if there is no cell hovered */
+        hovered: structures.PeriodicCell | undefined
+        /** the currently selected cell, or undefined if there is no cell selected */
+        selected: structures.PeriodicCell | undefined
 
         /** draws the provided cell to the canvas that owns the Context using the given Styles, override this function to change the rendering of the table */
         drawCell(ctx: CanvasRenderingContext2D, styles: structures.Styles, cell: structures.PeriodicCell): void
@@ -899,28 +899,28 @@ declare module ChemDoodle {
         getHoveredElement(): structures.Element | undefined
 
         /** catches double click events and selects a cell */
-		click(e: JQuery.Event): void
+        click(e: JQuery.Event): void
 
         /** set to undefined to ignore this function from the _Canvas class */
-		getMolecule(): structures.Molecule
+        getMolecule(): structures.Molecule
 
         /** catches mouse move events and hovers a cell */
-		mousemove(e: JQuery.Event): void
+        mousemove(e: JQuery.Event): void
 
         /** catches mouse out events and sets the hovered cell to undefined */
-		mouseout(e: JQuery.Event): void
+        mouseout(e: JQuery.Event): void
 
         /** paints the periodic table */
-		repaint(): void
+        repaint(): void
 
         /** set to undefined to ignore this function from the _Canvas class */
-		setMolecule(): void
+        setMolecule(): void
 
         /** sets up the table and all the table cells, this function is called by the constructor, but can be called after changing the constructor defaults to re-layout the table */
-		setupTable(): void
+        setupTable(): void
 
         /** catches the touchstart mobile event and hovers a cell */
-		touchstart(e: JQuery.Event): void
+        touchstart(e: JQuery.Event): void
     }
 
     /**
@@ -959,114 +959,114 @@ declare module ChemDoodle {
         resizable: boolean
         /** this is one of the options, define this to true to inlcude query tools in the toolbar */
         includeQuery: boolean
-		/** the toolbar manager */
-		toolbarManager: uis.gui.desktop.ToolbarManager
-		/** the state manager */
-		stateManager: uis.states.StateManager3D
-		/** the history manager */
-		historyManager: uis.actions.HistoryManager
-		/** the copy/paste manager */
-		copyPasteManager: uis.CopyPasteManager
-		/** the cursor manager */
-		cursorManager: uis.gui.desktop.CursorManager
-		/** the TextInput object used for text input in custom labels */
-		textInput: uis.gui.desktop.TextInput
-		/**
+        /** the toolbar manager */
+        toolbarManager: uis.gui.desktop.ToolbarManager
+        /** the state manager */
+        stateManager: uis.states.StateManager3D
+        /** the history manager */
+        historyManager: uis.actions.HistoryManager
+        /** the copy/paste manager */
+        copyPasteManager: uis.CopyPasteManager
+        /** the cursor manager */
+        cursorManager: uis.gui.desktop.CursorManager
+        /** the TextInput object used for text input in custom labels */
+        textInput: uis.gui.desktop.TextInput
+        /**
          * if this is not undefined, the sketcher goes into modal mode and all input events are blocked;
          * this value is a pointer to the current modal popup, and is closed automatically when the user clicks on sketcher outside of the popover
          */
-		modal: uis.gui.desktop.Popover
-		/** if this is defined, there is a tray open on the floating toolbar, and this parameter is a pointer to that tray */
-		openTray: uis.gui.desktop.Tray
-		/** true if the user is hovering over the help icon */
-		isHelp: boolean
-		/** keeps track of the pinch gesture */
-		lastPinchScale: number
-		/** keeps track of the two finger rotate gesture */
-		lastGestureRotate: number
-		/** this keeps track of where the mouse is over the canvas, set in State */
-		lastMousePos: structures.Point
-		/** this keeps track of the last drag gesture position, set in State */
-		lastPoint: structures.Point
-		/** the atom that follows the pointer in the full sketcher */
-		startAtom: structures.Atom
-		/** the lasso, only declared in the full sketcher */
-		lasso: uis.tools.Lasso
+        modal: uis.gui.desktop.Popover
+        /** if this is defined, there is a tray open on the floating toolbar, and this parameter is a pointer to that tray */
+        openTray: uis.gui.desktop.Tray
+        /** true if the user is hovering over the help icon */
+        isHelp: boolean
+        /** keeps track of the pinch gesture */
+        lastPinchScale: number
+        /** keeps track of the two finger rotate gesture */
+        lastGestureRotate: number
+        /** this keeps track of where the mouse is over the canvas, set in State */
+        lastMousePos: structures.Point
+        /** this keeps track of the last drag gesture position, set in State */
+        lastPoint: structures.Point
+        /** the atom that follows the pointer in the full sketcher */
+        startAtom: structures.Atom
+        /** the lasso, only declared in the full sketcher */
+        lasso: uis.tools.Lasso
 
         /** confines the scale of the sketcher */
-		checkScale(): void
+        checkScale(): void
 
         /** set up some internal variables on executing an action, currently checks query shapes for errors, override this for your custom sketcher listeners; if force is false, the function remembers that it should do this when next called by true, which is called in _Canvas.repaint() */
-		checksOnAction(force: boolean): void
+        checksOnAction(force: boolean): void
 
         /** draws extra graphics for the sketcher */
-		drawSketcherDecorations(ctx: CanvasRenderingContext2D): void
+        drawSketcherDecorations(ctx: CanvasRenderingContext2D): void
 
         /** scales the event for the current scale of the sketcher */
-		scaleEvent(e: JQuery.Event): void
+        scaleEvent(e: JQuery.Event): void
 
         /** set up some internal variables before repainting */
-		checksBeforeRepaint(): void
+        checksBeforeRepaint(): void
 
         /** performs the mouse click action */
-		click(e: JQuery.Event): void
+        click(e: JQuery.Event): void
 
         /** performs the mouse dblclick action */
-		dblclick(e: JQuery.Event): void
+        dblclick(e: JQuery.Event): void
 
         /** performs the drag action */
-		drag(e: JQuery.Event): void
+        drag(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
-		drawChildExtras(ctx: CanvasRenderingContext2D): void
+        drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /** performs the gesturechange action */
-		gesturechange(e: JQuery.Event): void
+        gesturechange(e: JQuery.Event): void
 
         /** performs the gestureend action */
-		gestureend(e: JQuery.Event): void
+        gestureend(e: JQuery.Event): void
 
         /** performs the keydown action */
-		keydown(e: JQuery.Event): void
+        keydown(e: JQuery.Event): void
 
         /** performs the keypress action */
-		keypress(e: JQuery.Event): void
+        keypress(e: JQuery.Event): void
 
         /** performs the keyup action */
-		keyup(e: JQuery.Event): void
+        keyup(e: JQuery.Event): void
 
         /** performs the mousedown action */
-		mousedown(e: JQuery.Event): void
+        mousedown(e: JQuery.Event): void
 
         /** performs the mouseout action */
-		mouseout(e: JQuery.Event): void
+        mouseout(e: JQuery.Event): void
 
         /** performs the mouseover action */
-		mouseover(e: JQuery.Event): void
+        mouseover(e: JQuery.Event): void
 
         /** performs the mouseup action */
-		mouseup(e: JQuery.Event): void
+        mouseup(e: JQuery.Event): void
 
         /** performs the mousewheel action */
-		mousewheel(e: JQuery.Event): void
+        mousewheel(e: JQuery.Event): void
 
         /** performs the mouse rightclick action */
-		rightclick(e: JQuery.Event): void
+        rightclick(e: JQuery.Event): void
 
         /** performs the rightmousedown action */
-		rightmousedown(e: JQuery.Event): void
+        rightmousedown(e: JQuery.Event): void
 
         /** performs the rightmouseup action */
-		rightmouseup(e: JQuery.Event): void
+        rightmouseup(e: JQuery.Event): void
 
         /** performs the touchend action */
-		touchend(e: JQuery.Event): void
+        touchend(e: JQuery.Event): void
 
         /** performs the touchmove action */
-		touchmove(e: JQuery.Event): void
+        touchmove(e: JQuery.Event): void
 
         /** performs the touchstart action */
-		touchstart(e: JQuery.Event): void
+        touchstart(e: JQuery.Event): void
     }
 
     /** 
@@ -1094,53 +1094,53 @@ declare module ChemDoodle {
         /** this is one of the options, define this to false to exclude the toolbar */
         includeToolbar: boolean
         /** the toolbar manager */
-		toolbarManager: uis.gui.desktop.ToolbarManager
-		/** the state manager */
-		stateManager: uis.states.StateManager
-		/** the history manager */
-		historyManager: uis.actions.HistoryManager
+        toolbarManager: uis.gui.desktop.ToolbarManager
+        /** the state manager */
+        stateManager: uis.states.StateManager
+        /** the history manager */
+        historyManager: uis.actions.HistoryManager
 
         /** performs the mouse click action */
-		click(e: JQuery.Event): void
+        click(e: JQuery.Event): void
 
         /** performs the mouse dblclick action */
-		dblclick(e: JQuery.Event): void
+        dblclick(e: JQuery.Event): void
 
         /** performs the drag action */
-		drag(e: JQuery.Event): void
+        drag(e: JQuery.Event): void
 
         /** performs the keydown action */
-		keydown(e: JQuery.Event): void
+        keydown(e: JQuery.Event): void
 
         /** performs the keypress action */
-		keypress(e: JQuery.Event): void
+        keypress(e: JQuery.Event): void
 
         /** performs the keyup action */
-		keyup(e: JQuery.Event): void
+        keyup(e: JQuery.Event): void
 
         /** performs the mousedown action */
-		mousedown(e: JQuery.Event): void
+        mousedown(e: JQuery.Event): void
 
         /** performs the mouseout action */
-		mouseout(e: JQuery.Event): void
+        mouseout(e: JQuery.Event): void
 
         /** performs the mouseover action */
-		mouseover(e: JQuery.Event): void
+        mouseover(e: JQuery.Event): void
 
         /** performs the mouseup action */
-		mouseup(e: JQuery.Event): void
+        mouseup(e: JQuery.Event): void
 
         /** performs the mousewheel action */
-		mousewheel(e: JQuery.Event): void
+        mousewheel(e: JQuery.Event): void
 
         /** performs the mouse rightclick action */
-		rightclick(e: JQuery.Event): void
+        rightclick(e: JQuery.Event): void
 
         /** performs the rightmousedown action */
-		rightmousedown(e: JQuery.Event): void
+        rightmousedown(e: JQuery.Event): void
 
         /** performs the rightmouseup action */
-		rightmouseup(e: JQuery.Event): void
+        rightmouseup(e: JQuery.Event): void
     }
 
     /**
@@ -1151,47 +1151,47 @@ declare module ChemDoodle {
     class StoichiometryTable {
         constructor(id: string, options: Object)
 
-		/** this is the cancel button for the cell data input */
-		buttonCancel: uis.gui.desktop.Button
-		/** this is the clear button for the cell data input */
-		buttonClear: uis.gui.desktop.Button
-		/** this is the current state of the stoichiometry table */
-		currentTableData: Object
-		/** this is the jQuery reference to the table element in the DOM */
-		tableContainer: Object
+        /** this is the cancel button for the cell data input */
+        buttonCancel: uis.gui.desktop.Button
+        /** this is the clear button for the cell data input */
+        buttonClear: uis.gui.desktop.Button
+        /** this is the current state of the stoichiometry table */
+        currentTableData: Object
+        /** this is the jQuery reference to the table element in the DOM */
+        tableContainer: Object
 
         /** closes the currently opened edit component for a cell in the table, committing the action only if the commit parameter is true */
-		closeEdit(commit: boolean): void
+        closeEdit(commit: boolean): void
 
         /** closes the currently opened edit component if the user clicks elsewhere on the page */
-		closeEditCheckNotInEditDiv(): void
+        closeEditCheckNotInEditDiv(): void
 
         /** 
          * produces the HTML for the edit component for the cells where users input values and units, returning the HTML as a String
          * @returns {string} html
          */
-		makeEditComponent(): string
+        makeEditComponent(): string
 
         /** 
          * produces the container HTML where the stoichiometry table will exist, returning the HTML as a String
          * @returns {string} html
          */
-		makeTableContainer(): string
+        makeTableContainer(): string
 
         /** handles the original creation of the stoichiometry table based on the input data; the data object can be either a String (written equation) or a drawn reaction  */
-		serverSetup(data: Object): void
+        serverSetup(data: Object): void
 
         /** handles the updating of the stoichiometry table given the updated table data */
-		serverUpdate(currentTableData: JQuery.Event): void
+        serverUpdate(currentTableData: JQuery.Event): void
 
         /** defines the user interactivity actions for the stoichiometry table and its cells */
-		setupInteractivity(): void
+        setupInteractivity(): void
 
         /** produces the HTML for the stoichiometry table based on the input tableData */
-		setupStoichiometryTable(tableData: Object): void
+        setupStoichiometryTable(tableData: Object): void
 
         /** updates the DOM elements for the stoichiometry table based on the input tableData */
-		updateStoichiometryTable(tableData: Object): void
+        updateStoichiometryTable(tableData: Object): void
 
     }
 
@@ -1219,43 +1219,43 @@ declare module ChemDoodle {
         function supports_canvas(): boolean
 
         /** returns a boolean corresponding to the browser's support for HTML5 <canvas> text rendering */
-		function supports_canvas_text(): boolean
+        function supports_canvas_text(): boolean
 
         /** returns a boolean corresponding to the browser's support for gesture events; this is useful for determining if the current browser can support pinching and zooming, and to resort to ChemDoodle's handlers if necessary */
-		function supports_gesture(): boolean
+        function supports_gesture(): boolean
 
         /** returns a boolean corresponding to the browser's support for touch events; this is useful for determining if the current browser is on a mobile platform */
-		function supports_touch(): boolean
+        function supports_touch(): boolean
 
         /** returns a boolean corresponding to the browser's support for WebGL */
-		function supports_webgl(): boolean
+        function supports_webgl(): boolean
 
         /** this method checks the browser's support for XMLHttpRequest Level 2 functionality */
-		function supports_xhr2(): boolean
+        function supports_xhr2(): boolean
     }
 
     /** 
      * this package connects to iChemLabs cloud services through AJAX XMLHttpRequest Level 2 for complete access to the entire ChemDoodle Java API.
      * Please see the {@link https://web.chemdoodle.com/docs/ichemlabs-cloud-services|iChemLabs Cloud services} documentation for details.
      */
-    module iChemLabs {}
+    module iChemLabs { }
 
     /** this package hosts all classes that perform cheminformatics algorithms. */
     module informatics {
         /** returns the pixel/Ängstrom ratio that is currently defined by the default ChemDoodle settings */
-		function getPointsPerAngstrom(): number
+        function getPointsPerAngstrom(): number
 
         /** is a class for analyzing bonds based on 3D coordinates */
         class BondDeducer {
-			/** the amount of flexibility in calculating bonds; the larger the number, the more bonds found */
-			margin: number
+            /** the amount of flexibility in calculating bonds; the larger the number, the more bonds found */
+            margin: number
 
             /**
              * deduces covalent bonds for the input molecule and appends them to the molecule's bonds array.
              * Uses the covalent radii data provided in atomicData.
              * The customPointsPerAngstrom parameters allows you to change the value from that specified by default.
              */
-		    deduceCovalentBonds(molecule: structures.Molecule, customPointsPerAngstrom: number): void
+            deduceCovalentBonds(molecule: structures.Molecule, customPointsPerAngstrom: number): void
         }
 
         /** is a class for manipulating hydrogens */
@@ -1264,19 +1264,19 @@ declare module ChemDoodle {
              * removes all hydrogens and bonds attached to them from the given molecule;
              * if removeStereo is not set to true, then hydrogens connected with wedge bonds are retained
              */
-		    removeHydrogens(molecule: structures.Molecule, removeStereo: boolean): void
+            removeHydrogens(molecule: structures.Molecule, removeStereo: boolean): void
         }
 
         /** is a class for splitting a Molecule data structure composed of discrete graphs into individual discrete Molecule objects */
         class Splitter {
             /** returns an array consisting of each discrete graph data structure in the input molecule, as individual discrete Molecule objects */
-		    split(molecule: structures.Molecule): structures.Molecule[]
+            split(molecule: structures.Molecule): structures.Molecule[]
         }
 
         /** is a class for copying and creating molecular structures */
         class StructureBuilder {
             /** returns a new Molecule object that is a copy of the input Molecule */
-		    copy(molecule: structures.Molecule): structures.Molecule 
+            copy(molecule: structures.Molecule): structures.Molecule
         }
 
         /**
@@ -1286,17 +1286,17 @@ declare module ChemDoodle {
          * new ChildOfCounter(mol).value
          */
         abstract class _Counter {
-			/** the result of the Counter algorithm */
-			value: number
-			/** holds the Molecule object being analyzed by the child derivative */
-			molecule: structures.Molecule
+            /** the result of the Counter algorithm */
+            value: number
+            /** holds the Molecule object being analyzed by the child derivative */
+            molecule: structures.Molecule
 
             /** 
              * sets the molecule and performs the descriptor calculation.
              * Should be called as the last method in all child constructors.
              */
             setMolecule(molecule: structures.Molecule): void
-            
+
             /**
              * this method is defined by all child classes of Counter.
              * This method should calculate the descriptor value given the Molecule stored.
@@ -1309,7 +1309,7 @@ declare module ChemDoodle {
             constructor(molecule: structures.Molecule)
 
             /** calculates the Frèrejacque Number. This should never be manually called as it is called by the constructor after setup. */
-		    innerCalculate(molecule: structures.Molecule): void
+            innerCalculate(molecule: structures.Molecule): void
         }
 
         /** is a child of the Counter class and calculates the real number of molecules in a Molecule object, which can hold disjoint graphs. */
@@ -1317,7 +1317,7 @@ declare module ChemDoodle {
             constructor(molecule: structures.Molecule)
 
             /** calculates the number of molecules. This should never be manually called as it is called by the constructor after setup. */
-		    innerCalculate(molecule: structures.Molecule): void
+            innerCalculate(molecule: structures.Molecule): void
         }
 
         /**
@@ -1327,24 +1327,24 @@ declare module ChemDoodle {
          * So to obtain a ring set, use the following command where mol is a Molecule object and ChildOfRingFinder is a child of the RingFinder class:
          * new ChildOfRingFinder(mol).rings */
         abstract class _RingFinder {
-			/** all atoms that will be analyzed during ring perception are stored here, set by RingFinder.reduce() */
-			atoms: structures.Atom[]
-			/** all bonds that will be analyzed during ring perception are stored here, set by RingFinder.reduce() */
-			bonds: structures.Bond[]
-			/** this array holds all the perceived rings */
-			rings: structures.Ring[]
+            /** all atoms that will be analyzed during ring perception are stored here, set by RingFinder.reduce() */
+            atoms: structures.Atom[]
+            /** all bonds that will be analyzed during ring perception are stored here, set by RingFinder.reduce() */
+            bonds: structures.Bond[]
+            /** this array holds all the perceived rings */
+            rings: structures.Ring[]
 
             /** a helper method to find the bonds that belong to the perceived rings if only the atoms are specified. */
-		    fuse(): void
+            fuse(): void
 
             /** reduces this input molecule graph to discard most non-ring atons and all lone atoms to speed up runtimes, sets the atoms and bonds Arrays to the reduced graph. */
-		    reduce(molecule: structures.Molecule): void
+            reduce(molecule: structures.Molecule): void
 
             /** sets the molecule and performs the ring perception. Should be called as the last method in all child constructors. */
-		    setMolecule(molecule: structures.Molecule): void
+            setMolecule(molecule: structures.Molecule): void
 
             /** this method is defined by all child classes of RingFinder. This method should find rings based on the reduced atoms and bonds Arrays and then place perceived rings in the rings Array. */
-		    abstract innerGetRings(molecule: structures.Molecule): void
+            abstract innerGetRings(molecule: structures.Molecule): void
         }
 
         /** 
@@ -1356,8 +1356,8 @@ declare module ChemDoodle {
         class SSSRFinder {
             constructor(molecule: structures.Molecule)
 
-			/** this array holds all the perceived rings */
-			rings: structures.Ring[]
+            /** this array holds all the perceived rings */
+            rings: structures.Ring[]
         }
 
         /**
@@ -1365,29 +1365,29 @@ declare module ChemDoodle {
          * This ring set is thorough, unique and adequately describes rings as a 3D representation of a 2D drawing.
          */
         class EulerFacetFinder extends _RingFinder {
-			/** 
+            /** 
              * is a cutoff for the size of rings to be found.
              * Defines the length of a ring path which is half of a ring.
              * So a value of 5 specifies that only 8 membered rings and smaller should be perceived.
              * Use this setting to improve performance.
              */
-			fingerBreak: number
+            fingerBreak: number
 
             /** 
              * implements the algorithm to find the Euler facet ring set.
              * This should never be manually called as it is called by the constructor after setup.
              */
-		    innerGetRings(molecule: structures.Molecule): void
+            innerGetRings(molecule: structures.Molecule): void
         }
     }
 
     /** this package contains various classes and tools for converting chemical data between formats. */
     module io {
         /** recover a Molecule from JSON format */
-		function fromJSONDummy(content: Object): structures.Molecule
+        function fromJSONDummy(content: Object): structures.Molecule
 
         /** convert a Molecule to a consise Object that represents the chemical data for use in JSON protocol */
-		function toJSONDummy(mol: structures.Molecule): Object
+        function toJSONDummy(mol: structures.Molecule): Object
 
         /**
          * is an interface for reading and writing chemical data.
@@ -1396,7 +1396,7 @@ declare module ChemDoodle {
          */
         abstract class _Interpreter {
             /** helper method for formating data in MDL-like syntaxes. */
-		    fit(data: string, length: number, leftAlign: boolean): void
+            fit(data: string, length: number, leftAlign: boolean): void
         }
 
         /** handles converting Javascript objects to and from the ChemDoodle JSON format, this is NOT a child of the Interpreter class */
@@ -1407,62 +1407,62 @@ declare module ChemDoodle {
              * given the input object represented in ChemDoodle JSON (object, not the string),
              * this function will create the corresponding Object data structure containing an Array of Molecule data structures named molecules and an Array of Shape data structures named shapes
              */
-		    contentFrom(dummy: Object): Object
+            contentFrom(dummy: Object): Object
 
             /**
              * creates a dummy object from the input molecules and shapes Arrays corresponding to the ChemDoodle JSON format;
              * use JSON.stringify() to create a JSON string from this dummy object
              */
-		    contentTo(mols: structures.Molecule[], shapes: structures.d2._Shape): Object
+            contentTo(mols: structures.Molecule[], shapes: structures.d2._Shape): Object
 
             /** given the input object represented in ChemDoodle JSON (object, not the string), this function will create the corresponding Molecule data structure */
-		    molFrom(dummy: Object): structures.Molecule
+            molFrom(dummy: Object): structures.Molecule
 
             /** creates a dummy object from the input Molecule data structure corresponding to the ChemDoodle JSON format; use JSON.stringify() to create a JSON string from this dummy object */
-		    molTo(mol: structures.Molecule): Object
+            molTo(mol: structures.Molecule): Object
 
             /** given the input object represented in ChemDoodle JSON (object, not the string), this function will create the corresponding Query data structure */
-		    queryFrom(dummy: Object): structures.Query
+            queryFrom(dummy: Object): structures.Query
 
             /** creates a dummy object from the input Query data structure corresponding to the ChemDoodle JSON format; use JSON.stringify() to create a JSON string from this dummy object */
-		    queryTo(mol: structures.Molecule): Object
+            queryTo(mol: structures.Molecule): Object
 
             /** given the input object represented in ChemDoodle JSON (object, not the string), this function will create the corresponding Shape data structure; the second parameter is the array of molecules already read, just incase the shape is dependent upon them */
-		    shapeFrom(dummy: Object, mols: structures.Molecule[]): structures.d2._Shape
+            shapeFrom(dummy: Object, mols: structures.Molecule[]): structures.d2._Shape
 
             /** creates a dummy object from the input Shape data structure corresponding to the ChemDoodle JSON format; use JSON.stringify() to create a JSON string from this dummy object */
-		    shapeTo(shape: structures.d2._Shape): Object
+            shapeTo(shape: structures.d2._Shape): Object
         }
 
         /** reads IUPAC JCAMP-DX files, is a child of the Interpreter class */
         class JCAMPInterpreter extends _Interpreter {
             constructor()
-			/** if true, and the file being read is a NMR spectrum in HZ, then the interpreter will automatically convert the x-axis into PPM */
-			convertHZ2PPM: boolean
+            /** if true, and the file being read is a NMR spectrum in HZ, then the interpreter will automatically convert the x-axis into PPM */
+            convertHZ2PPM: boolean
 
             /** given an input JCAMP file with structure colleration data, this function creates two canvases,
              * one for a molecule and one for the spectrum,
              * where each has hover events (or touch on mobile) to highlight peaks and the corresponding parts of the molecular structure;
              * the input id is used to generate the canvases, or find previously created canvases;
              * the array that is returned contains the molecule ChemDoodle Web Component and the spectrum ChemDoodle Web Component objects in that order */
-		    makeStructureSpectrumSet(id: string, content: string): (structures.Molecule | structures.Spectrum)[]
+            makeStructureSpectrumSet(id: string, content: string): (structures.Molecule | structures.Spectrum)[]
 
             /** reads the JCAMP file content and returns the corresponding Spectrum */
-		    read(content: string): structures.Spectrum
+            read(content: string): structures.Spectrum
         }
 
         /** reads and writes MDL MOLFiles, both v2000 and v3000, is a child of the Interpreter class */
         class MOLInterpreter extends _Interpreter {
             constructor()
             /** when writing V3000 MOLFiles by instantiating this class, first set this parameter to 3 */
-		    version: number
+            version: number
 
             /** 
              * reads MOLFile content and returns the corresponding molecule;
              * this function will automatically detect v2000 and v3000 MOLFiles and handle them accordingly;
              * the optional multiplier variable will override the default_anstromsPerBondLength variable, set it to 1 for 3D scenes in Angstroms
              */
-		    read(content: string, multiplier?: number): structures.Molecule
+            read(content: string, multiplier?: number): structures.Molecule
 
             /** writes and returns a String containing the MOLFile of the given molecule */
             write(molecule: structures.Molecule): string
@@ -1489,16 +1489,16 @@ declare module ChemDoodle {
             deduceCovalentBonds: structures.Molecule
 
             /** reads XYZ file content and returns the corresponding molecule */
-    		read(content: string): structures.Molecule
+            read(content: string): structures.Molecule
         }
 
         /** reads RCSB PDB files, is a child of the Interpreter class */
         class PDBInterpreter extends _Interpreter {
             constructor()
             /** if true, the PDBInterpreter deduce bonds between residue atoms */
-		    deduceResidueBonds: structures.Molecule
+            deduceResidueBonds: structures.Molecule
             /** if true, the PDBInterpreter will also calculate distances for all protein and nucleic acid atoms to the closest ligand atoms for use in display. If no ligand atoms are present, then all atoms will be given a measured distance of 0 */
-		    calculateRibbonDistances: structures.Molecule
+            calculateRibbonDistances: structures.Molecule
 
             /** 
              * reads the PDB file content and returns the corresponding Molecule;
@@ -1520,7 +1520,7 @@ declare module ChemDoodle {
              * @param {number} beta radians
              * @param {number} gamma radians
              */
-		    static generateABC2XYZ(a: number, b: number, c: number, alpha: number, beta: number, gamma: number): number[][]
+            static generateABC2XYZ(a: number, b: number, c: number, alpha: number, beta: number, gamma: number): number[][]
 
             /** 
              * reads a CIF file and returns the corresponding Molecule and unit cell shape;
@@ -1530,7 +1530,7 @@ declare module ChemDoodle {
              * In addition to reading atoms from CIF files,
              * this interpreter will also produce a unit cell and other objects relevant to the display of periodic information
              */
-		    read(content: string, xSuper: number, ySuper: number, zSuper: number): structures.Molecule
+            read(content: string, xSuper: number, ySuper: number, zSuper: number): structures.Molecule
         }
 
         /** 
@@ -1544,7 +1544,7 @@ declare module ChemDoodle {
              * reads CML content and returns an object containing the corresponding content.
              * The Object possesses an array of Molecules which an be accessed with the name 'molecules'.
              */
-		    read(content: string): Object
+            read(content: string): Object
 
             /** writes and returns a String containing the CML of the given molecules. */
             write(molecules: structures.Molecule): string
@@ -1558,7 +1558,7 @@ declare module ChemDoodle {
              * note that this function uses AJAX, so it will only work for files local to the same origin calling it, 
              * unless the server supports XHR2
              */
-		    function content(url: string, callback: Function): void
+            function content(url: string, callback: Function): void
         }
 
         /** this package generates Portable Network Grpahics (PNG) images from canvases. */
@@ -1567,16 +1567,16 @@ declare module ChemDoodle {
              * creates a PNG image from the input Canvas object and downloads the file to the user's default download location.
              * The name of the file is the second parameter, which will default to "unnamed" if not provided.
              */
-		    function download(canvas: _Canvas, filename?: string): void
+            function download(canvas: _Canvas, filename?: string): void
 
             /** creates a PNG image from the input Canvas object and opens it in a new window or tab based on the user's browser settings. */
-		    function open(canvas: _Canvas): void
+            function open(canvas: _Canvas): void
 
             /** 
              * creates a PNG image from the input Canvas object as a String and returns it;
              * the String will be prepended with "data:image/png;base64,".
              */
-		    function string(canvas: _Canvas): string
+            function string(canvas: _Canvas): string
         }
 
         /** 
@@ -1589,15 +1589,15 @@ declare module ChemDoodle {
              * creates a SVG image from the input Canvas object and downloads the file to the user's default download location.
              * The name of the file is the second parameter, which will default to "unnamed" if not provided.
              */
-		    function download(canvas: _Canvas, filename?: string): void
+            function download(canvas: _Canvas, filename?: string): void
 
             /** creates a SVG image from the input Canvas object and opens it in a new window or tab based on the user's browser settings. */
-		    function open(canvas: _Canvas): void
+            function open(canvas: _Canvas): void
 
             /** creates a SVG image from the input Canvas object as a String and returns it. */
-		    function string(canvas: _Canvas): string
+            function string(canvas: _Canvas): string
         }
-        
+
     }
 
     /** this package contains various mathematical algorithms. */
@@ -1607,22 +1607,22 @@ declare module ChemDoodle {
          * angle points between the largest gap of the input Array of angles in radians,
          * largest is the value of the angle between the bonds of the largest gap in radians
          */
-		function angleBetweenLargest(data: Object): number
+        function angleBetweenLargest(data: Object): number
 
         /** this is a helper method to alter an angle in radians to be between 0 and 2pi and with an additional parameter to convert to degrees and a last parameter to constrain under Pi (so it will give the 2Pi complement) */
-		function angleBounds(value: number, convertToDegrees: boolean, constrainToPi: boolean): number
+        function angleBounds(value: number, convertToDegrees: boolean, constrainToPi: boolean): number
 
         /**
          * returns the distance of a line inscribed in a rectangle, given that the line has only 1 endpoint in the rectangle;
          * the rectangle is a object with self-explanatory parameters x, y, w, and h
          */
-		function calculateDistanceInterior(to: structures.Point, from: structures.Point, r: Object): number
+        function calculateDistanceInterior(to: structures.Point, from: structures.Point, r: Object): number
 
         /**
          * return the value if it is between the min and max, inclusive; returns the min if the value is less than the min,
          * returns the max if the value is greater than the max
          */
-		function clamp(value: number, min: number, max: number): number
+        function clamp(value: number, min: number, max: number): number
 
         /**
          * returns the shortest (tangent) distance from the input Point to the line with endpoints defined by the last two input Points.
@@ -1631,29 +1631,29 @@ declare module ChemDoodle {
          *  If the input Point's y-coordinate is not between the endpoints, inclusively, a value of -1 is returned.
          * The retract parameter is optional and will buffer the ends of the line from hitting with that magnitue if provided.
          */
-		function distanceFromPointToLineInclusive(p: structures.Point, l1: structures.Point, l2: structures.Point, retract: number): number
+        function distanceFromPointToLineInclusive(p: structures.Point, l1: structures.Point, l2: structures.Point, retract: number): number
 
         /** returns a 3 membered Array of Numbers corresponding to the RGB magnitudes of the input hex string and multiplied by the input multiplier */
-		function getRGB(hex: string, mutliplier: number): number[]
+        function getRGB(hex: string, mutliplier: number): number[]
 
         /** convert HSL (values between 0 and 1) color to RGB values */
-		function hsl2rgb(h: number, s: number, l: number): number[]
+        function hsl2rgb(h: number, s: number, l: number): number[]
 
         /** this is a helper method for our WebGL picking system */
-		function idx2color(value: number): string
+        function idx2color(value: number): string
 
         /** returns the intersection of two non-parallel line segments, if they intersect */
-		function intersectLines(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number): structures.Point
+        function intersectLines(x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, x4: number, y4: number): structures.Point
 
         /** returns true if the first input parameter is between the last two input parameters, inclusively */
-		function isBetween(x: number, left: number, right: number): boolean
+        function isBetween(x: number, left: number, right: number): boolean
 
         /** return true if the Point pt is in Polygon poly */
-		function pointInPoly(poly: Object, pt: structures.Point): boolean
+        function pointInPoly(poly: Object, pt: structures.Point): boolean
 
         /** returns an rgb color as a CSS string, this is a helper function for the rainbow coloring in ribbons */
-		function rainbowAt(i: number, ii: number, colors: string[]): string
- 
+        function rainbowAt(i: number, ii: number, colors: string[]): string
+
 
         /** manages 2D and 3D bounds information for graphical objects */
         class Bounds {
@@ -1676,21 +1676,21 @@ declare module ChemDoodle {
              * this Bounds object will expand the bounds of the current rectangle using the x and y data provided;
              * two sets of coordinates can be provided, but the second set is optional (this way you can expand by point or by rectangle)
              */
-	    	expand(x1: number, y1: number, x2: number, y2: number): void
+            expand(x1: number, y1: number, x2: number, y2: number): void
 
             /** 
              * this Bounds object will expand the bounds of the current rectangle
              * (or rectangular prism, if z coordinate information is provided)
              * using the Bounds data provided by the bounds2 parameter
              */
-    		expand(bounds2: math.Bounds): void
+            expand(bounds2: math.Bounds): void
 
             /** 
              * this Bounds object will expand the bounds of the current rectangular prisms using the x, y and z data provided;
              * two sets of coordinates can be provided, but the second set is optional
              * (this way you can expand by point or by rectanglular prism)
              */
-		    expand3D(x1: number, y1: number, x2: number, y2: number, z1: number, z2: number): void
+            expand3D(x1: number, y1: number, x2: number, y2: number, z1: number, z2: number): void
         }
     }
 
@@ -1699,12 +1699,12 @@ declare module ChemDoodle {
      * such as the Canvas that is focused and what modifier keys are pressed on the keyboard
      */
     module monitor {
-		/** keeps track of whether the shift key is held down */
-		const SHIFT: boolean
-		/** keeps track of whether the alt key is held down */
-		const ALT: boolean
-		/** keeps track of whether the operating system specific meta key is held down (CTRL on Windows/Linux, CMD on Mac) */
-		const META: boolean
+        /** keeps track of whether the shift key is held down */
+        const SHIFT: boolean
+        /** keeps track of whether the alt key is held down */
+        const ALT: boolean
+        /** keeps track of whether the operating system specific meta key is held down (CTRL on Windows/Linux, CMD on Mac) */
+        const META: boolean
         /**
          * keeps track of the canvas that the mouse is currently over.
          * This is undefined if the mouse is over no canvas
@@ -1719,7 +1719,7 @@ declare module ChemDoodle {
 
     /** this package hosts all data structures provided by the ChemDoodle Web Components library. */
     module structures {
-        
+
         /**
          * is data structure for holding information about an element.
          * This is a private class that cannot be instantiated, however, the Elements in the ELEMENT array can be extended.
@@ -1831,7 +1831,7 @@ declare module ChemDoodle {
              * but can be overridden if preferred (if the value is undefined, then this setting is ignored),
              * this should be width/height of your canvas to keep the aspect ratio square
              */
-		    projectionWidthHeightRatio_3D: Number
+            projectionWidthHeightRatio_3D: Number
             /** the near camera cutoff distance in 3D scenes */
             projectionFrontCulling_3D: Number
             /** the far camera cutoff distance in 3D scenes */
@@ -2111,8 +2111,8 @@ declare module ChemDoodle {
             macro_colorByChain: Boolean
             /** the colors to interpolate through for the rainbow */
             macro_rainbowColors: String[]
-            
-            
+
+
             //Surface Specifications
 
             /** render surfaces, if any */
@@ -2129,8 +2129,8 @@ declare module ChemDoodle {
             surfaces_materialSpecularColor_3D: String
             /** the shininess of surfaces in 3D scenes */
             surfaces_materialShininess_3D: Number
-            
-            
+
+
             //Spectrum Specifications
 
             /** plot color */
@@ -2204,13 +2204,13 @@ declare module ChemDoodle {
             measurement_displayText_3D: Boolean
 
             /** create a copy of this Styles object */
-		    copy(): void
+            copy(): void
 
             /** 
              * presets the 3D representation for the main molecular structure for a Canvas3D,
              * currently accepts: 'Ball and Stick', 'van der Waals Spheres', 'Stick', 'Wireframe', 'Line'
              */
-		    set3DRepresentation(representation: 'Ball and Stick' | 'van der Waals Spheres' | 'Stick' | 'Wireframe' | 'Line'): void
+            set3DRepresentation(representation: 'Ball and Stick' | 'van der Waals Spheres' | 'Stick' | 'Wireframe' | 'Line'): void
         }
 
         /**
@@ -2223,22 +2223,22 @@ declare module ChemDoodle {
             y: number
 
             /** add Point p */
-		    add(p: Point): void
+            add(p: Point): void
 
             /** returns the angle to Point p, with the current Point as the origin (y-axis is inverted for the inverted canvases) */
-		    angle(p: Point): number
+            angle(p: Point): number
 
             /** same as angle(), but for the contradictory way canvas arcs are handled */
-		    angleForStupidCanvasArcs(p: Point): number
+            angleForStupidCanvasArcs(p: Point): number
 
             /** returns the distance to Point p */
-		    distance(p: Point): number
+            distance(p: Point): number
 
             /** subtract Point p */
-		    sub(p: Point): void
+            sub(p: Point): void
         }
 
-        type QueryRangeVariable = {x: number, y: number}[]
+        type QueryRangeVariable = { x: number, y: number }[]
 
         /** 
          * this data structure holds query information for chemical objects;
@@ -2277,16 +2277,16 @@ declare module ChemDoodle {
             type: Number
 
             /** draws this query to the canvas that owns the Context using the given Styles at the input position */
-		    draw(ctx: CanvasRenderingContext2D, styles: Styles, pos: Point): void
+            draw(ctx: CanvasRenderingContext2D, styles: Styles, pos: Point): void
 
             /** returns a string representing the input range objects */
-		    outputRange(range: QueryRangeVariable): String
+            outputRange(range: QueryRangeVariable): String
 
             /** returns an array of range values corresponding to the input string value */
-		    parseRange(value: string): QueryRangeVariable
+            parseRange(value: string): QueryRangeVariable
 
             /** returns a string representing this query in the ChemDoodle query notation format */
-		    toString(): String
+            toString(): String
         }
 
         /** represents a chemical atom */
@@ -2353,52 +2353,52 @@ declare module ChemDoodle {
              * 'type' is a String and defines the enhanced stereochemistry operator, either 'abs', 'or', or '&', 'abs' by default.
              * 'group' is a positive integer defining the and/or operator group and is 1 by default.
              */
-            enhancedStereo: {type: 'abs' | 'or' | '&', group: number}
+            enhancedStereo: { type: 'abs' | 'or' | '&', group: number }
 
             /** the 3D counterpart to the same Point function */
-			add3D(a: Atom): void
+            add3D(a: Atom): void
 
             /** the 3D counterpart to the same Point function */
-			distance3D(a: Atom): void
+            distance3D(a: Atom): void
 
             /** draws this atom to the canvas that owns the Context using the given Styles */
-			draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+            draw(ctx: CanvasRenderingContext2D, styles: Styles): void
 
             /** draws attributes for an Atom */
-			drawAttribute(ctx: CanvasRenderingContext2D, styles: Styles): void
+            drawAttribute(ctx: CanvasRenderingContext2D, styles: Styles): void
 
             /** draws decorations for the SketcherCanvas that owns the Context and has this Atom hovered */
-			drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+            drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
 
             /** returns a Bounds object containing the 2D bounds of the graphical atom */
-			getBounds(): math.Bounds
+            getBounds(): math.Bounds
 
             /** returns a Bounds object containing the 3D bounds of the graphical atom */
-			getBounds3D(): math.Bounds
+            getBounds3D(): math.Bounds
 
             /**
              * this is a helper function for the rendering functions; 
              * given the input choices, a color is returned with which to render the atom with
              */
-			getElementColor(useJMOLColors: boolean, usePYMOLColors: boolean, color: string): String
+            getElementColor(useJMOLColors: boolean, usePYMOLColors: boolean, color: string): String
 
             /** returns the number of implicit hydrogens */
-			getImplicitHydrogenCount(): Number
+            getImplicitHydrogenCount(): Number
 
             /** returns true if label is not 'C' */
-			isLabelVisible(styles: Styles): Boolean
+            isLabelVisible(styles: Styles): Boolean
 
             /** 
-             * renders this atom to the 3D scene in the WebGL canvas that owns the GLContext using the given Styles;
+             * renders this atom to the 3D scene in the WebGL canvas that owns the WebGLRenderingContext using the given Styles;
              * noColor is a parameter only used by the picking system
              */
-			render(gl: WebGLRenderingContext, styles: Styles, noColor: boolean): void
+            render(gl: WebGLRenderingContext, styles: Styles, noColor: boolean): void
 
             /** renders the highlight for this atom the given Styles */
-			renderHighlight(gl: WebGLRenderingContext, styles: Styles): void
+            renderHighlight(gl: WebGLRenderingContext, styles: Styles): void
 
             /** the 3D counterpart to the same Point function */
-			sub3D(a: Atom): void
+            sub3D(a: Atom): void
         }
 
         /**
@@ -2418,13 +2418,13 @@ declare module ChemDoodle {
             tokens: string[]
 
             /** draws this condensed label to the canvas that owns the Context using the given Styles */
-		    draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+            draw(ctx: CanvasRenderingContext2D, styles: Styles): void
 
             /** reverses the order of the tokens if necessary for layout */
-		    getLeftAlignedTokens(ctx: CanvasRenderingContext2D, styles: Styles): string[]
+            getLeftAlignedTokens(ctx: CanvasRenderingContext2D, styles: Styles): string[]
 
             /** this algorithm parses the label */
-		    parse(): void
+            parse(): void
         }
 
         /** represents a chemical ring */
@@ -2439,10 +2439,10 @@ declare module ChemDoodle {
             center: Point
 
             /** returns a Point that specifies the center of this Ring */
-		    getCenter(): Point
+            getCenter(): Point
 
             /** loops through bonds and sets all Bond.ring objects in to itself, caches center */
-		    setupBonds(p: Point): void
+            setupBonds(p: Point): void
         }
 
         /** represents a chemical bond */
@@ -2475,37 +2475,37 @@ declare module ChemDoodle {
             molCenter: Point
 
             /** returns true if this Bond connects to the input atom */
-		    contains(a: Atom): Boolean
+            contains(a: Atom): Boolean
 
             /** draws this bond to the canvas that owns the Context using the given Styles */
-		    draw(ctx: CanvasRenderingContext2D, styles: Styles): void
+            draw(ctx: CanvasRenderingContext2D, styles: Styles): void
 
             /** draws decorations for the SketcherCanvas that owns the Context and has this Bond hovered */
-		    drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+            drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
 
             /** draws this bond in Lewis Dot style given the input parameters */
-		    drawLewisStyle(ctx: CanvasRenderingContext2D, styles: Styles, y1: Number, x2: Number, x1: Number, y2: Number): void
+            drawLewisStyle(ctx: CanvasRenderingContext2D, styles: Styles, y1: Number, x2: Number, x1: Number, y2: Number): void
 
             /** returns a Point that specifies the center between the two Atoms in the Bond */
-		    getCenter(): Point
+            getCenter(): Point
 
             /** returns the bond length on the XY plane */
-		    getLength(): Number
+            getLength(): Number
 
             /** returns the 3D bond length */
-		    getLength3D(): Number
+            getLength3D(): Number
 
             /** returns the Atom opposite Atom a */
-		    getNeighbor(a: Atom): Atom
+            getNeighbor(a: Atom): Atom
 
-            /** renders this bond to the 3D scene in the WebGL canvas that owns the GLContext using the given Styles */
-		    render(gl: WebGLRenderingContext, styles: Styles): void
+            /** renders this bond to the 3D scene in the WebGL canvas that owns the WebGLRenderingContext using the given Styles */
+            render(gl: WebGLRenderingContext, styles: Styles): void
 
             /** renders the highlight for this bond the given Styles */
-		    renderHighlight(gl: WebGLRenderingContext, styles: Styles): void
+            renderHighlight(gl: WebGLRenderingContext, styles: Styles): void
 
             /** this function renders the bond for the picking system */
-		    renderPicker(gl: WebGLRenderingContext, styles: Styles): void
+            renderPicker(gl: WebGLRenderingContext, styles: Styles): void
         }
 
         /** represents a chemical molecule */
@@ -2576,7 +2576,7 @@ declare module ChemDoodle {
              */
             getDimension(): Point
 
-            /** renders this molecule to the 3D scene in the WebGL canvas that owns the GLContext using the given Styles */
+            /** renders this molecule to the 3D scene in the WebGL canvas that owns the WebGLRenderingContext using the given Styles */
             render(gl: WebGLRenderingContext, styles: Styles): void
 
             /** 
@@ -2604,9 +2604,9 @@ declare module ChemDoodle {
             constructor()
 
             /** the spectrum plot as an array of Point objects */
-			data: Point[]
+            data: Point[]
             /** this is an Array of String containing the header records from the JCAMP file */
-			metadata: string[]
+            metadata: string[]
             /** 
              * this is an Array of Object.
              * Each object describes an item in the list of data items to be displayed on the top left of the spectrum.
@@ -2617,27 +2617,27 @@ declare module ChemDoodle {
              * You can also add custom items by providing the display and value parameters.
              * If the value parameter is defined, then the tag parameter will be ignored if also defined.
              */
-			dataDisplay: {tag?: string, display?: string, value?: string}[]
+            dataDisplay: { tag?: string, display?: string, value?: string }[]
             /** the minimum domain value, set up by the setup method to the smallest x value in the data array after the spectrum is read, can also be manually set */
-			minX: Number
+            minX: Number
             /** the maximum domain value, set up by the setup method to the largest x value in the data array after the spectrum is read, can also be manually set */
-			maxX: Number
+            maxX: Number
             /** this value states that only values greater than this percentage of the highest y-value in the spectrum will be considered in the integration */
-			integrationSensitivity: Number
+            integrationSensitivity: Number
             /** the title of the spectrum, most spectrum file formats provide a title, no title is displayed if the value is undefined */
-			title: String
+            title: String
             /** the unit of the domain to be displayed under the x-axis, no x-axis title is displayed if the value is undefined */
-			xUnit: String
+            xUnit: String
             /** the unit of the domain to be displayed under the y-axis, no y-axis title is displayed if the value is undefined */
-			yUnit: String
+            yUnit: String
             /**
              * determines how the plot will be drawn,
              * if continuous is true, then the plot is rendered as a path from Point to Point in the data array,
              * if continuous is false, then each data point will be rendered as a vertical line from y = 0
              */
-			continuous: Boolean
+            continuous: Boolean
             /** an object storing dimension metadata from the previous render */
-			memory: Object
+            memory: Object
 
             /** will popup a Javascript alert dialog with the metadata from the JCAMP file */
             alertMetadata(): void
@@ -2654,14 +2654,14 @@ declare module ChemDoodle {
              * because the smallest resolution on screens is a pixel, this function will actually find the highest peak within a pixel range of the input x coordinate to return;
              * can only be called after a render when memory is set, this function doesn't make sense without a render first anyway
              */
-            getClosestPlotInternalCoordinates(x: Number): Point   
+            getClosestPlotInternalCoordinates(x: Number): Point
 
             /** 
              * function to obtain the x and y coordinates within the spectrum's plot space given the input x and y coordinates from the canvas space;
              * can only be called after a render when memory is set, this function doesn't make sense without a render first anyway;
              * essentially, this just calls getInverseTransformedX() and getInverseTransformedY()
              */
-            getInternalCoordinates(x: Number, y: Number): Point 
+            getInternalCoordinates(x: Number, y: Number): Point
 
             /**
              * function to obtain the x-coordinate within the spectrum's plot space given the input x-coordinate from the canvas space;
@@ -2707,7 +2707,7 @@ declare module ChemDoodle {
              * given a reaction arrow and an array of molecules, this function will separate the molecules into reactants and products.
              * An object is returned with two subarrays named "reactants" and "products"
              */
-            resolve(arrow: d2.Line, molecules: Molecule[]): {reactants: Molecule[], products: Molecule[]}
+            resolve(arrow: d2.Line, molecules: Molecule[]): { reactants: Molecule[], products: Molecule[] }
         }
 
         /** a queue data structure */
@@ -2716,28 +2716,28 @@ declare module ChemDoodle {
 
             /** returns and removes the element at the beginning of the queue */
             dequeue(): Object
-            
+
             /** adds an element to the end of the queue */
-		    enqueue(o: Object): Object
+            enqueue(o: Object): Object
 
             /** returns, but does not remove, the element at the beginning of the queue */
-		    getOldestElement(): Object
+            getOldestElement(): Object
 
             /** returns the size of the queue */
-		    getSize(): Number
+            getSize(): Number
 
             /** returns true if there are no elements in the queue */
-		    isEmpty(): Boolean
+            isEmpty(): Boolean
         }
 
         module d2 {
             /** the parent data structure for all 2D shapes, it should not be instantiated. */
             class _Shape {
                 /** draws this shape's anchor to the SketcherCanvas that owns the Context using the given Styles and mouse position */
-		        drawAnchor(ctx: CanvasRenderingContext2D, styles: Styles, p: Point, hovered: boolean): void
+                drawAnchor(ctx: CanvasRenderingContext2D, styles: Styles, p: Point, hovered: boolean): void
 
                 /** draws this shape's decorations to the SketcherCanvas that owns the Context using the given Styles */
-		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+                drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
 
                 /** returns a Bounds object containing the 2D bounds of the shape */
                 getBounds(): math.Bounds
@@ -2805,7 +2805,7 @@ declare module ChemDoodle {
                 draw(ctx: CanvasRenderingContext2D, styles: Styles): void
 
                 /** draws this pusher's decorations in the sketcher if it is hovered */
-		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+                drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
 
                 /** returns an empty Array */
                 getPoints(): []
@@ -2885,7 +2885,7 @@ declare module ChemDoodle {
                 draw(ctx: CanvasRenderingContext2D, styles: Styles): void
 
                 /** draws this repeat unit's decorations in the sketcher if it is hovered */
-		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+                drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
 
                 /** returns an Array of Point objects corresponding to the four corners of the drawn bracket ends */
                 getPoints(): Point[]
@@ -2917,7 +2917,7 @@ declare module ChemDoodle {
                 draw(ctx: CanvasRenderingContext2D, styles: Styles): void
 
                 /** draws this variable attachment point's decorations in the sketcher if it is hovered */
-		        drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
+                drawDecorations(ctx: CanvasRenderingContext2D, styles: Styles): void
 
                 /** returns an Array of Point objects corresponding to the four corners of the drawn bracket ends */
                 getPoints(): Point[]
@@ -2928,51 +2928,655 @@ declare module ChemDoodle {
         }
 
         module d3 {
-            class _Mesh {}
+            /** parent class for all 3D shapes, it should not be instantiated. */
+            abstract class _Mesh {
+                /** an array of floating point values that describe the position of verticies in a mesh. */
+                positionData: number[]
+                /** an array of floating point values that describe the surface normals */
+                normalData: number[]
+                /** an array of integer values that indexes the triplets contained within the positionData and normalData arrays */
+                indexData: number[]
 
-            class _Measurement {}
+                /** binds the vertex buffers to the given WebGL context; calls setupBuffers if buffers have not been already set up. */
+                bindBuffers(gl: WebGLRenderingContext): void
 
-            class Shape {}
+                /** given a WebGL context and vertex buffer data, returns an array containing the position, normal, and index buffers. */
+                generateBuffers(gl: WebGLRenderingContext, normalData: number[], indexData: number[]): void
+
+                /** sets up vertex buffers for a given WebGL context prior to rendering. */
+                setupBuffers(gl: WebGLRenderingContext): void
+
+                /** stores position, normal, and index vertex buffer data for later use by other methods. */
+                storeData(positionData: Number[], normalData: number[], indexData: number[]): void
+            }
+
+            /** parent class for all 3D measurements, it should not be instantiated. */
+            abstract class _Measurement extends _Mesh {
+                /** renders the measurement to the given WebGL context according to the provided visual specifications */
+                render(gl: WebGLRenderingContext, styles: Styles): void
+
+                /** renders the text associated with the measurement to the given WebGL context according to the provided visual specifications */
+                renderText(gl: WebGLRenderingContext, styles: Styles): void
+
+                /** abstract method for measuring the desired quantity and generating rendering data for use in a 3D canvas. */
+                abstract calculateData(styles: Styles): void
+
+                /** abstract method for returning an object with the position and value the measurement for rendering as text in a 3D canvas */
+                abstract getText(styles: Styles): Object
+            }
+
+            /** parent class for all 3D surfaces, it should not be instantiated. */
+            abstract class _Surface extends _Mesh {
+                /** generate and build the 3D surface, using marching cubes, including simplifying the mesh, smoothing and normal generation; this function is dependent on the input atoms, probeRadius and resolution */
+                build(atoms: Atom[], probeRadius: Number, resolution: Number): void
+
+                /** this is the algorithm that generates the isosurface so that the surface can be built */
+                generate(xdif: Number, ydif: Number, zdif: Number, step: Number, range: Number, xsteps: Number, ysteps: Number, zsteps: Number): void
+
+                /** renders the surface to the given WebGL context according to the provided visual specifications */
+                render(gl: WebGLRenderingContext, styles: Styles): void
+
+                /** calculate the isosurface value for the surface given the x, y and z coordinates; this is an abstract function to be implemented by child Surfaces. */
+                abstract calculate(x: Number, y: Number, z: Number): void
+            }
+
+            /** a child of the _Measurement class, represents the angle between three atoms */
+            class Angle extends _Measurement {
+                constructor(a1: Atom, a2: Atom, a3: Atom)
+
+                /** first of three atoms that form the angle. */
+                a1: Atom
+                /** second of three atoms that form the angle. */
+                a2: Atom
+                /** third of three atoms that form the angle. */
+                a3: Atom
+                /** vector from a1 to a2, computed by calculateData */
+                vec1: vec3
+                /** vector from a2 to a3, computed by calculateData */
+                vec2: vec3
+                /** angle formed by vec1 and vec2, computed by calculateData */
+                angle: Number
+
+                /** calculates the angle between the three atoms and creates the required data to render the angle in a 3D canvas. */
+                calculateData(styles: Styles): void
+
+                /** returns an object with the position and value of the angle for rendering as text in a 3D canvas */
+                getText(styles: Styles): Object
+            }
+
+            /** a child of the _Mesh class, represents a cylindrical arrow with head */
+            class Arrow extends _Mesh {
+                constructor(radius: number, bands: number)
+            }
+
+            /** a child of the _Mesh class, represents a 3D rectangular prism, or box */
+            class Box extends _Mesh {
+                constructor(width: number, height: number, depth: number)
+            }
+
+            /** helper object keep track of the projection and view matrixes from the camera into the scene */
+            class Camera {
+                /** field of view angle for the perspective projection */
+                fieldOfView: Number
+                /** aspect ration for the projection */
+                aspect: Number
+                /** near clip value for the projection */
+                near: Number
+                /** far clip value for the projection */
+                far: Number
+                /** the zoom value into the scene for the projection */
+                zoom: Number
+                /** the matrix for the model view */
+                viewMatrix: mat4
+                /** the matrix for the projection */
+                projectionMatrix: mat4
+
+                /** returns the calculated focal length */
+                focalLength(): Number
+
+                /** returns the orthogonal projection matrix given the camera's values, updating the internal matrix */
+                orthogonalProjectionMatrix(): mat4
+
+                /** returns the perspective projection matrix given the camera's values, updating the internal matrix */
+                perspectiveProjectionMatrix(): mat4
+
+                /** returns and recalculates the internal projection matrix, either perspective or orthogonal, given the parameter */
+                updateProjectionMatrix(isProjection: Boolean): mat4
+
+                /** zooms in the camera view */
+                zoomIn(): void
+
+                /** zooms out the camera view */
+                zoomOut(): void
+            }
+
+            /** helper object to render the compass */
+            class Compass {
+                constructor(gl: WebGLRenderingContext, styles: Styles)
+
+                /** renders the compass to the given WebGL context according to the provided visual specifications */
+                render(gl: WebGLRenderingContext, styles: Styles): void
+
+                /** renders an individual arrow */
+                renderArrow(gl: WebGLRenderingContext, color: String, mvMatrix: number[]): void
+            }
+
+            /** a child of the _Mesh class, represents a 3D cylinder */
+            class Cylinder extends _Mesh {
+                constructor(radius: Number, height: Number, bands: Number, closed: Boolean)
+            }
+
+            /** a class for supporting a frame buffer object (FBO), with knowledge of depth buffer capabilities of the given WebGL context */
+            class FrameBuffer {
+                constructor()
+
+                /** sets the size of the FBO buffer with both width and height being set to the input parameter and then binds it to the context */
+                bind(gl: WebGLRenderingContext, width: Number, height: Number): void
+
+                /** initializes the FBO */
+                init(gl: WebGLRenderingContext): void
+
+                /** set color texture */
+                setColorRenderBuffer(gl: WebGLRenderingContext, renderbuffer: Number, attachment: Number): void
+
+                /** set color texture */
+                setColorTexture(gl: WebGLRenderingContext, texture: Number, attachment: Number): void
+
+                /** set color texture */
+                setDepthRenderBuffer(gl: WebGLRenderingContext, renderbuffer: Number): void
+
+                /** set color texture */
+                setDepthTexture(gl: WebGLRenderingContext, texture: Number): void
+            }
+
+            /** a class for defining textures */
+            class Texture {
+                constructor()
+
+                /** initializes the texture */
+                init(gl: WebGLRenderingContext, type: Number, internalFormat: Number, format: Number): void
+
+                /** sets the size of the texture with both width and height being set to the input parameter and then binds it to the context */
+                setParameter(gl: WebGLRenderingContext, width: Number, height: Number): void
+            }
+
+            /** a class representing the render buffer */
+            class Renderbuffer {
+                constructor()
+
+                /** initializes the render buffer */
+                init(gl: WebGLRenderingContext, type: Number, internalFormat: Number, format: Number): void
+
+                /** sets the size of the render buffer with both width and height being set to the input parameter and then binds it to the context */
+                setParameter(gl: WebGLRenderingContext, width: Number, height: Number): void
+            }
+
+            /** a class controlling Screen Space Ambient Occlusion (SSAO) features */
+            class SSAO {
+                constructor()
+
+                /** binds the SSAO noise texture to the context */
+                initNoiseTexture(gl: WebGLRenderingContext): void
+
+                /** initializes the sample kernel */
+                initSampleKernel(kernelSize: Number): void
+            }
+
+            /** a child of the _Measurement class, represents the distance between two atoms */
+            class Distance extends _Measurement {
+                constructor(a1: Atom, a2: Atom, node: vec3, offset: Number)
+
+                /** first of the two atoms whose distance is being measured. */
+                a1: Atom
+                /** second of the two atoms whose distance is being measured. */
+                a2: Atom
+                /** an optional vector that displaces the measured vector from the midpoint of the two atoms */
+                node: vec3
+                /** an optional distance to offset the measurement text */
+                offset: Number
+
+                /** calculates the distance between the two atoms and creates the required data to render the distance in a 3D canvas. */
+                calculateData(styles: Styles): void
+
+                /** returns an object with the position and value of the distance for rendering as text in a 3D canvas */
+                getText(styles: Styles): Object
+            }
+
+            /** handles fogging for WebGL canvases. */
+            class Fog {
+                constructor(fog: String, fogStart: Number, fogEnd: Number, density: Number)
+                /** the color of the fog, stored as an array of representing the RGB values. */
+                colorRGB: Number[]
+                /** number value that the fog starts from. Choose a value between 0 and 1, and this value should be less than fogEnd. */
+                fogStart: Number
+                /** number value that the fog ends at. Choose a value between 0 and 1, and this value should be greater than fogStart. */
+                fogEnd: Number
+                /** the density of the fog for exp1 and exp2 algorithms. */
+                density: Number
+
+                /** sets up the values for the fogging algorithm. */
+		        fogScene(color: String, fogStart: Number, fogEnd: Number, density: Number): void
+            }
+
+            /** a child of the _Mesh class, represents a line */
+            class Line extends _Mesh {
+                constructor()
+            }
+
+            /** a child of the _Mesh class, represents a quad */
+            class Quad extends _Mesh {
+                constructor()
+            }
+
+            /** a child of the _Mesh class, represents a 3D pill geometry */
+            class Pill extends _Mesh {
+                constructor(radius: Number, height: Number, latitudeBands: Number, longitudeBands: Number)
+            }
+
+            /** a child of the _Mesh class, represents a ribbon typically used in protein renderings */
+            class Ribbon extends _Mesh {
+                constructor(chain: any[], offset: Number, cartoon: Boolean)
+
+                /** an array of sub-meshes that make up the ribbon */
+                paritions: _Mesh[]
+                /** an array of sub-meshes that make up residues in the ribbon. */
+                segments: _Mesh[]
+                /** an array of sub-meshes that make up cartoonized residues in the ribbon. */
+                cartoonSegments: _Mesh[]
+                /** keeps track of last partition rendered */
+                "partitions.lastRender": Number
+                /** indicates whether the front or the back of the ribbon is visible. */
+                front: Boolean
+
+                /** renders the ribbon to the given WebGL context according to the provided visual specifications */
+		        render(gl: WebGLRenderingContext, styles: Styles): void
+
+                /** overrides the storeData function of the Mesh class to pull vertex data from the first member of the partition array; clears the partition array to save memory if there is only one partition. */
+		        storeData(positionData: Number[], normalData: Number[], indexData: Number[]): void
+            }
+
+            /** a child of the _Mesh class, represents a shape described by a set of points in the xy plane and a thickness in the z plane. */
+            class Shape extends _Mesh {
+                constructor(points: Point[], thickness: Number)
+            }
+
+            /** a child of the _Surface class, this surface defines a solvent accessible surface. */
+            class SASSurface extends _Surface {
+                constructor(atoms: Atom[], probeRadius: Number, resolution: Number)
+
+                /** the array of Atom objects this surface is based on */
+                atoms: Atom[]
+                /** this is the number of divisions the smallest side of the rectangular prism that encompases the isosurface is divided into, a value of 30 is typically acceptable */
+                resolution: Number
+                /** the radius of the probe used to define the surface */
+                probeRadius: Number
+
+                /** calculate the isosurface value for the surface given the x, y and z coordinates; this is an abstract function to be implemented by child Surfaces. */
+                calculate(x: Number, y: Number, z: Number): void
+            }
+
+            /** a child of the _Surface class, this surface defines a solvent excluded (also known as Connolly) surface. (Proprietary Only) */
+            class SESSurface extends _Surface {
+                constructor(atoms: Atom[], probeRadius: Number, resolution: Number)
+
+                /** the array of Atom objects this surface is based on */
+                atoms: Atom[]
+                /** this is the number of divisions the smallest side of the rectangular prism that encompases the isosurface is divided into, a value of 30 is typically acceptable */
+                resolution: Number
+                /** the radius of the probe used to define the surface */
+                probeRadius: Number
+
+                /** calculate the isosurface value for the surface given the x, y and z coordinates; this is an abstract function to be implemented by child Surfaces. */
+                calculate(x: Number, y: Number, z: Number): void
+            }
+
+            /** a child of the _Mesh class, respresents a sphere with a given radius and number of latitude and longitude bands. */
+            class Sphere extends _Mesh {
+                constructor(radius: Number, latitudeBands: Number, longitudeBands: Number)
+            }
+
+            /** a child of the _Mesh class, represents a small star (mainly used to depict solvent in macromolecule renderings). */
+            class Star extends _Mesh {
+                constructor()
+            }
+
+            /** a child of the _Mesh class, represents a tube of the sort typically used in macromolecular backbone renderings. */
+            class Tube extends _Mesh {
+                constructor(chain: any[], thickness: Number, cylinderResolution: Number)
+
+                /** cylindrical meshes that make */
+                paritions: Cylinder[]
+                /** sphere meshes at the end of the each tube. */
+                ends: Sphere[]
+
+                /** renders the tube to the given WebGL context according to the provided visual specifications */
+		        render(gl: WebGLRenderingContext, styles: Styles): void
+            }
+
+            /** a child of the _Mesh class, represents a crystallographic unit cell rendered from a set of vectors. */
+            class UnitCell extends _Mesh {
+                /**
+                 * @param lengths this is an array of length 3, with the length values of the unit cell for a, b, and c in that order. Unit: Angstroms
+                 * @param angles this is an array of length 3, with the angle values of the unit cell for alpha, beta, and gamma in that order. Unit: radians
+                 * @param offset this is an array of length 3, with the ABC offset values of the unit cell for A, B and C in that order; these offset values are in internal coordinate space; if not provided, the default offset will be [0, 0, 0] to start the unit cell at the origin. Unit: ABC Internal Coordinates
+                 */
+                constructor(lengths: Number[], angles: Number[], offset: Number[])
+
+                /** renders the unit cell to the given WebGL context according to the provided visual specifications */
+		        render(gl: WebGLRenderingContext, styles: Styles): void
+            }
+
+            /** a child of the _Surface class, this surface defines a van der Waals surface. */
+            class VDWSurface extends _Surface {
+                constructor(atoms: Atom[], resolution: Number)
+
+                /** the array of Atom objects this surface is based on */
+                atoms: Atom[]
+                /** this is the number of divisions the smallest side of the rectangular prism that encompases the isosurface is divided into, a value of 30 is typically acceptable */
+                resolution: Number
+                /** the radius of the probe used to define the surface, vdW surfaces are not dependent on a probe, and this value has no effect on the VDWSurface class */
+                probeRadius: Number
+
+                /** calculate the isosurface value for the surface given the x, y and z coordinates; this is an abstract function to be implemented by child Surfaces. */
+                calculate(x: Number, y: Number, z: Number): void;
+            }
+
+            /** represents a light source with given RGB specular and diffuse colors, as well as a vector describing the direction it is shining in. */
+            class Light {
+                constructor(specularColor: String, diffuseColor: String, direction: vec3)
+
+                /** an array of RGB values describing the diffuse color of the light. */
+                diffuseColor: Number[]
+                /** an array of RGB values describing the specular color of the light. */
+                specularColor: Number[]
+                /** a vector pointing in the direction that the light is shining. */
+                direction: vec3
+                /** a pointer to the associated camera view for the Canvas3D. */
+                camera: Camera
+
+                /** sets up the values for the light */
+		        lightScene(specularColor: String, diffuseColor: String, direction: vec3): void
+
+                /** sets up the projection and perspective matrixes from the light's perspective, mainly for shadow maps */
+		        updateView(): void
+            }
+
+            /** contains material properties for a given 3D context */
+            class Material {
+                constructor(gl: WebGLRenderingContext)
+
+                /** array storing the ambient color. */
+                aCache: Number[]
+                /** array storing the diffuse color. */
+                dCache: Number[]
+                /** array storing the specular color. */
+                sCache: Number[]
+                /** current shininess value. */
+                snCache: Number
+                /** current alpha value. */
+                alCache: Number
+
+                /** sets the diffuse color to the values contained in the provided array. */
+		        setDiffuseColor(diffuseColor: Number[]): void
+
+                /** sets the alpha transparency value. */
+		        setDiffuseColor(alpha: Number): void
+
+                /** sets temporary values for all colors and shininess. */
+		        setTempColors(ambientColor: Number[], diffuseColor: Number[], specularColor: Number[], shininess: Number): void
+            }
+
+            /** this class manages an invisible 2D <canvas> for rendering character data to be used in WebGL components. */
+            class TextImage {
+                constructor()
+
+                init(gl: WebGLRenderingContext): void
+            }
+
+            /** this class creates the WebGL text objects that are rendered to WebGL components. */
+            class TextMesh {
+                constructor()
+            }
+
+            /** this class defines the default text rendering of the scene. */
+            class Label {
+                constructor()
+            }
+
+            /** the parent class for the various vertex and fragment shader pairs for WebGL canvases. */
+            abstract class _Shader {
+                /** disables the vertex attributes array. */
+		        disableAttribsArray(gl: WebGLRenderingContext): void
+
+                /** enables the vertex attributes array. */
+		        enableAttribsArray(gl: WebGLRenderingContext): void
+
+                /** returns a pointer to the requested shader. */
+		        getShader(gl: WebGLRenderingContext, id: Number): WebGLShader
+
+                /** initializes a shader given the id and source of the shader. */
+		        getShaderFromStr(gl: WebGLRenderingContext, shaderType: Number, strSrc: String): WebGLShader
+
+                /** initializes the vertex and fragment shaders for a given WebGL canvas. */
+		        init(gl: WebGLRenderingContext): void
+
+                /** initializes the main uniform variables for the shaders. */
+		        initUniformLocations(gl: WebGLRenderingContext): void
+
+                /** called when the shader is attached to initialize locations for attribute variables. */
+		        onShaderAttached(gl: WebGLRenderingContext): void
+
+                /** set the model view matrix to the shader (with pre-processing). */
+		        setMatrixUniforms(gl: WebGLRenderingContext, modelMatrix: mat4): void
+
+                /** set the model view matrix to the shader. */
+		        setModelViewMatrix(gl: WebGLRenderingContext, mvMatrix: mat4): void
+
+                /** set the projection matrix to the shader. */
+		        setProjectionMatrix(gl: WebGLRenderingContext, matrix: mat4): void
+
+                /** enables this shader for the GL context. */
+		        useShaderProgram(gl: WebGLRenderingContext): void
+
+                /** load the default fragment shader. */
+		        abstract loadDefaultFragmentShader(gl: WebGLRenderingContext): void
+
+                /** load the default vertex shader.  */
+		        abstract loadDefaultVertexShader(gl: WebGLRenderingContext): void
+            }
+
+            /** this class handles the rendering to depth map FBOs, mainly for shadows. (Proprietary Only) */
+            class DepthShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the deferred shading anti-aliasing pass, based on the FXAA algorithm. */
+            class FXAAShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the rendering of text textures that are rendered to WebGL components. */
+            class LabelShader extends _Shader {
+                constructor()
+
+                /** set the texture dimensions to the shader program. */
+		        setDimension(gl: WebGLRenderingContext, width: Number, height: Number): void
+
+                override disableAttribsArray(gl: WebGLRenderingContext): void;
+
+                override enableAttribsArray(gl: WebGLRenderingContext): void;
+
+                override init(gl: WebGLRenderingContext): void;
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+
+                override onShaderAttached(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the deferred shading lighting pass. */
+            class LightingShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the deferred shading normals pass. */
+            class NormalShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the deferred shading outlining pass. */
+            class OutlineShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this is the default rendering shader for the ChemDoodle Web Components, using a Blinn-Phong model. */
+            class PhongShader extends _Shader {
+                constructor()
+
+                override disableAttribsArray(gl: WebGLRenderingContext): void;
+
+                override enableAttribsArray(gl: WebGLRenderingContext): void;
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the rendering of pickable objects, allowing the Picker to work. */
+            class PickShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the deferred shading position attribute pass. */
+            class PositionShader extends _Shader {
+                constructor()
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the rendering of quads to the canvas. */
+            class QuadShader extends _Shader {
+                constructor()
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the deferred shading SSAO blur pass. (Proprietary Only) */
+            class SSAOBlurShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class handles the deferred shading SSAO pass. (Proprietary Only) */
+            class SSAOShader extends _Shader {
+                constructor()
+
+                override initUniformLocations(gl: WebGLRenderingContext): void;
+
+                override loadDefaultFragmentShader(gl: WebGLRenderingContext): void;
+
+                override loadDefaultVertexShader(gl: WebGLRenderingContext): void;
+            }
+
+            /** this class manages the FBO and picking system for WebGL components. */
+            class Picker {
+                constructor()
+
+                /** initializes the picking system for a given WebGL canvas. */
+		        init(gl: WebGLRenderingContext): void
+
+                /** sets the width and height information */
+		        setDimension(gl: WebGLRenderingContext, width: Number, height: Number): void
+            }
         }
     }
-  
+
     module uis {
 
-        class CopyPasteManager {}
+        class CopyPasteManager { }
 
         module actions {
-            class HistoryManager {}
+            class HistoryManager { }
         }
 
         module tools {
-            class Lasso {}
+            class Lasso { }
         }
 
         module states {
-            class StateManager {}
+            class StateManager { }
 
-            class StateManager3D {}
+            class StateManager3D { }
         }
-      module gui {
-        module desktop {
-            class Button {}
+        module gui {
+            module desktop {
+                class Button { }
 
-            class CursorManager {}
+                class CursorManager { }
 
-            class TextInput {}
+                class TextInput { }
 
-            class Tray {}
+                class Tray { }
 
-            class Popover {}
-          /** this class organizes and manages the toolbars for the sketcher. */
-          class ToolbarManager {
-            /** sets up the HTML with jQuery UI */
-            setup(): void
-          }
+                class Popover { }
+                /** this class organizes and manages the toolbars for the sketcher. */
+                class ToolbarManager {
+                    /** sets up the HTML with jQuery UI */
+                    setup(): void
+                }
+            }
         }
-      }
     }
-  }
-  
-  export default ChemDoodle
-  
+}
+
+export default ChemDoodle
