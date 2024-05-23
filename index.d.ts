@@ -375,16 +375,16 @@ declare module ChemDoodle {
         setHoverImage(url: string): void
 
         /** performs the mouse click action */
-        click(e: JQuery.Event): void
+        override click(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
-        drawChildExtras(ctx: CanvasRenderingContext2D): void
+        override drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /**  performs the mouse out action */
-        mouseout(e: JQuery.Event): void
+        override mouseout(e: JQuery.Event): void
 
         /** performs the mouse over action, currently not called */
-        mouseover(e: JQuery.Event): void
+        override mouseover(e: JQuery.Event): void
     }
 
     /** is a child of the Canvas class and provides a basic canvas for users to transform (translate [alt+drag], rotate [drag], scale [mousewheel]) molecules with */
@@ -403,22 +403,22 @@ declare module ChemDoodle {
         lastGestureRotate: number
 
         /** performs the double-click action, which centers the molecule */
-        dblclick(e: JQuery.Event): void
+        override dblclick(e: JQuery.Event): void
 
         /** performs the mouse drag action */
-        drag(e: JQuery.Event): void
+        override drag(e: JQuery.Event): void
 
         /** handles any pinch and rotate gestures from mobile devices which will scale and rotate the molecule */
-        gesturechange(e: JQuery.Event): void
+        override gesturechange(e: JQuery.Event): void
 
         /** resets the gesture tracking variables and ends the gesture */
-        gestureend(e: JQuery.Event): void
+        override gestureend(e: JQuery.Event): void
 
         /** performs the mouse down action */
-        mousedown(e: JQuery.Event): void
+        override mousedown(e: JQuery.Event): void
 
         /** performs the mouse wheel action */
-        mousewheel(e: JQuery.Event, delta: number): void;
+        override mousewheel(e: JQuery.Event, delta: number): void;
     }
 
     /** is a child of the Canvas class and provides a basic canvas for users to search databases with. */
@@ -490,10 +490,10 @@ declare module ChemDoodle {
         zIncrement: number
 
         /** catches double click events and toggles the animation */
-        dblclick(e: JQuery.Event): void
+        override dblclick(e: JQuery.Event): void
 
         /** updates the state during the rotation animation */
-        nextFrame(delta: number): void
+        override nextFrame(delta: number): void
     }
 
     /** is a child of the AnimatorCanvas class and provides a basic canvas for displaying transitions between several molecular structures */
@@ -520,10 +520,10 @@ declare module ChemDoodle {
         breakInnerHandle(): void
 
         /** draws extra graphics on top of the base graphics */
-        drawChildExtras(ctx: CanvasRenderingContext2D): void
+        override drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /** updates the state during the rotation */
-        nextFrame(delta: number): void;
+        override nextFrame(delta: number): void;
     }
 
     /**
@@ -604,40 +604,40 @@ declare module ChemDoodle {
         updateScene(): void
 
         /** helper method to reset the scene if a gl parameter has been altered */
-        afterLoadContent(): void
+        override afterLoadContent(): void
 
         /** centers the molecule in 3D around the origin */
-        center(): void
+        override center(): void
 
         /** performs the mouse drag action */
-        drag(e: JQuery.Event): void
+        override drag(e: JQuery.Event): void
 
         /** performs the gesturechange action */
-        gesturechange(e: JQuery.Event): void
+        override gesturechange(e: JQuery.Event): void
 
         /** performs the mouse down action */
-        mousedown(e: JQuery.Event): void
+        override mousedown(e: JQuery.Event): void
 
         /** performs the mouse up action */
-        mousedown(e: JQuery.Event): void
+        override mousedown(e: JQuery.Event): void
 
         /** performs the mouse scroll action */
-        mousewheel(e: JQuery.Event): void
+        override mousewheel(e: JQuery.Event): void
 
         /** performs the multitouchmove action */
-        multitouchmove(e: JQuery.Event): void
+        override multitouchmove(e: JQuery.Event): void
 
         /** renders the 3D scene */
-        repaint(): void
+        override repaint(): void
 
         /** performs the mouse right click action */
-        rightmousedown(e: JQuery.Event): void
+        override rightmousedown(e: JQuery.Event): void
 
         /**
          * sets up WebGLRenderingContext, alerts viewer to warning if WebGLRenderingContext cannot be created;
          * initializes shaders and scene
          */
-        subCreate(): void
+        override subCreate(): void
     }
 
     /** is a child of the Canvas3D class and provides a basic canvas for simply displaying a static 3D scene of a molecule */
@@ -645,16 +645,16 @@ declare module ChemDoodle {
         constructor(id: string, width: number, height: number)
 
         /** set to undefined to ignore this gesture */
-        drag(): void
+        override drag(): void
 
         /** set to undefined to ignore this gesture */
-        mousedown(): void
+        override mousedown(): void
 
         /** set to undefined to ignore this gesture */
-        mousewheel(): void
+        override mousewheel(): void
 
         /** set to undefined to ignore this gesture */
-        rightmousedown(): void
+        override rightmousedown(): void
     }
 
     /** is a child of the Canvas3D class and provides a basic canvas for users to transform (translate [alt+drag], rotate [drag], scale [mousewheel]) molecules with in a 3D scene */
@@ -701,22 +701,22 @@ declare module ChemDoodle {
         stopAnimation(): void
 
         /** catches double click events and toggles the animation */
-        dblclick(e: JQuery.Event): void
+        override dblclick(e: JQuery.Event): void
 
         /** set to undefined to ignore this gesture */
-        drag(): void
+        override drag(): void
 
         /** set to undefined to ignore this gesture */
-        mousedown(): void
+        override mousedown(): void
 
         /** set to undefined to ignore this gesture */
-        mousewheel(): void
+        override mousewheel(): void
 
         /** updates the state during the rotation animation */
         nextFrame(delta: number): void
 
         /** set to undefined to ignore this gesture */
-        rightmousedown(): void
+        override rightmousedown(): void
     }
 
     /** is a child of the Canvas3D class and provides a basic canvas for displaying movies of molecules in a 3D scene, also doubly inherits methods from the AnimatorCanvas class */
@@ -758,10 +758,10 @@ declare module ChemDoodle {
         stopAnimation(): void
 
         /** centers all of the frames in the molecules array */
-        center(): void
+        override center(): void
 
         /** catches double click events and toggles the animation */
-        dblclick(e: JQuery.Event): void
+        override dblclick(e: JQuery.Event): void
 
         /** updates the state during the rotation animation */
         nextFrame(delta: number): void
@@ -784,7 +784,7 @@ declare module ChemDoodle {
         loadSpectrum(): void
 
         /** paints the spectrum */
-        repaint(): void
+        override repaint(): void
     }
 
     /** is a child of the SpectrumCanvas class and provides a basic canvas for simply displaying a static styled spectrum drawing */
@@ -821,25 +821,25 @@ declare module ChemDoodle {
         lastPinchScale: number
 
         /** performs the double-click action, which fits the entire spectrum to the canvas */
-        dblclick(e: JQuery.Event): void
+        override dblclick(e: JQuery.Event): void
 
         /** performs the mouse drag action, which will zoom in on the spectrum; if the shift key is held, then the spectrum will be translated */
-        drag(e: JQuery.Event): void
+        override drag(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
-        drawChildExtras(ctx: CanvasRenderingContext2D): void
+        override drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /** handles any pinch gestures from mobile devices which will scale the spectrum */
-        gesturechange(e: JQuery.Event): void
+        override gesturechange(e: JQuery.Event): void
 
         /** performs the mouse down action */
-        mousedown(e: JQuery.Event): void
+        override mousedown(e: JQuery.Event): void
 
         /** performs the mouse up action */
-        mouseup(e: JQuery.Event): void
+        override mouseup(e: JQuery.Event): void
 
         /** performs the mouse wheel action */
-        mousewheel(e: JQuery.Event, delta: number): void
+        override mousewheel(e: JQuery.Event, delta: number): void
     }
 
     /** is a child of the SpectrumCanvas class and provides an interactive canvas for viewing internal coordinates in spectra */
@@ -861,19 +861,19 @@ declare module ChemDoodle {
         innerRepaint(ctx: CanvasRenderingContext2D): void
 
         /** performs the mouse move action */
-        mousemove(e: JQuery.Event): void
+        override mousemove(e: JQuery.Event): void
 
         /** performs the mouse out action */
-        mouseout(e: JQuery.Event): void
+        override mouseout(e: JQuery.Event): void
 
         /** performs the touch end action */
-        touchend(e: JQuery.Event): void
+        override touchend(e: JQuery.Event): void
 
         /** performs the touch move action */
-        touchmove(e: JQuery.Event): void
+        override touchmove(e: JQuery.Event): void
 
         /** performs the touch start action */
-        touchstart(e: JQuery.Event): void
+        override touchstart(e: JQuery.Event): void
     }
 
     /**
@@ -899,19 +899,19 @@ declare module ChemDoodle {
         getHoveredElement(): structures.Element | undefined
 
         /** catches double click events and selects a cell */
-        click(e: JQuery.Event): void
+        override click(e: JQuery.Event): void
 
         /** set to undefined to ignore this function from the _Canvas class */
-        getMolecule(): structures.Molecule
+        override getMolecule(): structures.Molecule
 
         /** catches mouse move events and hovers a cell */
-        mousemove(e: JQuery.Event): void
+        override mousemove(e: JQuery.Event): void
 
         /** catches mouse out events and sets the hovered cell to undefined */
-        mouseout(e: JQuery.Event): void
+        override mouseout(e: JQuery.Event): void
 
         /** paints the periodic table */
-        repaint(): void
+        override repaint(): void
 
         /** set to undefined to ignore this function from the _Canvas class */
         setMolecule(): void
@@ -920,7 +920,7 @@ declare module ChemDoodle {
         setupTable(): void
 
         /** catches the touchstart mobile event and hovers a cell */
-        touchstart(e: JQuery.Event): void
+        override touchstart(e: JQuery.Event): void
     }
 
     /**
@@ -1009,64 +1009,64 @@ declare module ChemDoodle {
         checksBeforeRepaint(): void
 
         /** performs the mouse click action */
-        click(e: JQuery.Event): void
+        override click(e: JQuery.Event): void
 
         /** performs the mouse dblclick action */
-        dblclick(e: JQuery.Event): void
+        override dblclick(e: JQuery.Event): void
 
         /** performs the drag action */
-        drag(e: JQuery.Event): void
+        override drag(e: JQuery.Event): void
 
         /** draws extra graphics on top of the base graphics */
-        drawChildExtras(ctx: CanvasRenderingContext2D): void
+        override drawChildExtras(ctx: CanvasRenderingContext2D): void
 
         /** performs the gesturechange action */
-        gesturechange(e: JQuery.Event): void
+        override gesturechange(e: JQuery.Event): void
 
         /** performs the gestureend action */
-        gestureend(e: JQuery.Event): void
+        override gestureend(e: JQuery.Event): void
 
         /** performs the keydown action */
-        keydown(e: JQuery.Event): void
+        override keydown(e: JQuery.Event): void
 
         /** performs the keypress action */
-        keypress(e: JQuery.Event): void
+        override keypress(e: JQuery.Event): void
 
         /** performs the keyup action */
-        keyup(e: JQuery.Event): void
+        override keyup(e: JQuery.Event): void
 
         /** performs the mousedown action */
-        mousedown(e: JQuery.Event): void
+        override mousedown(e: JQuery.Event): void
 
         /** performs the mouseout action */
-        mouseout(e: JQuery.Event): void
+        override mouseout(e: JQuery.Event): void
 
         /** performs the mouseover action */
-        mouseover(e: JQuery.Event): void
+        override mouseover(e: JQuery.Event): void
 
         /** performs the mouseup action */
-        mouseup(e: JQuery.Event): void
+        override mouseup(e: JQuery.Event): void
 
         /** performs the mousewheel action */
-        mousewheel(e: JQuery.Event): void
+        override mousewheel(e: JQuery.Event): void
 
         /** performs the mouse rightclick action */
-        rightclick(e: JQuery.Event): void
+        override rightclick(e: JQuery.Event): void
 
         /** performs the rightmousedown action */
-        rightmousedown(e: JQuery.Event): void
+        override rightmousedown(e: JQuery.Event): void
 
         /** performs the rightmouseup action */
-        rightmouseup(e: JQuery.Event): void
+        override rightmouseup(e: JQuery.Event): void
 
         /** performs the touchend action */
-        touchend(e: JQuery.Event): void
+        override touchend(e: JQuery.Event): void
 
         /** performs the touchmove action */
-        touchmove(e: JQuery.Event): void
+        override touchmove(e: JQuery.Event): void
 
         /** performs the touchstart action */
-        touchstart(e: JQuery.Event): void
+        override touchstart(e: JQuery.Event): void
     }
 
     /** 
@@ -1104,43 +1104,43 @@ declare module ChemDoodle {
         click(e: JQuery.Event): void
 
         /** performs the mouse dblclick action */
-        dblclick(e: JQuery.Event): void
+        override dblclick(e: JQuery.Event): void
 
         /** performs the drag action */
-        drag(e: JQuery.Event): void
+        override drag(e: JQuery.Event): void
 
         /** performs the keydown action */
-        keydown(e: JQuery.Event): void
+        override keydown(e: JQuery.Event): void
 
         /** performs the keypress action */
-        keypress(e: JQuery.Event): void
+        override keypress(e: JQuery.Event): void
 
         /** performs the keyup action */
-        keyup(e: JQuery.Event): void
+        override keyup(e: JQuery.Event): void
 
         /** performs the mousedown action */
-        mousedown(e: JQuery.Event): void
+        override mousedown(e: JQuery.Event): void
 
         /** performs the mouseout action */
-        mouseout(e: JQuery.Event): void
+        override mouseout(e: JQuery.Event): void
 
         /** performs the mouseover action */
-        mouseover(e: JQuery.Event): void
+        override mouseover(e: JQuery.Event): void
 
         /** performs the mouseup action */
-        mouseup(e: JQuery.Event): void
+        override mouseup(e: JQuery.Event): void
 
         /** performs the mousewheel action */
-        mousewheel(e: JQuery.Event): void
+        override mousewheel(e: JQuery.Event): void
 
         /** performs the mouse rightclick action */
-        rightclick(e: JQuery.Event): void
+        override rightclick(e: JQuery.Event): void
 
         /** performs the rightmousedown action */
-        rightmousedown(e: JQuery.Event): void
+        override rightmousedown(e: JQuery.Event): void
 
         /** performs the rightmouseup action */
-        rightmouseup(e: JQuery.Event): void
+        override rightmouseup(e: JQuery.Event): void
     }
 
     /**
@@ -1309,7 +1309,7 @@ declare module ChemDoodle {
             constructor(molecule: structures.Molecule)
 
             /** calculates the Frèrejacque Number. This should never be manually called as it is called by the constructor after setup. */
-            innerCalculate(molecule: structures.Molecule): void
+            override innerCalculate(molecule: structures.Molecule): void
         }
 
         /** is a child of the Counter class and calculates the real number of molecules in a Molecule object, which can hold disjoint graphs. */
@@ -1317,7 +1317,7 @@ declare module ChemDoodle {
             constructor(molecule: structures.Molecule)
 
             /** calculates the number of molecules. This should never be manually called as it is called by the constructor after setup. */
-            innerCalculate(molecule: structures.Molecule): void
+            override innerCalculate(molecule: structures.Molecule): void
         }
 
         /**
@@ -1377,7 +1377,7 @@ declare module ChemDoodle {
              * implements the algorithm to find the Euler facet ring set.
              * This should never be manually called as it is called by the constructor after setup.
              */
-            innerGetRings(molecule: structures.Molecule): void
+            override innerGetRings(molecule: structures.Molecule): void
         }
     }
 
@@ -2998,10 +2998,10 @@ declare module ChemDoodle {
                 angle: Number
 
                 /** calculates the angle between the three atoms and creates the required data to render the angle in a 3D canvas. */
-                calculateData(styles: Styles): void
+                override calculateData(styles: Styles): void
 
                 /** returns an object with the position and value of the angle for rendering as text in a 3D canvas */
-                getText(styles: Styles): Object
+                override getText(styles: Styles): Object
             }
 
             /** a child of the _Mesh class, represents a cylindrical arrow with head */
@@ -3136,10 +3136,10 @@ declare module ChemDoodle {
                 offset: Number
 
                 /** calculates the distance between the two atoms and creates the required data to render the distance in a 3D canvas. */
-                calculateData(styles: Styles): void
+                override calculateData(styles: Styles): void
 
                 /** returns an object with the position and value of the distance for rendering as text in a 3D canvas */
-                getText(styles: Styles): Object
+                override getText(styles: Styles): Object
             }
 
             /** handles fogging for WebGL canvases. */
@@ -3192,7 +3192,7 @@ declare module ChemDoodle {
 		        render(gl: WebGLRenderingContext, styles: Styles): void
 
                 /** overrides the storeData function of the Mesh class to pull vertex data from the first member of the partition array; clears the partition array to save memory if there is only one partition. */
-		        storeData(positionData: Number[], normalData: Number[], indexData: Number[]): void
+		        override storeData(positionData: Number[], normalData: Number[], indexData: Number[]): void
             }
 
             /** a child of the _Mesh class, represents a shape described by a set of points in the xy plane and a thickness in the z plane. */
@@ -3212,7 +3212,7 @@ declare module ChemDoodle {
                 probeRadius: Number
 
                 /** calculate the isosurface value for the surface given the x, y and z coordinates; this is an abstract function to be implemented by child Surfaces. */
-                calculate(x: Number, y: Number, z: Number): void
+                override calculate(x: Number, y: Number, z: Number): void
             }
 
             /** a child of the _Surface class, this surface defines a solvent excluded (also known as Connolly) surface. (Proprietary Only) */
@@ -3227,7 +3227,7 @@ declare module ChemDoodle {
                 probeRadius: Number
 
                 /** calculate the isosurface value for the surface given the x, y and z coordinates; this is an abstract function to be implemented by child Surfaces. */
-                calculate(x: Number, y: Number, z: Number): void
+                override calculate(x: Number, y: Number, z: Number): void
             }
 
             /** a child of the _Mesh class, respresents a sphere with a given radius and number of latitude and longitude bands. */
@@ -3278,7 +3278,7 @@ declare module ChemDoodle {
                 probeRadius: Number
 
                 /** calculate the isosurface value for the surface given the x, y and z coordinates; this is an abstract function to be implemented by child Surfaces. */
-                calculate(x: Number, y: Number, z: Number): void;
+                override calculate(x: Number, y: Number, z: Number): void;
             }
 
             /** represents a light source with given RGB specular and diffuse colors, as well as a vector describing the direction it is shining in. */
