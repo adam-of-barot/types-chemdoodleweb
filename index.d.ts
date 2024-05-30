@@ -3543,10 +3543,613 @@ declare module ChemDoodle {
 
     module uis {
 
-        class CopyPasteManager { }
+        /** this class manages the copy and paste clipboard actions for a sketcher. */
+        class CopyPasteManager {
+            /** the associated sketcher */
+            sketcher: SketcherCanvas
+            /** the JSON object of the data on the clipboard */
+            data: Object
+
+            /** perform the copy action on a selection if present; the boolean parameter defines whether the copied content is also remove, so sending true executes a cut action */
+		    copy(remove: Boolean): void
+
+            /** perform a paste action for the sketcher */
+		    paste(): void
+        }
 
         module actions {
-            class HistoryManager { }
+
+            /** is the parent class for actions associated with the sketcher. Its basic functionality allows for content to be changed and the ability to reverse those changes. */
+            abstract class _Action {
+                constructor()
+
+                /** checks the content of the given sketcher, reassessing any metadata after the change, finishing by repainting the sketcher */
+		        checks(sketcher: SketcherCanvas): void
+
+                /** performs the action for the given sketcher instance */
+		        forward(sketcher: SketcherCanvas): void
+
+                /** reverses the action for the given sketcher instance */
+		        reverse(sketcher: SketcherCanvas): void
+
+                /** must be defined by child Actions to execute the forward changes, is called by forward() */
+		        abstract innerforward(): void
+
+                /** must be defined by child Actions to execute the reverse changes, is called by reverse() */
+		        abstract innerreverse(): void
+            }
+
+            class AddAction extends _Action {
+                constructor(sketcher: SketcherCanvas, a: structures.Atom, as: structures.Atom[], bs: structures.Bond[])
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the Atom that identifies the molecule that atoms and bonds are added to */
+                a: structures.Atom
+                /** the atoms to be added */
+                as: structures.Atom[]
+                /** the bonds to be added */
+                bs: structures.Bond[]
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles adding content with new Molecules and Shapes to the sketcher. */
+            class AddContentAction extends _Action {
+                constructor(sketcher: SketcherCanvas)
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the molecules being added */
+                mols: structures.Molecule
+                /** the shapes being added */
+                shapes: structures.d2._Shape
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles adding a single shape to the sketcher. */
+            class AddShapeAction extends _Action {
+                constructor(sketcher: SketcherCanvas, s: structures.d2._Shape)
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the shape that is added to the sketcher */
+                s: structures.d2._Shape
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles adding a connection to a variable attachment point, whether attachment or substituent. */
+            class AddVAPAttachmentAction extends _Action {
+                constructor(vap: structures.d2.VAP, a: structures.Atom, substituent: Boolean)
+
+                /** the variable attachment point that this action is associated with */
+                vap: structures.d2.VAP
+                /** the atom being added as a connection */
+                a: structures.Atom
+                /** true if this connection is the substituent connection */
+                substituent: Boolean
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing the bond type of a Bond. */
+            class ChangeBondAction extends _Action {
+                constructor(b: structures.Bond, orderAfter: Number, stereoAfter: String)
+
+                /** the manipulated bond */
+                b: structures.Bond
+                /** the bond order before the change */
+                orderBefore: Number
+                /** the bond order after; if not provided, this value will be the incrementation of orderBefore, or 1 if orderBefore is 3 */
+                orderAfter: Number
+                /** the bond stereochemistry setting before the change; this should be one of the Bond stereochemistry values */
+                stereoBefore: String
+                /** the bond stereochemistry setting before the change; this should be one of the Bond stereochemistry values; if not provided, this value will be STEREO_NONE */
+                stereoAfter: String
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            class ChangeBracketAttributeAction extends _Action {
+                constructor(s: structures.d2.Bracket, delta: Number)
+
+                /** the manipulated bracket */
+                s: structures.d2.Bracket
+                /** the change in amount and type */
+                delta: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing charges for an Atom. */
+            class ChangeChargeAction extends _Action {
+                constructor(a: structures.Atom, delta: Number)
+
+                /** the manipulated atom */
+                a: structures.Atom
+                /** the change in charge amount */
+                delta: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing coordinates for a set of Atoms. */
+            class ChangeCoordinatesAction extends _Action {
+                constructor(as: structures.Atom[], newCoords: Object[])
+
+                /** the manipulated atoms */
+                as: structures.Atom[]
+                /** an array of objects storing the before and after coordinates for the given atoms based on their current coordinates and the newCoords parameter */
+                recs: Object[]
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing attributes (charge/mult/repeat) for the Charge Bracket shape. */
+            class ChangeRepeatUnitAttributeAction extends _Action {
+                constructor(s: structures.d2.RepeatUnit, delta: Number)
+
+                /** the manipulated bracket */
+                s: structures.d2.RepeatUnit
+                /** the change in amount and type */
+                delta: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing labels for an Atom. */
+            class ChangeLabelAction extends _Action {
+                constructor(a: structures.Atom, after: String)
+
+                /** the manipulated atom */
+                a: structures.Atom
+                /** the label before the change */
+                before: String
+                /** the label after the change */
+                after: String
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing the number of lone pairs for an Atom. */
+            class ChangeLonePairAction extends _Action {
+                constructor(a: structures.Atom, delta: Number)
+
+                /** the manipulated atom */
+                a: structures.Atom
+                /** the change in lone pair count */
+                delta: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing queries for an Atom. */
+            class ChangeQueryAction extends _Action {
+                constructor(o: structures.Atom | structures.Bond, after: String)
+
+                /** the manipulated object, an atom or bond */
+                o: structures.Atom | structures.Bond
+                /** the query before the change */
+                before: structures.Query
+                /** the query after the change */
+                after: structures.Query
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing the number of radical electrons for an Atom. */
+            class ChangeRadicalAction extends _Action {
+                constructor(a: structures.Atom, delta: Number)
+
+                /** the manipulated atom */
+                a: structures.Atom
+                /** the change in radical count */
+                delta: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing the enhanced stereochemistry definition for an Atom. */
+            class ChangeEnhancedStereoAction extends _Action {
+                constructor(a: structures.Atom, type: String, group: Number)
+
+                /** the manipulated atom */
+                a: structures.Atom
+                /** the new enhanced stereochemistry type (abs/or/&) */
+                type: Number
+                /** the new enhanced stereochemistry group number (should be a positive integer) */
+                group: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing the implicit hydrogen count for an Atom. */
+            class ChangeImplicitHydrogenAction extends _Action {
+                constructor(a: structures.Atom, val: Number)
+
+                /** the manipulated atom */
+                a: structures.Atom
+                /** the new implicit hydrogen count (should be a positive integer or 0) */
+                val: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing the isotope value for an Atom. */
+            class ChangeIsotopeAction extends _Action {
+                constructor(a: AutomationRate, val: Number)
+
+                /** the manipulated atom */
+                a: structures.Atom
+                /** the new implicit hydrogen count (should be a positive integer or 0) */
+                val: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+            
+            /** is a child of the Action class and handles changing the bond type for a variable attachment point substituent. */
+            class ChangeVAPOrderAction extends _Action {
+                constructor(vap: structures.d2.VAP, orderAfter: Number)
+
+                /** the variable attachment point that this action is associated with */
+                vap: structures.d2.VAP
+                /** the original bond type of the substituent bond */
+                orderBefore: Number
+                /** the bond type to change the substituent bond to */
+                orderAfter: Number
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles changing the substituent atom for a veriable attachment point; the bond type of the variable attachment point is reverted to single. */
+            class ChangeVAPSubstituentAction extends _Action {
+                constructor(vap: structures.d2.VAP, nsub: structures.Atom)
+
+                /** the variable attachment point that this action is associated with */
+                vap: structures.d2.VAP
+                /** the original bond type of the substituent bond */
+                orderBefore: Number
+                /** the original substituent atom */
+                osub: structures.Atom
+                /** the new substituent atom */
+                nsub: structures.Atom
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles clearing the sketcher. */
+            class ClearAction extends _Action {
+                constructor(sketcher: SketcherCanvas)
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the molecules present before the clear */
+                beforeMols: structures.Molecule[]
+                /** the shapes present before the clear */
+                beforeShapes: structures.d2._Shape[]
+                /** the molecule added after the clear in the case of the single molecule sketcher */
+                molAfter: structures.Molecule
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles deleting bonds and atoms to a single molecule. This is a reversal of the AddAction class. */
+            class DeleteAction extends _Action {
+                constructor(sketcher: SketcherCanvas, a: structures.Atom, as: structures.Atom[], bs: structures.Bond[])
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the Atom that identifies the molecule that atoms and bonds are removed from */
+                a: structures.Atom
+                /** the atoms to be deleted */
+                as: structures.Atom[]
+                /** the bonds to be deleted */
+                bs: structures.Bond[]
+                /** the shapes to be deleted, this array is used if deleting the atoms and bonds also deletes some linked shapes */
+                ss: structures.d2._Shape[]
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /**  */
+            class DeleteContentAction extends _Action {
+                constructor(sketcher: SketcherCanvas, as: structures.Atom[], ss: structures.d2._Shape[])
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the atoms to be deleted */
+                as: structures.Atom[]
+                /** the bonds to be deleted, based on the as Array */
+                bs: structures.Bond[]
+                /** the shapes to be deleted */
+                ss: structures.d2._Shape[]
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles removing a single shape from the sketcher. */
+            class DeleteShapeAction extends _Action {
+                constructor(sketcher: SketcherCanvas, s: structures.d2._Shape)
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the shape that is deleted from the sketcher */
+                s: structures.d2._Shape
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles removing a connection to a variable attachment point, whether attachment or substituent. */
+            class DeleteVAPConnectionAction extends _Action {
+                constructor(vap: structures.d2.VAP, connection: structures.Atom)
+
+                /** the variable attachment point that this action is associated with */
+                vap: structures.d2.VAP
+                /** the atom being removed as a connection */
+                a: structures.Atom
+                /** true if this connection is the substituent connection */
+                substituent: Boolean
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles flipping atoms and shapes. Any stereo bonds passed in through the bs parameter will be converted to their counterpart. */
+            class FlipAction extends _Action {
+                constructor(ps: structures.Point[], vertical: Boolean)
+
+                /** the points to be edited, including atoms and shape points */
+                ps: structures.Point[]
+                /** the bonds to be flipped, from recessed to protruding or reverse */
+                bs: structures.Bond[]
+                /** if true, the flip is vertical, otherwise it is horizontal */
+                vertical: Boolean
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles flipping the orientation of a Bond. */
+            class FlipBondAction extends _Action {
+                constructor(b: structures.Bond)
+
+                /** the manipulated bond */
+                b: structures.Bond
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles flipping the orientation of a repeat unit in a single unfused ring. */
+            class FlipRepeatUnitAction extends _Action {
+                constructor(b: structures.Bond)
+
+                /** Bond b: the manipulated repeat unit */
+                b: structures.Bond
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles moving atoms and shapes. */
+            class MoveAction extends _Action {
+                constructor(ps: structures.Point[], dif: structures.Point)
+
+                /** the points to be edited, including atoms and shape points */
+                ps: structures.Point[]
+                /** the change in X and Y coordinates in a Point data structure */
+                dif: structures.Point
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles adding a new discrete Molecule to the sketcher. */
+            class NewMoleculeAction extends _Action {
+                constructor(sketcher: SketcherCanvas, as: structures.Atom[], bs: structures.Bond[])
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the atoms of the new Molecule */
+                as: structures.Atom[]
+                /** the bonds of the new Molecule */
+                bs: structures.Bond[]
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles rotating atoms and shapes. */
+            class RotateAction extends _Action {
+                constructor(ps: structures.Point[], dif: structures.Point, center: structures.Point)
+
+                /** the points to be edited, including atoms and shape points */
+                ps: structures.Point[]
+                /** the rotation angle */
+                dif: Number
+                /** the center of rotation */
+                center: structures.Point
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles switching the current content with a new Molecules and Shapes in the sketcher. */
+            class SwitchContentAction extends _Action {
+                constructor(sketcher: SketcherCanvas)
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the molecules present before the switch */
+                beforeMols: structures.Molecule[]
+                /** the shapes present before the switch */
+                beforeShapes: structures.d2._Shape[]
+                /** the molecules present after the switch */
+                molsA: structures.Molecule[]
+                /** the shapes present after the switch */
+                shapesA: structures.d2._Shape[]
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** is a child of the Action class and handles switching the current content with a new Molecule in the sketcher. */
+            class SwitchMoleculeAction extends _Action {
+                constructor(sketcher: SketcherCanvas)
+
+                /** the sketcher that this action is associated with */
+                sketcher: SketcherCanvas
+                /** the molecules present before the switch */
+                beforeMols: structures.Molecule[]
+                /** the shapes present before the switch */
+                beforeShapes: structures.d2._Shape[]
+                /** the molecule replacing the current content */
+                molA: structures.Molecule
+
+                /** implements the forward action */
+                override innerforward(): void
+
+                /** implements the reverse action */
+                override innerreverse(): void
+            }
+
+            /** this class manages actions and the undo/redo stacks for a sketcher. */
+            class HistoryManager {
+                constructor(sketcher: SketcherCanvas)
+
+                /** the associated sketcher */
+                sketcher: SketcherCanvas
+                /** the Array of Action objects that acts as the undo stack */
+                undoStack: _Action[]
+                /** the Array of Action objects that acts as the redo stack */
+                redoStack: _Action[]
+
+                /** clears the history and resets the undo and redo stacks */
+                clear(): void
+
+                /** adds the input Action to the undo stack, performs its forward action and clears the redo stack */
+                pushUndo(a: _Action): void
+                
+                /** if possible, redoes the last action */
+                redo(): void
+
+                /** if possible, undoes the last action */
+                undo(): void
+            }
         }
 
         module tools {
