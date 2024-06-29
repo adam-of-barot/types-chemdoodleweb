@@ -4152,6 +4152,876 @@ declare module ChemDoodle {
             }
         }
 
+        /** this package contains any gui components for the sketcher. */
+        module gui {
+
+            /** this package contains any gui components for the desktop sketcher and 3D editor, usually created with jQuery UI. */
+            module desktop {
+
+                /** this class organizes and manages cursors for the UIs. Cursors are only defined for non-mobile instances of the UIs. */
+                class CursorManager {
+                    constructor(sketcher: SketcherCanvas)
+
+                    /** the "pointer" cursor */
+                    POINTER: String
+                    /** the "crosshair" cursor */
+                    CROSSHAIR: String
+                    /** the "text" cursor */
+                    TEXT: String
+                    /** the "hand_open" cursor */
+                    HAND_OPEN: String
+                    /** the "hand_close" cursor */
+                    HAND_CLOSE: String
+                    /** the "hand_point" cursor */
+                    HAND_POINT: String
+                    /** the "lasso" cursor */
+                    LASSO: String
+                    /** the "rotate" cursor */
+                    ROTATE: String
+                    /** the "resize" cursor */
+                    RESIZE: String
+                    /** the "eraser" cursor */
+                    ERASER: String
+
+                    /** returns the current cursor value */
+                    getCursor(): String
+
+                    /** sets the current cursor to the registered UI. This may be any of the static cursors defined by this class, or any valid CSS cursor type. */
+		            setCursor(cursor: String): void
+
+                    /** sets the current cursor to the previously defined cursor */
+		            setPreviousCursor(): void
+                }
+
+                /** this class defines jQuery UI buttons for the sketcher. */
+                class Button {
+                    constructor(id: String, icon: String, tooltip: String, func: Function)
+
+                    /** a unique HTML id for this element in the HTML document */
+                    id: String
+                    /** the PNG icon in Base64 encoding */
+                    icon: String
+                    /** the HTML tooltip (used in title attribute) for the button */
+                    tooltip: String
+                    /** the function to be executed when this button is clicked */
+                    func: Function
+                    /**
+                     * defines this button as a toggle button in a group or not
+                     * 
+                     * @default false
+                     */
+                    toggle: Boolean
+
+                    /** disables the button */
+		            disable(): void
+
+                    /** enables the button */
+		            enable(): void
+
+                    /** returns the jQuery wrapper around the core HTML element */
+		            getElement(): Object
+
+                    /** returns the jQuery wrapper around the core HTML element of the label for this button if it is a radio button, otherwise it returns undefined */
+		            getLabelElement(): Object | undefined
+
+                    /** returns the HTML source used to create this element */
+		            getSource(buttonGroup: String): String
+
+                    /** selects the button */
+		            select(): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(lone: Boolean): void
+                }
+
+                /** this class defines jQuery UI button sets for the sketcher. */
+                class ButtonSet {
+                    constructor(id: String)
+
+                    /** a unique HTML id for this element in the HTML document */
+                    id: String
+                    /** an Array of Button objects that this set contains */
+                    buttons: Button[]
+                    /**
+                     * defines this button set as a toggle button set in a group or not
+                     * 
+                     * @default false
+                     */
+                    toggle: Boolean
+                    /**
+                     * if set from -1, the buttons will be layed out individually in a grid with the column count as assigned
+                     * 
+                     * @default -1
+                     */
+                    columnCount: Number
+
+                    /** adds a DropDown component to this button set */
+		            addDropDown(tooltip: String): void
+
+                    /** returns the jQuery wrapper around the core HTML element */
+		            getElement(): Object
+
+                    /** returns the HTML source used to create this element */
+		            getSource(buttonGroup: String): String
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** this class defines color pickers for the 3D editor stylesDialog. Uses jquery-simple-color. */
+                class ColorPicker {
+                    constructor(id: String, tooltip: String, func: Function)
+
+                    /** a unique HTML id for this element in the HTML document */
+                    id: String
+                    /** the HTML tooltip, used to describe the picker */
+                    tooltip: String
+                    /** the function to be executed when the color is changed */
+                    func: Function
+
+                    /** returns the jQuery wrapper around the core HTML element */
+		            getElement(): Object
+
+                    /** returns the HTML source used to create this element */
+		            getSource(): String
+
+                    /** sets the currently selected color on the picker. */
+		            setColor(color: String): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** a child of the button class, this defines checkboxes for the 3D editor stylesDialog. */
+                class CheckBox {
+                    constructor(id: String, tooltip: String, func: Function, checked: Boolean)
+
+                    /**
+                     * tracks whether the box is currently checked or not
+                     * 
+                     * @default false
+                     */
+                    checked: Boolean
+
+                    /** sets the checkbox as checked */
+		            check(): void
+
+                    /** returns the HTML source used to create this element */
+		            getSource(): String
+
+                    /** unchecks the checkbox */
+		            uncheck(): void
+                }
+
+                /** this class is a child of the Button class defines the dummy buttons associated with DropDown objects. */
+                class DummyButton {
+                    constructor(id: String, tooltip: String)
+
+                    /** a unique HTML id for this element in the HTML document */
+                    id: String
+                    /** the HTML tooltip (used in title attribute) for the button */
+                    tooltip: String
+                    /**
+                     * defines this button as a toggle button in a group or not
+                     * 
+                     * @default false
+                     */
+                    toggle: Boolean
+                    /**
+                     * the function to be executed when this button is clicked, this gets absorbed from a child button
+                     * 
+                     * @default undefined
+                     */
+                    func?: Function
+
+                    /** absorbs the parameter button to mimick it and match its function */
+                    absorb(button: Button): void
+
+                    /** sets up the HTML with jQuery UI */
+                    setup(): void
+                }
+
+                /** this class defines drop down components for the sketcher. */
+                class DropDown {
+                    constructor(id: String, tooltip: String, dummy: DummyButton)
+
+                    /** a unique HTML id for this element in the HTML document */
+                    id: String
+                    /** the tooltip for this drop down group */
+                    tooltip: String
+                    /** the dummy button that this drop down is linked to */
+                    dummy: DummyButton
+                    /** the button set that contains this drop down's children */
+                    buttonSet: ButtonSet
+                    /**
+                     * the default button, if this isn't set, the default button is the first declared button in the buttonset
+                     * 
+                     * @default undefined
+                     */
+                    defaultButton?: Button
+
+                    /** returns the HTML source used to create this element's drop down button */
+		            getButtonSource(): String
+
+                    /** returns the HTML source used to create this element's hidden button set */
+		            getHiddenSource(): String
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** this class defines sticky tray components for the sketcher floating palette. */
+                class Tray {
+                    constructor(sketcher: SketcherCanvas, id: String, dummy: DummyButton, columnCount: Number)
+
+                    /** the sketcher of the floating toolbar this tray is attached to is associated with */
+                    sketcher: SketcherCanvas
+                    /** a unique HTML id for this element in the HTML document */
+                    id: String
+                    /** the tooltip for this drop down group */
+                    tooltip: String
+                    /** the dummy button that this tray is linked to */
+                    dummy: DummyButton
+                    /** the number of columns the buttonset for this tray is partitioned into */
+                    columnCount: Number
+                    /** the button set that contains this tray's children */
+                    buttonSet: ButtonSet
+                    /**
+                     * the default button, if this isn't set, the default button is the first declared button in the buttonset
+                     * 
+                     * @default undefined
+                     */
+                    defaultButton?: Button
+
+                    /** closes this tray */
+		            close(): void
+
+                    /** returns the HTML source used to create this tray in the DOM; the buttonGroup the dummyButton is set to must be provided */
+		            getSource(buttonGroup: String): String
+
+                    /** opens this tray, closing any other associated with the same sketcher; if the select parameter is provided, that button is selected in the tray and absorbed to the dummy button (it must be a member of the tray) */
+		            open(select: Button): void
+
+                    /** positions this tray in the appropriate location around the floating palette it is associated with */
+		            reposition(): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** this class defines a floating palette of buttons and trays. */
+                class FloatingToolbar {
+                    constructor(sketcher: SketcherCanvas)
+
+                    /** the sketcher this floating toolbar is associated with */
+                    sketcher: SketcherCanvas
+
+                    /** returns the jQuery wrapper around the core HTML element */
+		            getElement(): Object
+
+                    /** returns the HTML source used to create this floating toolbar in the DOM; the buttonGroup the contents must be provided */
+		            getSource(buttonGroup: String): String
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** a child of the button class, this defines buttons with text labels instead of icons. */
+                class TextButton {
+                    constructor(id: String, tooltip: String, func: Function, checked: Boolean)
+
+                    /** sets the button as checked */
+		            check(): void
+
+                    /** returns the HTML source used to create this element */
+		            getSource(): String
+
+                    /** removes checked property */
+		            uncheck(): void
+                }
+
+                /** 
+                 * this defines a text field which is used to receive input from the user. The text field automatically resizes to fit content and matches input fonts.
+                 * (Proprietary Only)
+                 */
+                class TextInput {
+                    constructor(sketcher: SketcherCanvas, id: String)
+
+                    /** the sketcher this text field is associated with */
+                    sketcher: SketcherCanvas
+                    /** a unique HTML id for this element in the HTML document */
+                    id: String
+
+                    /** closes the text field, if the Event is provided, the TextInput state is called to set the new label to the atom */
+		            close(e: Event): void
+
+                    /** returns the jQuery wrapper around the core HTML element */
+		            getElement(): Object
+
+                    /** returns the HTML source used to create this element */
+		            getSource(): String
+
+                    /** returns the value of the text field */
+		            getValue(): String
+
+                    /** returns the width of the input text based on the settings of the text field */
+		            measureTextWidth(text: String): void
+
+                    /** resizes the text field to fit its current text value */
+		            resize(): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+
+                    /** shows this text field at the location of the hovered atom in the sketcher coordinate space provided by the left and top parameters, and populated with the input val parameter */
+		            show(left: Number, top: Number, val: String): void
+                }
+
+                /** this class defines jQuery UI dialogs for the sketcher. */
+                class Dialog {
+                    constructor(sketcherid: String, subid: String, title: String)
+
+                    /** the id of the sketcher this dialog is associated with */
+                    sketcherid: String
+                    /** a unique HTML id for this button element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "Information"
+                     */
+                    title: String
+                    /**
+                     * the jQuery UI definition for the buttons in the dialog
+                     * 
+                     * @default undefined
+                     */
+                    buttons?: Object
+                    /**
+                     * the message to be displayed at the top of the dialog
+                     * 
+                     * @default undefined
+                     */
+                    message?: String
+                    /**
+                     * the message to be displayed at the bottom of the dialog    
+                     *
+                     * @default undefined
+                     */
+                    afterMessage?: String
+                    /**
+                     * defines whether this dialog should contain a text area
+                     * 
+                     * @default false
+                     */
+                    includeTextArea: Boolean
+                    /**
+                     * defines whether this dialog should contain a text field
+                     * 
+                     * @default false
+                     */
+                    includeTextField: Boolean
+
+                    /** returns the jQuery wrapper around the core HTML element */
+		            getElement(): Object
+
+                    /** returns the jQuery wrapper around the core HTML element used to represent this dialog's text area */
+		            getTextArea(): Object
+
+                    /** returns the jQuery wrapper around the core HTML element used to represent this dialog's text field */
+		            getTextField(): Object
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** this class is a child of the Dialog class and defines the atom query window for the sketcher. */
+                class AtomQueryDialog extends Dialog {
+                    constructor(sketcher: SketcherCanvas, subid: String)
+
+                    /** the id of the sketcher this dialog is associated with */
+                    sketcherid: String
+                    /** a unique HTML id for this button element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "Atom Query"
+                     */
+                    title: String
+
+                    /** resets the form to the input atom's query, or the defaults if no query is set */
+                    setAtom(a: structures.Atom): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** this class is a child of the Dialog class and defines the bond query window for the sketcher. */
+                class BondQueryDialog extends Dialog {
+                    constructor(sketcher: SketcherCanvas, subid: String)
+
+                    /** the id of the sketcher this dialog is associated with */
+                    sketcherid: String
+                    /** a unique HTML id for this button element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "Bond Query"
+                     */
+                    title: String
+
+                    /** resets the form to the input bond's query, or the defaults if no query is set */
+                    setBond(b: structures.Bond): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** this class is a child of the Dialog class and defines the search dialog for the sketcher. */
+                class MolGrabberDialog extends Dialog {
+                    constructor(sketcher: SketcherCanvas, subid: String)
+
+                    /** the id of the sketcher this dialog is associated with */
+                    sketcherid: String
+                    /** a unique HTML id for this button element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "MolGrabber"
+                     */
+                    title: String
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /** this class is a child of the Dialog class and defines the save file dialog for the sketcher. */
+                class SaveFileDialog extends Dialog {
+                    constructor(sketcher: SketcherCanvas, subid: String)
+
+                    /** the id of the sketcher this dialog is associated with */
+                    sketcherid: String
+                    /** a unique HTML id for this button element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "Save File"
+                     */
+                    title: String
+
+                    /** resets the download link */
+                    clear(): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+                }
+
+                /**
+                 * this class is a child of the Dialog class and defines the template dialog for the sketcher.
+                 * The template dialog is similar to the Templates widget from the desktop software
+                 * and will automatically populate based on the templateDepot data.
+                 */
+                class TemplateDialog extends Dialog {
+                    constructor(sketcher: SketcherCanvas, subid: String)
+
+                    /** the id of the sketcher this dialog is associated with */
+                    sketcherid: String
+                    /** a unique HTML id for this button element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "Save File"
+                     */
+                    title: String
+
+                    /**
+                     * load the specified template into the template widget for selection and drawing
+                     * 
+                     * @param g the index of the template group in the templateDepot object,
+                     * @param t the index of the template in its group in the templateDepot object
+                     * @param changeState if true, the state of the sketcher will be changed to the template state for drawing
+                     */
+		            loadTemplate(g: Number, t: Number, changeState: Boolean): void
+
+                    /** populates the template data when called by the sketcher */
+		            populate(): void
+
+                    /** sets up the HTML with jQuery UI */
+                    setup(): void
+                }
+
+                /** this class is a child of the Dialog class and defines the periodic table dialog for the sketcher. */
+                class PeriodicTableDialog extends Dialog {
+                    constructor(sketcher: SketcherCanvas, subid: String)
+
+                    /** the id of the sketcher this dialog is associated with */
+                    sketcherid: String
+                    /** a unique HTML id for this button element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "Periodic Table"
+                     */
+                    title: String
+
+                    /** sets up the HTML with jQuery UI */
+                    setup(): void
+                }
+
+                /**
+                 * this class defines jQuery UI dialogs for the sketcher.
+                 * Popovers are modal and only 1 can be shown at any time for a given SketcherCanvas.
+                 */
+                class Popover {
+                    constructor(sketcher: SketcherCanvas, id: String, free: Boolean, onclose: Function)
+
+                    /** the sketcher this popover is associated with */
+                    sketcher: SketcherCanvas
+                    /** a unique HTML id for this button element in the HTML document */
+                    id: String
+                    /**
+                     * if true, this popover will appear above the provided event in the show function;
+                     * if false, this popover will slide down from the top of the sketcher
+                     * 
+                     * @default false
+                     */
+                    free: Boolean
+                    /**
+                     * this function is called when the popover closes, if set
+                     * 
+                     * @default undefined
+                     */
+                    onclose?: Function
+
+                    /**
+                     * closes the popover;
+                     * the optional boolean parameter is set to true if it is closed by a click on the sketcher,
+                     * to notify the onclose message that it was cancelled
+                     */
+		            close(cancel: Boolean): void
+
+                    /** returns the HTML source of the element of this popover */
+		            getHiddenSource(): String
+
+                    /** sets up the HTML of this popover */
+		            setup(): void
+
+                    /** 
+                     * shows the popover;
+                     * if this popover is free then the Event e must be provided to give a location for the popover to appear */
+		            show(e: Event): void
+                }
+
+                /**
+                 * this class is a child of the Popover class and defines the enhanced stereochmemistry defintion input popover for the sketcher.
+                 * This popover allows the user to define enhanced stereochemistry operators for the hovered atom.
+                 */
+                class EnhancedStereoPopover extends Popover {
+                    constructor(sketcher: SketcherCanvas, id: String)
+
+                    /** the sketcher this popover is associated with */
+                    sketcher: SketcherCanvas
+                    /** a unique HTML id for this button element in the HTML document */
+                    id: String
+
+                    /** sets up the inner HTML of this popover */
+                    getContentSource(): void
+
+                    /**
+                     * Populate the value of the isotope number field in this popover using the current value of the atom parameter.
+                     * 
+                     * @param atom the atom this popover will be affecting
+                     */
+		            populate(atom: structures.Atom): void
+
+                    /** defines the JavaScript behavior of the component */
+		            setupContent(): void
+                }
+
+                /**
+                 * this class is a child of the Popover class and defines the implicit hydrogen count input popover for the sketcher.
+                 * This popover allows the user to define an integer implicit hydrogen count value for the hovered atom.
+                 */
+                class ImplicitHydrogenPopover extends Popover {
+                    constructor(sketcher: SketcherCanvas, id: String)
+
+                    /** the sketcher this popover is associated with */
+                    sketcher: SketcherCanvas
+                    /** a unique HTML id for this button element in the HTML document */
+                    id: String
+
+                    /** sets up the inner HTML of this popover */
+                    getContentSource(): void
+
+                    /**
+                     * Populate the value of the isotope number field in this popover using the current value of the atom parameter.
+                     * 
+                     * @param atom the atom this popover will be affecting
+                     */
+		            populate(atom: structures.Atom): void
+
+                    /** defines the JavaScript behavior of the component */
+		            setupContent(): void
+                }
+
+                /**
+                 * this class is a child of the Popover class and defines the isotope value input popover for the sketcher.
+                 * This popover allows the user to define an integer isotope value for the hovered atom.
+                 */
+                class IsotopePopover extends Popover {
+                    constructor(sketcher: SketcherCanvas, id: String)
+
+                    /** the sketcher this popover is associated with */
+                    sketcher: SketcherCanvas
+                    /** a unique HTML id for this button element in the HTML document */
+                    id: String
+
+                    /** sets up the inner HTML of this popover */
+                    getContentSource(): void
+
+                    /**
+                     * Populate the value of the isotope number field in this popover using the current value of the atom parameter.
+                     * 
+                     * @param atom the atom this popover will be affecting
+                     */
+		            populate(atom: structures.Atom): void
+
+                    /** defines the JavaScript behavior of the component */
+		            setupContent(): void
+                }
+
+                /** this class organizes and manages dialogs for the sketcher. */
+                class DialogManager {
+                    constructor(sketcher: SketcherCanvas)
+
+                    /** the associated sketcher */
+                    sketcher: SketcherCanvas
+                    /** the save dialog */
+                    saveDialog: Dialog
+                    /** the atom query dialog */
+                    atomQueryDialog: AtomQueryDialog
+                    /** the bond query dialog */
+                    bondQueryDialog: BondQueryDialog
+                    /** the template dialog */
+                    templateDialog: TemplateDialog
+                    /** the search dialog */
+                    searchDialog: Dialog
+                    /** the Periodic Table dialog */
+                    periodicTableDialog: PeriodicTableDialog
+                    /** the calculate dialog */
+                    calculateDialog: Dialog
+                    /** the input dialog */
+                    inputDialog: Dialog
+                    /** the popover for file content input */
+                    openPopup: Popover
+                    /** the popover for enhanced stereochemistry definitions */
+                    enhancedStereoPopup: EnhancedStereoPopover
+                    /** the popover for implicit hydrogen count input */
+                    implicitHydrogenPopup: ImplicitHydrogenPopover
+                    /** the popover for isotope input */
+                    isotopePopup: IsotopePopover
+
+                    /** Implement this function in your extension to the dialog manager to create your own dialogs */
+		            makeOtherDialogs(sketcher: SketcherCanvas): void
+                }
+
+                /** this class organizes and manages the toolbars for the sketcher. */
+                class ToolbarManager {
+                    constructor(sketcher: SketcherCanvas)
+
+                    /** the associated sketcher */
+                    sketcher: SketcherCanvas
+                    /** the open button */
+                    buttonOpen: Button
+                    /** the save button */
+                    buttonSave: Button
+                    /** the search button */
+                    buttonSearch: Button
+                    /** the calculate button */
+                    buttonCalculate: Button
+                    /** the move button */
+                    buttonMove: Button
+                    /** the erase button */
+                    buttonErase: Button
+                    /** the clear button */
+                    buttonClear: Button
+                    /** the clean button */
+                    buttonClean: Button
+                    /** the query button */
+                    buttonQuery: Button
+                    /** the scale button set */
+                    scaleSet: ButtonSet
+                    /** the zoom in button */
+                    buttonScalePlus: Button
+                    /** the zoom out button */
+                    buttonScaleMinus: Button
+                    /** the lasso button set */
+                    lassoSet: ButtonSet
+                    /** the lasso button */
+                    buttonLasso: Button
+                    /** the history button set */
+                    historySet: ButtonSet
+                    /** the undo button */
+                    buttonUndo: Button
+                    /** the redo button */
+                    buttonRedo: Button
+                    /** the label button set */
+                    labelSet: ButtonSet
+                    /** the label button */
+                    buttonLabel: Button
+                    /** the bond button set */
+                    bondSet: ButtonSet
+                    /** the single bond button */
+                    buttonSingle: Button
+                    /** the recessed bond button */
+                    buttonRecessed: Button
+                    /** the protruding bond button */
+                    buttonProtruding: Button
+                    /** the double bond button */
+                    buttonDouble: Button
+                    /** the bond button */
+                    buttonBond: Button
+                    /** the ring button set */
+                    ringSet: ButtonSet
+                    /** the cyclohexane button */
+                    buttonCyclohexane: Button
+                    /** the benzene button */
+                    buttonBenzene: Button
+                    /** the ring button */
+                    buttonRing: Button
+                    /** the attribute button set */
+                    attributeSet: ButtonSet
+                    /** the attribute button */
+                    buttonAttribute: Button
+                    /** the shape button set */
+                    shapeSet: ButtonSet
+                    /** the shape button */
+                    buttonShape: Button
+
+                    /** creates the attribute button set, sending the function itself */
+		            makeAttributeSet(self: ToolbarManager): void
+
+                    /** creates the bond button set, sending the function itself */
+		            makeBondSet(self: ToolbarManager): void
+
+                    /** creates the horizontal and vertical flip button set, sending the function itself */
+		            makeFlipSet(self: ToolbarManager): void
+
+                    /** creates the history button set, sending the function itself */
+		            makeHistorySet(self: ToolbarManager): void
+
+                    /** creates the label button set, sending the function itself */
+		            makeLabelSet(self: ToolbarManager): void
+
+                    /** creates the lasso button set, sending the function itself */
+		            makeLassoSet(self: ToolbarManager): void
+
+                    /** creates the ring button set, sending the function itself */
+		            makeRingSet(self: ToolbarManager): void
+
+                    /** creates the scale button set, sending the function itself */
+		            makeScaleSet(self: ToolbarManager): void
+
+                    /** creates the shape button set, sending the function itself */
+		            makeShapeSet(self: ToolbarManager): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+
+                    /** collects all the HTML source for the toolbar and creates it in the DOM */
+		            write(): void  
+                    
+                    /** Implement this function in your extension to the toolbar manager to create your own buttons */
+                    makeOtherButtons?(self: ToolbarManager): void
+                }
+
+                /** this class is a child of the Dialog class and defines the visual specifications dialog for the Editor. */
+                class stylesDialog extends Dialog {
+                    constructor(editor: EditorCanvas3D, subid: String)
+
+                    /** the EditorCanvas3D this dialog is associated with */
+                    editor: EditorCanvas3D
+                    /** a unique HTML id for this dialog element in the HTML document */
+                    subid: String
+                    /**
+                     * the title of the dialog
+                     * 
+                     * @default "Visual Specifications"
+                     */
+                    title: String
+
+                    /** creates the atom color button set, sending the function itself */
+		            makeAtomColorSet(self: stylesDialog): void
+
+                    /** creates the bond color button set, sending the function itself */
+		            makeBondColorSet(self: stylesDialog): void
+
+                    /** creates the compass position button set, sending the function itself */
+		            makeCompassPositionSet(self: stylesDialog): void
+
+                    /** creates the fog mode button set, sending the function itself */
+		            makeFogModeSet(self: stylesDialog): void
+
+                    /** creates the projection button set, sending the function itself */
+		            makeProjectionSet(self: stylesDialog): void
+
+                    /** writes and sets up the HTML with jQuery UI, sending the function itself and its canvas */
+		            // @ts-ignore
+                    setup(self: stylesDialog, editor: EditorCanvas3D): void
+
+                    /** updates the state of dialog elements with the given visual specifications */
+		            update(styles: structures.Styles): void
+                }
+
+                /** this class organizes and manages the toolbars for the editor. */
+                class ToolbarManager3D {
+                    constructor(editor: EditorCanvas3D)
+
+                    /** the associated editor */
+                    editor: EditorCanvas3D
+                    /** the open button */
+                    buttonOpen: Button
+                    /** the save button */
+                    buttonSave: Button
+                    /** the search button */
+                    buttonSearch: Button
+                    /** the calculate button */
+                    buttonCalculate: Button
+                    /** the transform button */
+                    buttonTransform: Button
+                    /** the settings button */
+                    buttonSettings: Button
+                    /** the animation button */
+                    buttonAnimation: Button
+                    /** the clear button */
+                    buttonClear: Button
+                    /** the clean button */
+                    buttonClean: Button
+
+                    /** creates the history button set, sending the function itself */
+		            makeHistorySet(self: ToolbarManager3D): void
+
+                    /** creates the shape button set, sending the function itself */
+		            makeMeasurementsSet(self: ToolbarManager3D): void
+
+                    /** creates the scale button set, sending the function itself */
+		            makeScaleSet(self: ToolbarManager3D): void
+
+                    /** sets up the HTML with jQuery UI */
+		            setup(): void
+
+                    /** collects all the HTML source for the toolbar and creates it in the DOM */
+		            write(): void
+                }
+            }
+        }
+
         module tools {
             class Lasso { }
         }
@@ -4160,24 +5030,6 @@ declare module ChemDoodle {
             class StateManager { }
 
             class StateManager3D { }
-        }
-        module gui {
-            module desktop {
-                class Button { }
-
-                class CursorManager { }
-
-                class TextInput { }
-
-                class Tray { }
-
-                class Popover { }
-                /** this class organizes and manages the toolbars for the sketcher. */
-                class ToolbarManager {
-                    /** sets up the HTML with jQuery UI */
-                    setup(): void
-                }
-            }
         }
     }
 }
